@@ -1,0 +1,29 @@
+{
+  "oauthScopes": ["https://www.googleapis.com/auth/gmail.addons.execute", "https://www.googleapis.com/auth/gmail.addons.current.message.readonly", "https://www.googleapis.com/auth/gmail.addons.current.message.metadata", "https://www.googleapis.com/auth/gmail.addons.current.action.compose", "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile"],
+  "addOns": {
+    "common": {
+      "name": "GenAI Companion Demo",
+      "logoUrl": "https://fonts.gstatic.com/s/i/googlematerialicons/history_edu/v6/black-24dp/1x/gm_history_edu_black_24dp.png",
+      "homepageTrigger": {
+        "runFunction": "https://gen-ai-sample-add-on.malansari.repl.co/homePage"
+      }
+    },
+    "gmail": {
+      "composeTrigger": {
+        "actions": [
+          {
+            "label": "Write with GenAI",
+            "runFunction": "https://gen-ai-sample-add-on.malansari.repl.co/composeMail"
+          }
+        ],
+        "draftAccess": "METADATA"
+      },
+      "contextualTriggers": [{
+        "unconditional": {
+        },
+        "onTriggerFunction": "https://gen-ai-sample-add-on.malansari.repl.co/contextualTriggers"
+      }]
+    }
+  }
+}
