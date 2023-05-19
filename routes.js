@@ -27,49 +27,6 @@ const navigateBackFunctionUrl =
 // This defines three routes that our API is going to use.
 //
 var routes = function(app) {
-  //
-  // This route processes GET requests, by using the `get()` method in express, and we're looking for them on
-  // the root of the application (in this case that's https://rest-api.glitch.me/), since we've
-  // specified `"/"`.  For any GET request received at "/", we're sending some HTML back and logging the
-  // request to the console. The HTML you see in the browser is what `res.send()` is sending back.
-  //
-  app.get("/", function(req, res) {
-    res.send(
-      "<h1>REST API</h1><p>Nothing to see, unless you have the key!</p>"
-    );
-    console.log("Received GET");
-  });
-
-  //
-  // A route for POST requests sent to `/update`. Imagine we have an app and we want an API call for passing
-  // data related to an account. In this route we're checking that the POST request contains two parameters,
-  // `username` and `data`. If it does have them, then we're logging the contents to the console and just
-  // sending back the contents of the request. In a real app, this is where you could include a function
-  // call to populate a database with them. Otherwise, if one or more parameters are missing, we log what
-  // we were sent to the console and then send back an error message.
-  //
-  // Testing this is slightly trickier than just viewing the output in the browser. But there are a couple of ways.
-  // One way is to send a mock POST request using Curl from the terminal. Copy and paste the following into your terminal and hit enter:
-  // `curl -H "Content-Type: application/json" -X POST -d '{"username":"test","data":"1234"}' http://rest-api.glitch.me/update`
-  // This sends a JSON object with the username 'test' and data '1234' to the '/update' API endpoint.
-  // If you have the logs open in Glitch, you'll see an update with the line 'Received POST: {"username":"test","data":"1234"}'.
-  // Try editing the JSON object to use different data, and with empty or missing parameters too - you should see
-  // the 'Received incomplete POST' message in the logs.
-  //
-  // If you don't have Curl or access to the terminal, then you can also use a browser plugin, like [Servistate](http://www.servistate.com)
-  // for Chrome, with which you can also send test GET and POST requests. Both of these techniques are just simulating a request sent
-  // by an app or form in a real application.
-  //
-  app.post("/update", function(req, res) {
-    if (!req.body.username || !req.body.data) {
-      console.log("Received incomplete POST: " + JSON.stringify(req.body));
-      return res.send({ status: "error", message: "missing parameter(s)" });
-    } else {
-      console.log("Received POST: " + JSON.stringify(req.body));
-      return res.send(req.body);
-    }
-  });
-
   // Homepage
   app.post("/homePage", function(req, res) {
     console.log("Received POST: " + JSON.stringify(req.body));
