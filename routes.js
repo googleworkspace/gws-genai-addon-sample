@@ -2,6 +2,8 @@ const { google } = require("googleapis");
 const asyncHandler = require("express-async-handler");
 const { OAuth2Client } = require("google-auth-library");
 
+const config = require('config');
+
 const gmail = google.gmail({ version: "v1" });
 
 // Change with your GenAI provider
@@ -9,10 +11,10 @@ const cohere = require("cohere-ai");
 
 // Add-on Client ID (to validate token)
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id
-const clientId = "";
+const clientId = config.get('addOn.clientId');
 
 // This is your Cohere.ai API key
-const cohereApiKey = "";
+const cohereApiKey = config.get('cohere.apiKey');
 
 const generateReplyFunctionUrl =
   "https://gen-ai-sample-add-on.malansari.repl.co/generateReply";
