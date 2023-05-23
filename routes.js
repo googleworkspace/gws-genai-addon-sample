@@ -78,11 +78,11 @@ var routes = function(app) {
         (header) => header.name === "Date"
       ).value;
 
-      // TODO use message.internalData instead and format
-      // i.e. .toLocaleDateString(), although Locale will depent on the server locale
-      // Unless you can get the locale of the user from the event
-      // As I assume we cannot trust the Date in the header
-      const messageSentDate = messageDate;
+      // Convert message date to local timezone per user locale and timezone
+      const userTimeZone = event.commonEventObject.timeZone.id;
+      console.log("User Locale: " + userLocle + ", " + "User Timezone: " + userTimeZone);
+
+      const formattedSentDateTime = new Date(messageDate).toLocaleString(userLocle, { timeZone: userTimeZone });
 
       let response = {
         action: {
@@ -103,7 +103,7 @@ var routes = function(app) {
                       {
                         decoratedText: {
                           topLabel: "Sent on",
-                          text: messageSentDate,
+                          text: formattedSentDateTime,
                           bottomLabel: "",
                         },
                       },
@@ -581,7 +581,7 @@ var routes = function(app) {
 
 
       // Create a new reply draft using Gmail and get the draft ID
-      
+
 
 
       // Compoes a JSON reply that will trigger Gmail to open a draft
