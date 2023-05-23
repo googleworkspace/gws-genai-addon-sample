@@ -2,6 +2,8 @@ const { google } = require("googleapis");
 const asyncHandler = require("express-async-handler");
 const { OAuth2Client } = require("google-auth-library");
 
+const config = require('config');
+
 const gmail = google.gmail({ version: "v1" });
 
 // Change with your GenAI provider
@@ -9,10 +11,10 @@ const cohere = require("cohere-ai");
 
 // Add-on Client ID (to validate token)
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id
-const clientId = "";
+const clientId = config.get('addOn.clientId');
 
 // This is your Cohere.ai API key
-const cohereApiKey = "";
+const cohereApiKey = config.get('cohere.apiKey');
 
 const generateReplyFunctionUrl =
   "https://gen-ai-sample-add-on.malansari.repl.co/generateReply";
@@ -76,11 +78,11 @@ var routes = function(app) {
         (header) => header.name === "Date"
       ).value;
 
-      // TODO use message.internalData instead and format
-      // i.e. .toLocaleDateString(), although Locale will depent on the server locale
-      // Unless you can get the locale of the user from the event
-      // As I assume we cannot trust the Date in the header
-      const messageSentDate = messageDate;
+      // Convert message date to local timezone per user locale and timezone
+      const userTimeZone = event.commonEventObject.timeZone.id;
+      console.log("User Locale: " + userLocle + ", " + "User Timezone: " + userTimeZone);
+
+      const formattedSentDateTime = new Date(messageDate).toLocaleString(userLocle, { timeZone: userTimeZone });
 
       let response = {
         action: {
@@ -101,7 +103,7 @@ var routes = function(app) {
                       {
                         decoratedText: {
                           topLabel: "Sent on",
-                          text: messageSentDate,
+                          text: formattedSentDateTime,
                           bottomLabel: "",
                         },
                       },
@@ -579,7 +581,7 @@ var routes = function(app) {
 
 
       // Create a new reply draft using Gmail and get the draft ID
-      
+
 
 
       // Compoes a JSON reply that will trigger Gmail to open a draft
