@@ -80,9 +80,8 @@ var routes = function(app) {
 
       // Convert message date to local timezone per user locale and timezone
       const userTimeZone = event.commonEventObject.timeZone.id;
-      console.log("User Locale: " + userLocle + ", " + "User Timezone: " + userTimeZone);
-
-      const formattedSentDateTime = new Date(messageDate).toLocaleString(userLocle, { timeZone: userTimeZone });
+      const userLocale = event.commonEventObject.userLocale;
+      const formattedDateTime = new Date(messageDate).toLocaleString(userLocale, { timeZone: userTimeZone });
 
       let response = {
         action: {
@@ -103,7 +102,7 @@ var routes = function(app) {
                       {
                         decoratedText: {
                           topLabel: "Sent on",
-                          text: formattedSentDateTime,
+                          text: formattedDateTime,
                           bottomLabel: "",
                         },
                       },
