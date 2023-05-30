@@ -13,7 +13,8 @@
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
     "google-auth-library": "^8.7.0",
-    "googleapis": "^118.0.0"
+    "googleapis": "^118.0.0",
+    "js-base64": "^3.7.5"
   },
   "engines": {
     "node": "16.x"
