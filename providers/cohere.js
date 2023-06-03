@@ -1,5 +1,7 @@
 // TODO create another exported function for creating content for Google Docs
-async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {  
+async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
+  console.log("Entering Cohere provider module");
+
   const cohere = require("cohere-ai");
 
   const cohereApiKey = config.apiKey;
@@ -25,31 +27,40 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
   console.log("Prompt to be sent to API is: " + prompt);
 
   cohere.init(cohereApiKey);
-  
+
   const results = await generateCohereReplied(cohere, prompt);
 
   return results;
 }
 
 async function generateCohereReplied(cohere, prompt) {
-    console.log("Calling Cohere..");
-    
-    const response = await cohere.generate({
-      model: "command-xlarge-nightly",
-      prompt: prompt,
-      max_tokens: 300,
-      temperature: 0.5,
-      k: 0,
-      stop_sequences: [],
-      return_likelihoods: "NONE",
-      num_generations: 3, //TODO look up the parameter
-    });
-    
-    console.log(`Cohere response is ${JSON.stringify(response)}`);
+  console.log("Calling Cohere..");
 
-    const generations = response.body.generations;
-    
-    return generations;
+  const response = await cohere.generate({
+    model: "command-xlarge-nightly",
+    prompt: prompt,
+    max_tokens: 300,
+    temperature: 0.5,
+    k: 0,
+    stop_sequences: [],
+    return_likelihoods: "NONE",
+    num_generations: 3, //TODO look up the parameter
+  });
+
+  console.log(`Cohere response is ${JSON.stringify(response)}`);
+
+  const generations = response.body.generations;
+
+
+  //This is done to standerize the response to be used by the calling code
+  let replies = [];
+
+  // TODO can you remove the for loop and move to an array method ?
+  for (let i = 0; i < generations.length; i++) {
+    replies.push({ "suggestedText": generations[i].text });
+  }
+
+  return replies;
 }
 
 exports.generateEmailReply = generateEmailReply;

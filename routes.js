@@ -88,12 +88,11 @@ var routes = function (app) {
       const defaultProvider = config.get("defaultProvider");
       const enabledProviders = config.get("providers").filter(provider => provider.enabled == true);
       console.log("Enabled providers: " + JSON.stringify(enabledProviders));
-      
-      if (enabledProviders.length == 0)
-      {
+
+      if (enabledProviders.length == 0) {
         throw new Error("No enabled providers!");
       }
-      
+
       let providerSelectionItems = [];
       for (let i = 0; i < enabledProviders.length; i++) {
         console.log("ping");
@@ -103,10 +102,10 @@ var routes = function (app) {
           value: provider.value,
           selected: (provider.value == defaultProvider) ? true : false
         };
-        
+
         providerSelectionItems.push(providerItem);
       }
-      
+
       let response = {
         action: {
           navigations: [
@@ -271,30 +270,42 @@ var routes = function (app) {
 
         let generatedReplies = [];
 
-        const selectedProvider = formInputs.providerSelection.stringInputs.value
+        const selectedProvider = formInputs.providerSelection.stringInputs.value;
         console.log(`Selected provider is ${selectedProvider}`);
-        
-        if (selectedProvider == "cohere") {
-          const cohereProvider = require("./providers/cohere.js");
-          console.log("Calling cohere provider");
+        if (selectedProvider != "") {
+          const providerConfig = config.get("providers").find(provider => provider.value == selectedProvider).config;
 
-          const cohereConfig = config.get("providers").find(provider => provider.value === "cohere").config;
+          console.log(`Calling ${selectedProvider} provider`);
+          console.log(`Config is ${JSON.stringify(providerConfig)}`);
 
-          console.log(`Cohere config is ${JSON.stringify(cohereConfig)}`);
-          
-          generatedReplies = await cohereProvider.generateEmailReply(subject, senderName, messageBodyText, replyTextPromptValue, toneSelection, languageSelection, profileInfo.given_name, cohereConfig);
-          
-        }
-        else {
+          let provider = null;
+
+          //TODO I hate having to convert the type ... should look into what the type comes as from config file
+          switch (String(selectedProvider)) {
+            case "cohere":
+              provider = require("./providers/cohere.js");
+              break;
+            case "vertexAiPalmApi":
+              //TODO move provider module file name to config file
+              provider = require("./providers/vertex_ai.js");
+              break;
+            default:
+              throw new Error(`No valid modules exists for ${selectedProvider}`);
+          }
+
+          generatedReplies = await provider.generateEmailReply(subject, senderName, messageBodyText, replyTextPromptValue, toneSelection, languageSelection, profileInfo.given_name, providerConfig);
+        } else {
           throw new Error('No valid provider selected.');
         }
+
+        console.log(`Provider replies are ${JSON.stringify(generatedReplies)}`);
 
         let replyText = "";
 
         // Pick the first two responses and generate a JSON section
         // for each of them.
         for (let i = 0; i < Math.min(generatedReplies.length, 2); i++) {
-          replyText = generatedReplies[i].text;
+          replyText = generatedReplies[i].suggestedText;
           let responseSection = {
             header: "Suggested reply #" + (i + 1),
             widgets: [
