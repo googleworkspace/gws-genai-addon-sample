@@ -1,8 +1,15 @@
 {
+  "addOnConfig": {
+    "oauthClientId": "",
+    "serviceAccountEmail": ""
+  },
+  "genAiProviderInUse": "cohere",
+  "genAiProviderConfig": {
     "cohere": {
-      "apiKey": ""
+      "apiKey": ""  
     },
-    "addOn": {
-      "clientId": ""
+    "vertexAiPalmApi": {
+      
     }
   }
+}

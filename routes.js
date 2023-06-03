@@ -5,17 +5,17 @@ const Base64 = require('js-base64').Base64;
 
 const config = require("config");
 
-// Change with your GenAI provider
-const cohere = require("cohere-ai");
 
 // Add-on Client ID (to validate token)
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id
-const clientId = config.get("addOn.clientId");
+const oauthClientId = config.get("addOnConfig.oauthClientId");
+const addOnServiceAccountEmail = config.get("addOnConfig.serviceAccountEmail");
 
 // TODO confiuse the service account to validate requests
 
-// This is your Cohere.ai API key
-const cohereApiKey = config.get("cohere.apiKey");
+// Change with your GenAI provider
+const cohere = require("cohere-ai");
+const cohereApiKey = config.get("genAiProviderConfig.cohere.apiKey");
 
 const generateReplyFunctionUrl =
   "https://gen-ai-sample-add-on.malansari.repl.co/generateReply";
@@ -536,6 +536,11 @@ var routes = function(app) {
         replyText =
           parameters.replyText;
       }
+
+      // TODO check if a draft already exist send a notification / alert saying a draft already exists
+      // ask the user to delete it if they want to use a different text
+      // TODO 2
+      // or update draft text after prompting if they want to overwrite?
       let draft = await createDraftReply(req.body, replyText);
 
       console.log("Draft is " + JSON.stringify(draft));
@@ -568,7 +573,7 @@ var routes = function(app) {
     const oAuth2Client = new OAuth2Client();
     const decodedToken = await oAuth2Client.verifyIdToken({
       idToken: event.authorizationEventObject.userIdToken,
-      audience: clientId,
+      audience: oauthClientId,
     });
     const payload = decodedToken.getPayload();
 
