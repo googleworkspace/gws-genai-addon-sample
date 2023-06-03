@@ -3,13 +3,31 @@
     "oauthClientId": "",
     "serviceAccountEmail": ""
   },
-  "genAiProviderInUse": "cohere",
-  "genAiProviderConfig": {
-    "cohere": {
-      "apiKey": ""  
+  "defaultProvider": "cohere",
+  "providers": [
+    {
+      "name": "Cohere",
+      "value": "cohere",
+      "enabled": true,
+      "config": {
+        "apiKey": ""
+      }
     },
-    "vertexAiPalmApi": {
-      
+    {
+      "name": "Vertex AI PaLM",
+      "value": "vertexAiPalmApi",
+      "enabled": true,
+      "config": {
+        "apiKey": ""
+      }
+    },
+    {
+      "name": "Jasper AI",
+      "value": "jasperAiApi",
+      "enabled": false,
+      "config": {
+        "apiKey": ""
+      }
     }
-  }
+  ]
 }

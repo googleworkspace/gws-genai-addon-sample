@@ -1,9 +1,8 @@
-async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName) {
-
-  const config = require("config");
-
+// TODO create another exported function for creating content for Google Docs
+async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {  
   const cohere = require("cohere-ai");
-  const cohereApiKey = config.get("genAiProviderConfig.cohere.apiKey");
+
+  const cohereApiKey = config.apiKey;
 
   let prompt =
     //Add: My name is xyz or "Sign it with my name which is ()"
