@@ -14,8 +14,6 @@ const addOnServiceAccountEmail = config.get("addOnConfig.serviceAccountEmail");
 
 // TODO confiuse the service account to validate requests
 
-const genAiProviderToUse = config.get("genAiProviderToUse");
-
 const generateReplyFunctionUrl =
   "https://gen-ai-sample-add-on.malansari.repl.co/generateReply";
 
@@ -86,6 +84,29 @@ var routes = function (app) {
         { timeZone: userTimeZone }
       );
 
+      // TODO may move the default to being an attribute of the provider
+      const defaultProvider = config.get("defaultProvider");
+      const enabledProviders = config.get("providers").filter(provider => provider.enabled == true);
+      console.log("Enabled providers: " + JSON.stringify(enabledProviders));
+      
+      if (enabledProviders.length == 0)
+      {
+        throw new Error("No enabled providers!");
+      }
+      
+      let providerSelectionItems = [];
+      for (let i = 0; i < enabledProviders.length; i++) {
+        console.log("ping");
+        const provider = enabledProviders[i];
+        let providerItem = {
+          text: provider.name,
+          value: provider.value,
+          selected: (provider.value == defaultProvider) ? true : false
+        };
+        
+        providerSelectionItems.push(providerItem);
+      }
+      
       let response = {
         action: {
           navigations: [
@@ -181,6 +202,14 @@ var routes = function (app) {
                         },
                       },
                       {
+                        selectionInput: {
+                          type: "DROPDOWN",
+                          label: "Generative AI Provider",
+                          name: "providerSelection",
+                          items: providerSelectionItems,
+                        },
+                      },
+                      {
                         buttonList: {
                           buttons: [
                             {
@@ -227,10 +256,6 @@ var routes = function (app) {
         const languageSelection =
           formInputs.languageSelection.stringInputs.value;
         console.log("User prompt was: " + replyTextPromptValue);
-        // Connect to GenAI platform
-        // i.e. Cohere.ai in this case
-        // You could use an interface here and a Cohere.ai module for an advance sample
-        //Build the prompt
 
         const subject = message.payload.headers.find(
           (header) => header.name === "Subject"
@@ -246,13 +271,18 @@ var routes = function (app) {
 
         let generatedReplies = [];
 
-        console.log(`Selected provider is ${genAiProviderToUse}`);
+        const selectedProvider = formInputs.providerSelection.stringInputs.value
+        console.log(`Selected provider is ${selectedProvider}`);
         
-        if (genAiProviderToUse === "cohere") {
+        if (selectedProvider == "cohere") {
           const cohereProvider = require("./providers/cohere.js");
           console.log("Calling cohere provider");
+
+          const cohereConfig = config.get("providers").find(provider => provider.value === "cohere").config;
+
+          console.log(`Cohere config is ${JSON.stringify(cohereConfig)}`);
           
-          generatedReplies = await cohereProvider.generateEmailReply(subject, senderName, messageBodyText, replyTextPromptValue, toneSelection, languageSelection, profileInfo.given_name);
+          generatedReplies = await cohereProvider.generateEmailReply(subject, senderName, messageBodyText, replyTextPromptValue, toneSelection, languageSelection, profileInfo.given_name, cohereConfig);
           
         }
         else {
