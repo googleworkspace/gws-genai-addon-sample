@@ -4,6 +4,7 @@ const { OAuth2Client } = require("google-auth-library");
 const Base64 = require('js-base64').Base64;
 
 const config = require("config");
+const cohere = require("cohere-ai");
 
 
 // Add-on Client ID (to validate token)
@@ -13,9 +14,7 @@ const addOnServiceAccountEmail = config.get("addOnConfig.serviceAccountEmail");
 
 // TODO confiuse the service account to validate requests
 
-// Change with your GenAI provider
-const cohere = require("cohere-ai");
-const cohereApiKey = config.get("genAiProviderConfig.cohere.apiKey");
+const genAiProviderToUse = config.get("genAiProviderToUse");
 
 const generateReplyFunctionUrl =
   "https://gen-ai-sample-add-on.malansari.repl.co/generateReply";
@@ -29,9 +28,9 @@ const navigateBackFunctionUrl =
 //
 // This defines three routes that our API is going to use.
 //
-var routes = function(app) {
+var routes = function (app) {
   // Homepage
-  app.post("/homePage", function(req, res) {
+  app.post("/homePage", function (req, res) {
     console.log("Received POST: " + JSON.stringify(req.body));
     let response = {
       action: {
@@ -245,92 +244,49 @@ var routes = function(app) {
           message.payload.parts[0].body.data
         );
 
-        let prompt =
-          //Add: My name is xyz or "Sign it with my name which is ()"
-          //TODO Remove funny
-          'Given an email with the subject "' +
-          subject +
-          '" from the sender "' +
-          senderName +
-          '" and the content "' +
-          messageBodyText +
-          '", write a reply saying "' +
-          replyTextPromptValue +
-          '" in a ' +
-          toneSelection +
-          " tone in " +
-          languageSelection +
-          " and sign it with the name " +
-          profileInfo.given_name;
+        let generatedReplies = [];
 
-        console.log("Prompt sent to API is: " + prompt);
+        console.log(`Selected provider is ${genAiProviderToUse}`);
+        
+        if (genAiProviderToUse === "cohere") {
+          const cohereProvider = require("./providers/cohere.js");
+          console.log("Calling cohere provider");
+          
+          generatedReplies = await cohereProvider.generateEmailReply(subject, senderName, messageBodyText, replyTextPromptValue, toneSelection, languageSelection, profileInfo.given_name);
+          
+        }
+        else {
+          throw new Error('No valid provider selected.');
+        }
 
-        cohere.init(cohereApiKey);
-        await (async () => {
-          const response = await cohere.generate({
-            model: "command-xlarge-nightly",
-            prompt: prompt,
-            max_tokens: 300,
-            temperature: 0.75,
-            k: 0,
-            stop_sequences: [],
-            return_likelihoods: "NONE",
-            num_generations: 3, //TODO look up the parameter
-          });
-          console.log(`Cohere response is ${JSON.stringify(response)}`);
+        let replyText = "";
 
-          let generations = response.body.generations;
-          let replyText = "";
-
-          // Pick the first three responses from Cohere.ai and generate a section
-          // for each of them.
-          for (let i = 0; i < Math.min(generations.length, 2); i++) {
-            replyText = generations[i].text;
-            let responseSection = {
-              header: "Suggested reply #" + (i + 1),
-              widgets: [
-                {
-                  textParagraph: {
-                    text: replyText,
-                  },
-                },
-                {
-                  buttonList: {
-                    buttons: [
-                      {
-                        text: "Use this reply",
-                        onClick: {
-                          action: {
-                            function: createReplyDraftFunctionUrl,
-                            parameters: [
-                              {
-                                key: "replyText",
-                                value: replyText,
-                              },
-                            ],
-                          },
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            };
-            sections.push(responseSection);
-          }
-
-          // Add the remaining sections
-          sections.push({
+        // Pick the first two responses and generate a JSON section
+        // for each of them.
+        for (let i = 0; i < Math.min(generatedReplies.length, 2); i++) {
+          replyText = generatedReplies[i].text;
+          let responseSection = {
+            header: "Suggested reply #" + (i + 1),
             widgets: [
+              {
+                textParagraph: {
+                  text: replyText,
+                },
+              },
               {
                 buttonList: {
                   buttons: [
                     {
-                      text: "Try again",
+                      text: "Use this reply",
                       onClick: {
                         action: {
-                          function: navigateBackFunctionUrl,
-                          parameters: [],
+                          function: createReplyDraftFunctionUrl,
+                          parameters: [
+                            {
+                              key: "replyText",
+                              value: replyText,
+                            },
+                          ],
                         },
                       },
                     },
@@ -338,8 +294,30 @@ var routes = function(app) {
                 },
               },
             ],
-          });
-        })();
+          };
+          sections.push(responseSection);
+        }
+
+        // Add the remaining sections
+        sections.push({
+          widgets: [
+            {
+              buttonList: {
+                buttons: [
+                  {
+                    text: "Try again",
+                    onClick: {
+                      action: {
+                        function: navigateBackFunctionUrl,
+                        parameters: [],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        });
       } else {
         sections.push({
           widgets: [
@@ -387,7 +365,7 @@ var routes = function(app) {
   );
 
   // Navigate Back
-  app.post("/navigateBack", function(req, res) {
+  app.post("/navigateBack", function (req, res) {
     console.log("Received POST: " + JSON.stringify(req.body));
 
     let response = {
