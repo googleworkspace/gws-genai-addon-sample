@@ -144,10 +144,10 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId, cr
         // Pick the first two responses and generate a JSON section
         // for each of them.
         const generatedRepliesUiSection = gmailCardUiGenerator.createGeneratedRepliesUi(generatedReplies, 2, createReplyDraftUrl);
-      console.log(`Generated replies UI section is ${JSON.stringify(generatedRepliesUiSection)}`);
-      console.log(`Sections before: ${JSON.stringify(sections)}`);
+        console.log(`Generated replies UI section is ${JSON.stringify(generatedRepliesUiSection)}`);
+        console.log(`Sections before: ${JSON.stringify(sections)}`);
         sections = sections.concat(generatedRepliesUiSection);
-      console.log(`Sections after: ${JSON.stringify(sections)}`);
+        console.log(`Sections after: ${JSON.stringify(sections)}`);
         // Add the remaining sections
         const tryAgainUiSection = gmailCardUiGenerator.createTryAgainUi(navigateBackUrl);
         sections.push(tryAgainUiSection);
@@ -171,8 +171,8 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId, cr
         },
     };
 
-  console.log(`Response is ${JSON.stringify(response)}`);
-  return response;
+    console.log(`Response is ${JSON.stringify(response)}`);
+    return response;
 }
 
 exports.generateHomePageResponse = generateHomePageResponse;
