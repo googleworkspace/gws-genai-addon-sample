@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 
 const config = require("config");
 
+const addOnUtils = require("./modules/utils/add_on_utils.js");
 const gmailAddOnHandler = require("./modules/gmail_add_on_handler"
 )
 // Add-on Client ID (to validate token)
@@ -13,14 +14,15 @@ const addOnServiceAccountEmail = config.get("addOnConfig.serviceAccountEmail");
 
 var routes = function (app) {
   // Homepage
-  app.post("/homePage", function (req, res) {
-    //TODO add securityUtils to validate request by SA    
+  app.post("/homePage", asyncHandler(async (req, res) => {
+    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
     const response = gmailAddOnHandler.generateHomePageResponse();
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.send(response);
-  });
+  })
+  );
 
   // Contextual triggers
   // Look at at following resource on how to build
@@ -28,7 +30,7 @@ var routes = function (app) {
   app.post(
     "/contextualTriggers",
     asyncHandler(async (req, res) => {
-      //TODO add securityUtils to validate request by SA    
+      await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
       // REMOVE WHEN DEALING WITH REAL EMAIL DATA
       const event = req.body;
       console.log("Received POST: " + JSON.stringify(event));
@@ -45,7 +47,7 @@ var routes = function (app) {
   app.post(
     "/generateReply",
     asyncHandler(async (req, res) => {
-      // TODO add request auth against SA
+      await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
       const event = req.body;
       console.log("Received POST: " + JSON.stringify(event));
       const providers = config.get('providers');
@@ -58,19 +60,20 @@ var routes = function (app) {
   );
 
   // Navigate Back
-  app.post("/navigateBack", function (req, res) {
-    // TODO add request auth against SA
+  app.post("/navigateBack", asyncHandler(async (req, res) => {
+    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     console.log("Received POST: " + JSON.stringify(req.body));
     const response = gmailAddOnHandler.generateNavigateBackResponse();
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.status(200).send(response);
-  });
+  })
+  );
 
   // Compose reply draft message with text
   app.post(
     "/createReplyDraft",
     asyncHandler(async (req, res) => {
-      // TODO add request auth against SA
+      await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
       // REMOVE WHEN DEALING WITH REAL EMAIL DATA
       const event = req.body;
       console.log("Received POST: " + JSON.stringify(event));
