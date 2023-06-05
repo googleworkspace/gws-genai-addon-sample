@@ -1,28 +1,16 @@
-const gmailCardUi = require('./gmail_card_ui');
-const gmailUtils = require('./gmail_utils');
-const addOnUtils = require('./add_on_utils')
-
-//TODO - move to config using env variables or file?
-const generateReplyFunctionUrl =
-    "https://gen-ai-sample-add-on.malansari.repl.co/generateReply";
-
-const navigateBackFunctionUrl =
-    "https://gen-ai-sample-add-on.malansari.repl.co/navigateBack";
-
-const createReplyDraftFunctionUrl =
-    "https://gen-ai-sample-add-on.malansari.repl.co/createReplyDraft";
+const gmailCardUiGenerator = require('./ui/gmail_card_ui_generator');
+const gmailUtils = require('./utils/gmail_utils');
+const addOnUtils = require('./utils/add_on_utils')
 
 function generateHomePageResponse() {
     const message = "Please select a message to start using this add-on.";
-    const response = gmailCardUi.createHomePageUi(message);
+    const response = gmailCardUiGenerator.createHomePageUi(message);
     return response;
 }
 
-async function generateContextualTriggerResponse(event, providers, defaultProvider) {
-    // Get the Gmail message
+async function generateContextualTriggerResponse(event, providers, defaultProvider, generateReplyUrl) {
     const message = await gmailUtils.getGmailMessage(event);
 
-    // Extract subject, from and date values
     // TODO can extract to another function?
     const subject = message.payload.headers.find(
         (header) => header.name === "Subject"
@@ -43,7 +31,6 @@ async function generateContextualTriggerResponse(event, providers, defaultProvid
     );
 
     // Generate GenAI selection options and set default per config
-    // TODO may move the default to being an attribute of the provider
     const enabledProviders = providers.filter(provider => provider.enabled == true);
     console.log("Enabled providers: " + JSON.stringify(enabledProviders));
     if (enabledProviders.length == 0) {
@@ -63,12 +50,12 @@ async function generateContextualTriggerResponse(event, providers, defaultProvid
         providerSelectionItems.push(providerItem);
 
     };
-    var response = gmailCardUi.createStartGenerationUi(senderName, subject, formattedSentDateTime, providerSelectionItems, generateReplyFunctionUrl);
+    var response = gmailCardUiGenerator.createStartGenerationUi(senderName, subject, formattedSentDateTime, providerSelectionItems, generateReplyUrl);
     return response;
 }
 
 function generateNavigateBackResponse() {
-    const response = gmailCardUi.createNavigateBackUi();
+    const response = gmailCardUiGenerator.createNavigateBackUi();
     return response;
 }
 
@@ -89,12 +76,12 @@ async function generateCreateDraftResponse(event) {
 
     console.log("Draft is " + JSON.stringify(draft));
 
-    const response = gmailCardUi.createCreateDraftUi(draft.id, draft.message.threadId);
+    const response = gmailCardUiGenerator.createCreateDraftUi(draft.id, draft.message.threadId);
 
     return response;
 }
 
-async function generateGenerateReplyResponse(event, providers, oauthClientId) {
+async function generateGenerateReplyResponse(event, providers, oauthClientId, createReplyDraftUrl, navigateBackUrl) {
     const message = await gmailUtils.getGmailMessage(event);
     const formInputs = event.commonEventObject.formInputs;
     const profileInfo = await addOnUtils.getPayloadFromEvent(event, oauthClientId);
@@ -135,11 +122,11 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId) {
             //TODO I hate having to convert the type ... should look into what the type comes as from config file
             switch (String(selectedProvider)) {
                 case "cohere":
-                    provider = require("../providers/cohere.js");
+                    provider = require("./genAiProviders/cohere.js");
                     break;
                 case "vertexAiPalmApi":
                     //TODO move provider module file name to config file
-                    provider = require("../providers/vertex_ai.js");
+                    provider = require("./genAiProviders/vertex_ai.js");
                     break;
                 default:
                     throw new Error(`No valid modules exists for ${selectedProvider}`);
@@ -156,16 +143,16 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId) {
 
         // Pick the first two responses and generate a JSON section
         // for each of them.
-        const generatedRepliesUiSection = gmailCardUi.createGeneratedRepliesUi(generatedReplies, 2, createReplyDraftFunctionUrl);
+        const generatedRepliesUiSection = gmailCardUiGenerator.createGeneratedRepliesUi(generatedReplies, 2, createReplyDraftUrl);
       console.log(`Generated replies UI section is ${JSON.stringify(generatedRepliesUiSection)}`);
       console.log(`Sections before: ${JSON.stringify(sections)}`);
         sections = sections.concat(generatedRepliesUiSection);
       console.log(`Sections after: ${JSON.stringify(sections)}`);
         // Add the remaining sections
-        const tryAgainUiSection = gmailCardUi.createTryAgainUi(navigateBackFunctionUrl);
+        const tryAgainUiSection = gmailCardUiGenerator.createTryAgainUi(navigateBackUrl);
         sections.push(tryAgainUiSection);
     } else {
-        const noPromptProvidedUiSection = gmailCardUi.createTryAgainWithMessage("You did not enter a prompt!", navigateBackFunctionUrl);
+        const noPromptProvidedUiSection = gmailCardUiGenerator.createTryAgainWithMessage("You did not enter a prompt!", navigateBackUrl);
         sections.push(noPromptProvidedUiSection);
     }
 
