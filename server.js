@@ -6,11 +6,16 @@
 // port to listen to for requests. In this case, port 3000.
 //
 const express = require("express");
+const bearerToken = require("express-bearer-token");
 const bodyParser = require("body-parser");
 const app = express();
 
+// Needed if there is a proxy forwarding https to http
+app.enable('trust proxy');
+
+app.use(bearerToken());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const routes = require("./routes.js")(app);
 
