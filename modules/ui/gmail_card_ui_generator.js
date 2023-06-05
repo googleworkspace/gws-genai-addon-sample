@@ -70,7 +70,7 @@ function createStartGenerationUi(senderName, subject, formattedSentDateTime, pro
                       type: "SINGLE_LINE",
                       name: "replyTextPrompt",
                       hintText:
-                        "For example, 'you for your help on this task'",
+                        "For example, thank you for sending this information'",
                     },
                   },
                   {
