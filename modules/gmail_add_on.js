@@ -1,6 +1,6 @@
-const gmailCardUiHelper = require('./gmailCardUiHelper');
-const gmailUtils = require('./gmailUtils');
-const addOnHelper = require('./addOnHelper')
+const gmailCardUi = require('./gmail_card_ui');
+const gmailUtils = require('./gmail_utils');
+const addOnUtils = require('./add_on_utils')
 
 //TODO - move to config using env variables or file?
 const generateReplyFunctionUrl =
@@ -14,7 +14,7 @@ const createReplyDraftFunctionUrl =
 
 function generateHomePageResponse() {
     const message = "Please select a message to start using this add-on.";
-    const response = gmailCardUiHelper.createHomePageUi(message);
+    const response = gmailCardUi.createHomePageUi(message);
     return response;
 }
 
@@ -63,12 +63,12 @@ async function generateContextualTriggerResponse(event, providers, defaultProvid
         providerSelectionItems.push(providerItem);
 
     };
-    var response = gmailCardUiHelper.createStartGenerationUi(senderName, subject, formattedSentDateTime, providerSelectionItems, generateReplyFunctionUrl);
+    var response = gmailCardUi.createStartGenerationUi(senderName, subject, formattedSentDateTime, providerSelectionItems, generateReplyFunctionUrl);
     return response;
 }
 
 function generateNavigateBackResponse() {
-    const response = gmailCardUiHelper.createNavigateBackUi();
+    const response = gmailCardUi.createNavigateBackUi();
     return response;
 }
 
@@ -89,7 +89,7 @@ async function generateCreateDraftResponse(event) {
 
     console.log("Draft is " + JSON.stringify(draft));
 
-    const response = gmailCardUiHelper.createCreateDraftUi(draft.id, draft.message.threadId);
+    const response = gmailCardUi.createCreateDraftUi(draft.id, draft.message.threadId);
 
     return response;
 }
@@ -97,7 +97,7 @@ async function generateCreateDraftResponse(event) {
 async function generateGenerateReplyResponse(event, providers, oauthClientId) {
     const message = await gmailUtils.getGmailMessage(event);
     const formInputs = event.commonEventObject.formInputs;
-    const profileInfo = await addOnHelper.getPayloadFromEvent(event, oauthClientId);
+    const profileInfo = await addOnUtils.getPayloadFromEvent(event, oauthClientId);
     // This is for the JSON card UI response
     let sections = [];
     if (formInputs && formInputs.replyTextPrompt) {
@@ -156,16 +156,16 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId) {
 
         // Pick the first two responses and generate a JSON section
         // for each of them.
-        const generatedRepliesUiSection = gmailCardUiHelper.createGeneratedRepliesUi(generatedReplies, 2, createReplyDraftFunctionUrl);
+        const generatedRepliesUiSection = gmailCardUi.createGeneratedRepliesUi(generatedReplies, 2, createReplyDraftFunctionUrl);
       console.log(`Generated replies UI section is ${JSON.stringify(generatedRepliesUiSection)}`);
       console.log(`Sections before: ${JSON.stringify(sections)}`);
         sections = sections.concat(generatedRepliesUiSection);
       console.log(`Sections after: ${JSON.stringify(sections)}`);
         // Add the remaining sections
-        const tryAgainUiSection = gmailCardUiHelper.createTryAgainUi(navigateBackFunctionUrl);
+        const tryAgainUiSection = gmailCardUi.createTryAgainUi(navigateBackFunctionUrl);
         sections.push(tryAgainUiSection);
     } else {
-        const noPromptProvidedUiSection = gmailCardUiHelper.createTryAgainWithMessage("You did not enter a prompt!", navigateBackFunctionUrl);
+        const noPromptProvidedUiSection = gmailCardUi.createTryAgainWithMessage("You did not enter a prompt!", navigateBackFunctionUrl);
         sections.push(noPromptProvidedUiSection);
     }
 
