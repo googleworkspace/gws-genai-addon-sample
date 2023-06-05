@@ -1,5 +1,7 @@
 const { OAuth2Client } = require("google-auth-library");
 
+// See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#extract_the_user_id_and_email
+// and https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id on how to configure
 async function getPayloadFromEvent(event, oauthClientId) {
   const oAuth2Client = new OAuth2Client();
   const decodedToken = await oAuth2Client.verifyIdToken({
@@ -13,6 +15,7 @@ async function getPayloadFromEvent(event, oauthClientId) {
   return payload;
 }
 
+// See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#validate-requests-from-google
 async function authenticateRequest(request, serviceAccountEmail) {
   let idToken = request.token; // Using express-bearer-token middleware
   if (!idToken) throw 'Missing bearer token';
