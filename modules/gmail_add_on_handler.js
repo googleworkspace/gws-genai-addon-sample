@@ -122,11 +122,11 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId, cr
             //TODO I hate having to convert the type ... should look into what the type comes as from config file
             switch (String(selectedProvider)) {
                 case "cohere":
-                    provider = require("./genAiProviders/cohere.js");
+                    provider = require("./gen_ai_providers/cohere.js");
                     break;
                 case "vertexAiPalmApi":
                     //TODO move provider module file name to config file
-                    provider = require("./genAiProviders/vertex_ai.js");
+                    provider = require("./gen_ai_providers/vertex_ai.js");
                     break;
                 default:
                     throw new Error(`No valid modules exists for ${selectedProvider}`);
