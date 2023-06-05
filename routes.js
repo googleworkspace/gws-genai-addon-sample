@@ -1,9 +1,8 @@
 const asyncHandler = require("express-async-handler");
 
 const config = require("config");
-const cohere = require("cohere-ai");
 
-const gmailAddOnHelper = require("./modules/gmailAddOnHelper"
+const gmailAddOn = require("./modules/gmail_add_on"
 )
 // Add-on Client ID (to validate token)
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id
@@ -18,7 +17,7 @@ var routes = function (app) {
     //TODO add securityUtils to validate request by SA    
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
-    const response = gmailAddOnHelper.generateHomePageResponse();
+    const response = gmailAddOn.generateHomePageResponse();
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.send(response);
   });
@@ -35,7 +34,7 @@ var routes = function (app) {
       console.log("Received POST: " + JSON.stringify(event));
       const providers = config.get('providers');
       const defaultProvider = config.get('defaultProvider');
-      const response = await gmailAddOnHelper.generateContextualTriggerResponse(event, providers, defaultProvider);
+      const response = await gmailAddOn.generateContextualTriggerResponse(event, providers, defaultProvider);
       console.log(`JSON Response was ${JSON.stringify(response)}`);
       res.send(response);
     })
@@ -49,7 +48,7 @@ var routes = function (app) {
       const event = req.body;
       console.log("Received POST: " + JSON.stringify(event));
       const providers = config.get('providers');
-      const response = await gmailAddOnHelper.generateGenerateReplyResponse(event, providers, oauthClientId);
+      const response = await gmailAddOn.generateGenerateReplyResponse(event, providers, oauthClientId);
       console.log(`JSON Response was ${JSON.stringify(response)}`);
       res.status(200).send(response);
     })
@@ -59,7 +58,7 @@ var routes = function (app) {
   app.post("/navigateBack", function (req, res) {
     // TODO add request auth against SA
     console.log("Received POST: " + JSON.stringify(req.body));
-    const response = gmailAddOnHelper.generateNavigateBackResponse();
+    const response = gmailAddOn.generateNavigateBackResponse();
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.status(200).send(response);
   });
@@ -72,7 +71,7 @@ var routes = function (app) {
       // REMOVE WHEN DEALING WITH REAL EMAIL DATA
       const event = req.body;
       console.log("Received POST: " + JSON.stringify(event));
-      const response = await gmailAddOnHelper.generateCreateDraftResponse(event);
+      const response = await gmailAddOn.generateCreateDraftResponse(event);
       console.log(`JSON Response was ${JSON.stringify(response)}`);
       res.status(200).send(response);
     })
