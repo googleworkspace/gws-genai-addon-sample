@@ -1,7 +1,12 @@
 {
   "addOnConfig": {
     "oauthClientId": "",
-    "serviceAccountEmail": ""
+    "serviceAccountEmail": "",
+    "urls": {
+      "generateReplyUrl": "https://gen-ai-sample-add-on.malansari.repl.co/generateReply",
+      "navigateBackUrl": "https://gen-ai-sample-add-on.malansari.repl.co/navigateBack",
+      "createReplyDraftUrl": "https://gen-ai-sample-add-on.malansari.repl.co/createReplyDraft"
+    }
   },
   "defaultProvider": "cohere",
   "providers": [
