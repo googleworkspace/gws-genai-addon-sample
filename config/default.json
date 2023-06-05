@@ -3,24 +3,24 @@
     "oauthClientId": "",
     "serviceAccountEmail": "",
     "urls": {
-      "generateReplyUrl": "https://gen-ai-sample-add-on.malansari.repl.co/generateReply",
-      "navigateBackUrl": "https://gen-ai-sample-add-on.malansari.repl.co/navigateBack",
-      "createReplyDraftUrl": "https://gen-ai-sample-add-on.malansari.repl.co/createReplyDraft"
+      "generateReplyUrl": "",
+      "navigateBackUrl": "",
+      "createReplyDraftUrl": ""
     }
   },
-  "defaultProvider": "cohere",
+  "defaultProvider": "vertexAiPalmApi",
   "providers": [
     {
-      "name": "Cohere",
-      "value": "cohere",
+      "name": "Vertex AI PaLM",
+      "value": "vertexAiPalmApi",
       "enabled": true,
       "config": {
         "apiKey": ""
       }
     },
     {
-      "name": "Vertex AI PaLM",
-      "value": "vertexAiPalmApi",
+      "name": "Cohere",
+      "value": "cohere",
       "enabled": true,
       "config": {
         "apiKey": ""
