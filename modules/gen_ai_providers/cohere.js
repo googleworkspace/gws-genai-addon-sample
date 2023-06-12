@@ -1,8 +1,11 @@
+cohere = require("cohere-ai");
+
+const TEXT_GEN_MODEL_NAME = 'command-light'; //TODO use command-nightly or command-xlarge-nightly
+const SUMMARIZE_MODEL_NAME = 'summarize-medium'; //TODO summarize-xlarge once timeout issue is done
+
 // TODO create another exported function for creating content for Google Docs
 async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
   console.log("Entering Cohere provider module");
-
-  const cohere = require("cohere-ai");
 
   const cohereApiKey = config.apiKey;
 
@@ -28,12 +31,41 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
 
   cohere.init(cohereApiKey);
 
-  const results = await generateCohereReplied(cohere, prompt);
+  const generations = await callCohereTextGenerationApi(cohere, prompt);
 
-  return results;
+  //This is done to standerize the response to be used by the calling code
+  let replies = [];
+
+  // TODO can you remove the for loop and move to an array method ?
+  for (let i = 0; i < generations.length; i++) {
+    replies.push({ "suggestedText": generations[i].text });
+  }
+
+  return replies;
 }
 
-async function generateCohereReplied(cohere, prompt) {
+async function callCohereTextGenerationApi(cohere, prompt) {
+  console.log("Calling Cohere..");
+
+  const response = await cohere.generate({
+    model: TEXT_GEN_MODEL_NAME,
+    prompt: prompt,
+    max_tokens: 300,
+    temperature: 0.5,
+    k: 0,
+    stop_sequences: [],
+    return_likelihoods: "NONE",
+    num_generations: 3, //TODO look up the parameter
+  });
+
+  console.log(`Cohere response is ${JSON.stringify(response)}`);
+
+  const generations = response.body.generations;
+
+  return generations;
+}
+
+async function callCohereTextGenerationApi(cohere, prompt) {
   console.log("Calling Cohere..");
 
   const response = await cohere.generate({
@@ -51,16 +83,42 @@ async function generateCohereReplied(cohere, prompt) {
 
   const generations = response.body.generations;
 
+  return generations;
+}
 
-  //This is done to standerize the response to be used by the calling code
-  let replies = [];
+async function generateSummary(numOfParagraphs, language, text, config) {
+  console.log("Entering Cohere provider module");
 
-  // TODO can you remove the for loop and move to an array method ?
-  for (let i = 0; i < generations.length; i++) {
-    replies.push({ "suggestedText": generations[i].text });
-  }
+  const cohereApiKey = config.apiKey;
 
-  return replies;
+  cohere.init(cohereApiKey);
+
+  // TODO split prompt into prompt and context
+  const summary = await callCohereSummarizeEndpoint(cohere, text);
+
+  console.log(`Summary is ${JSON.stringify(summary)}`);
+
+  return summary;
+}
+
+async function callCohereSummarizeEndpoint(cohere, text) {
+  console.log("Calling Cohere..");
+
+  const response = await cohere.summarize({
+    text: text,
+    length: 'medium', //TODO control this with paragraphs?
+    format: 'paragraph',
+    model: SUMMARIZE_MODEL_NAME,
+    additional_command: '',
+    temperature: 0.3,
+  });
+
+  console.log(`Cohere response is ${JSON.stringify(response)}`);
+
+  const summary = response.body.summary;
+
+  return summary;
 }
 
 exports.generateEmailReply = generateEmailReply;
+exports.generateSummary = generateSummary;
