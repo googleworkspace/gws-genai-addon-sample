@@ -33,9 +33,10 @@ var routes = function (app) {
   // Generate summary
   app.post("/generateDocsSummary", asyncHandler(async (req, res) => {
     await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
-    const event = req.body;
-    console.log("Received POST: " + JSON.stringify(event));
-    const response = await docsAddOnHandler.generateSummaryResponse();
+    const event = req.body;console.log("Received POST: " + JSON.stringify(event));
+    const providers = config.get('providers');
+    const navigateBackUrl = config.get('addOnConfig.urls.navigateBackUrl');
+    const response = await docsAddOnHandler.generateSummaryResponse(event, providers, navigateBackUrl);
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.send(response);
   })
