@@ -1,5 +1,6 @@
 cohere = require("cohere-ai");
 
+// For models check https://docs.cohere.com/docs/models
 const TEXT_GEN_MODEL_NAME = 'command-light'; //TODO use command-nightly or command-xlarge-nightly
 const SUMMARIZE_MODEL_NAME = 'summarize-medium'; //TODO summarize-xlarge once timeout issue is done
 
@@ -55,28 +56,7 @@ async function callCohereTextGenerationApi(cohere, prompt) {
     k: 0,
     stop_sequences: [],
     return_likelihoods: "NONE",
-    num_generations: 3, //TODO look up the parameter
-  });
-
-  console.log(`Cohere response is ${JSON.stringify(response)}`);
-
-  const generations = response.body.generations;
-
-  return generations;
-}
-
-async function callCohereTextGenerationApi(cohere, prompt) {
-  console.log("Calling Cohere..");
-
-  const response = await cohere.generate({
-    model: "command-xlarge-nightly",
-    prompt: prompt,
-    max_tokens: 300,
-    temperature: 0.5,
-    k: 0,
-    stop_sequences: [],
-    return_likelihoods: "NONE",
-    num_generations: 3, //TODO look up the parameter
+    num_generations: 2, 
   });
 
   console.log(`Cohere response is ${JSON.stringify(response)}`);
