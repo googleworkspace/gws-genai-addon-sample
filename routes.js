@@ -3,8 +3,10 @@ const asyncHandler = require("express-async-handler");
 const config = require("config");
 
 const addOnUtils = require("./modules/utils/add_on_utils.js");
-const gmailAddOnHandler = require("./modules/gmail_add_on_handler"
-)
+const commonAddOnHandler = require("./modules/common_add_on_handler")
+const gmailAddOnHandler = require("./modules/gmail_add_on_handler");
+const docsAddOnHandler = require("./modules/docs_add_on_handler");
+
 // Add-on Client ID (to validate token)
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id
 const oauthClientId = config.get("addOnConfig.oauthClientId");
@@ -13,8 +15,35 @@ const addOnServiceAccountEmail = config.get("addOnConfig.serviceAccountEmail");
 // TODO use the service account to validate requests
 
 var routes = function (app) {
+  /* Docs Endpoints */
   // Homepage
-  app.post("/homePage", asyncHandler(async (req, res) => {
+  app.post("/docsHomePage", asyncHandler(async (req, res) => {
+    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    const event = req.body;
+    console.log("Received POST: " + JSON.stringify(event));
+    const providers = config.get('providers');
+    const defaultProvider = config.get('defaultProvider');
+    const generateSummaryUrl = config.get('addOnConfig.urls.generateDocsSummaryUrl');
+    const response = docsAddOnHandler.generateHomePageResponse(providers, defaultProvider, generateSummaryUrl);
+    console.log(`JSON Response was ${JSON.stringify(response)}`);
+    res.send(response);
+  })
+  );
+
+  // Generate summary
+  app.post("/generateDocsSummary", asyncHandler(async (req, res) => {
+    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    const event = req.body;
+    console.log("Received POST: " + JSON.stringify(event));
+    const response = await docsAddOnHandler.generateSummaryResponse();
+    console.log(`JSON Response was ${JSON.stringify(response)}`);
+    res.send(response);
+  })
+  );
+
+  /* Gmail Endpoints */
+  // Homepage
+  app.post("/gmailHomePage", asyncHandler(async (req, res) => {
     await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
@@ -59,16 +88,6 @@ var routes = function (app) {
     })
   );
 
-  // Navigate Back
-  app.post("/navigateBack", asyncHandler(async (req, res) => {
-    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
-    console.log("Received POST: " + JSON.stringify(req.body));
-    const response = gmailAddOnHandler.generateNavigateBackResponse();
-    console.log(`JSON Response was ${JSON.stringify(response)}`);
-    res.status(200).send(response);
-  })
-  );
-
   // Compose reply draft message with text
   app.post(
     "/createReplyDraft",
@@ -82,6 +101,19 @@ var routes = function (app) {
       res.status(200).send(response);
     })
   );
+
+  /* Common Endpoints */
+
+  // Navigate Back
+  app.post("/navigateBack", asyncHandler(async (req, res) => {
+    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    console.log("Received POST: " + JSON.stringify(req.body));
+    const response = commonAddOnHandler.generateNavigateBackResponse();
+    console.log(`JSON Response was ${JSON.stringify(response)}`);
+    res.status(200).send(response);
+  })
+  );
+
 };
 
 module.exports = routes;

@@ -54,11 +54,6 @@ async function generateContextualTriggerResponse(event, providers, defaultProvid
     return response;
 }
 
-function generateNavigateBackResponse() {
-    const response = gmailCardUiGenerator.createNavigateBackUi();
-    return response;
-}
-
 async function generateCreateDraftResponse(event) {
     const parameters = event.commonEventObject.parameters;
     let replyText = "";
@@ -177,6 +172,5 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId, cr
 
 exports.generateHomePageResponse = generateHomePageResponse;
 exports.generateContextualTriggerResponse = generateContextualTriggerResponse;
-exports.generateNavigateBackResponse = generateNavigateBackResponse;
 exports.generateCreateDraftResponse = generateCreateDraftResponse;
 exports.generateGenerateReplyResponse = generateGenerateReplyResponse;
