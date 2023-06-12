@@ -157,22 +157,6 @@ function createStartGenerationUi(senderName, subject, formattedSentDateTime, pro
   return response;
 }
 
-function createNavigateBackUi() {
-  let response = {
-    renderActions: {
-      action: {
-        navigations: [
-          {
-            pop: true,
-          },
-        ],
-      },
-    },
-  };
-
-  return response;
-}
-
 function createCreateDraftUi(draftId, draftThreadId) {
   let response = {
     render_actions: {
@@ -289,7 +273,6 @@ function createTryAgainWithMessage(message, navigateBackUrl) {
 
 exports.createHomePageUi = createHomePageUi;
 exports.createStartGenerationUi = createStartGenerationUi;
-exports.createNavigateBackUi = createNavigateBackUi;
 exports.createCreateDraftUi = createCreateDraftUi;
 exports.createGeneratedRepliesUi = createGeneratedRepliesUi;
 exports.createTryAgainUi = createTryAgainUi;

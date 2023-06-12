@@ -10,18 +10,23 @@
   ],
   "addOns": {
     "common": {
-      "name": "GenAI Companion Demo",
+      "name": "GenAI Companion",
       "logoUrl": "https://fonts.gstatic.com/s/i/googlematerialicons/history_edu/v6/black-24dp/1x/gm_history_edu_black_24dp.png",
-      "homepageTrigger": {
-        "runFunction": "https://gen-ai-sample-add-on.malansari.repl.co/homePage"
-      },
       "useLocaleFromApp": true
     },
+    "docs": {
+      "homepageTrigger": {
+        "runFunction": ""
+      }
+    },
     "gmail": {
+      "homepageTrigger": {
+        "runFunction": ""
+      },
       "contextualTriggers": [
         {
           "unconditional": {},
-          "onTriggerFunction": "https://gen-ai-sample-add-on.malansari.repl.co/contextualTriggers"
+          "onTriggerFunction": ""
         }
       ]
     }
