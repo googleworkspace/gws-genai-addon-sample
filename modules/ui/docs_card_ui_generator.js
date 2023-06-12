@@ -1,134 +1,134 @@
 function createHomePageUi(providerSelectionItems, generateDocsSummaryFunctionUrl) {
-    const response = {
+  const response = {
+    action: {
+      navigations: [
+        {
+          pushCard: {
+            "sections": [
+              {
+                "widgets": [
+                  {
+                    "selectionInput": {
+                      "type": "DROPDOWN",
+                      "label": "Length of summaryy",
+                      "name": "lengthSelection",
+                      "items": [
+                        {
+                          "text": "Short (1-2 sentences)",
+                          "value": "short",
+                          "selected": false
+                        },
+                        {
+                          "text": "Medium (3-4 sentences)",
+                          "value": "medium",
+                          "selected": false
+                        },
+                        {
+                          "text": "Long (4 or more sentences)",
+                          "value": "long",
+                          "selected": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    selectionInput: {
+                      type: "DROPDOWN",
+                      label: "Language",
+                      name: "formatSelection",
+                      items: [
+                        {
+                          text: "Paragraphs",
+                          value: "paragraph",
+                          selected: true,
+                        },
+                        {
+                          text: "Bullet Points",
+                          value: "bullets",
+                          selected: false,
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    selectionInput: {
+                      type: "DROPDOWN",
+                      label: "Generative AI Provider",
+                      name: "providerSelection",
+                      items: providerSelectionItems,
+                    },
+                  },
+                  {
+                    "buttonList": {
+                      "buttons": [
+                        {
+                          "text": "Generate Summary",
+                          "onClick": {
+                            "action": {
+                              "function": generateDocsSummaryFunctionUrl,
+                              "parameters": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "header": "Summarize Document",
+              }
+            ]
+          },
+        },
+      ],
+    },
+  };
+
+  return response;
+}
+
+function createGenerateSummaryUi(summary, navigateBackUrl) {
+  const response = {
+    render_actions: {
       action: {
         navigations: [
           {
             pushCard: {
-              "sections": [
+              sections: [
                 {
-                  "widgets": [
+                  widgets: [
                     {
-                      "selectionInput": {
-                        "type": "DROPDOWN",
-                        "label": "Num of paragraphs to include in summary",
-                        "name": "numOfParagraphs",
-                        "items": [
-                          {
-                            "text": "1",
-                            "value": "1",
-                            "selected": false
-                          },
-                          {
-                            "text": "2",
-                            "value": "2",
-                            "selected": false
-                          },
-                          {
-                            "text": "3",
-                            "value": "3",
-                            "selected": true
-                          }
-                        ]
-                      }
+                      textParagraph: {
+                        text: summary,
+                      },
                     },
                     {
-                      selectionInput: {
-                        type: "DROPDOWN",
-                        label: "Language",
-                        name: "languageSelection",
-                        items: [
+                      buttonList: {
+                        buttons: [
                           {
-                            text: "English",
-                            value: "english",
-                            selected: true,
-                          },
-                          {
-                            text: "French",
-                            value: "french",
-                            selected: false,
+                            text: "Try again",
+                            onClick: {
+                              action: {
+                                function: navigateBackUrl,
+                                parameters: [],
+                              },
+                            },
                           },
                         ],
-                      },
-                    },
-                    {
-                      selectionInput: {
-                        type: "DROPDOWN",
-                        label: "Generative AI Provider",
-                        name: "providerSelection",
-                        items: providerSelectionItems,
-                      },
-                    },
-                    {
-                      "buttonList": {
-                        "buttons": [
-                          {
-                            "text": "Generate Summary",
-                            "onClick": {
-                              "action": {
-                                "function": generateDocsSummaryFunctionUrl,
-                                "parameters": []
-                              }
-                            }
-                          }
-                        ]
                       }
-                    }
+                    },
                   ],
-                  "header": "Summarize Document",
-                }
-              ]
+                  "header": "Generated summary",
+                },
+              ],
             },
           },
         ],
       },
-    };
-  
-    return response;
-  }
-  
-  function createGenerateSummaryUi(summary, navigateBackUrl) {
-    const response = {
-      render_actions: {
-        action: {
-          navigations: [
-            {
-              pushCard: {
-                sections: [
-                  {
-                    widgets: [
-                      {
-                        textParagraph: {
-                          text: summary,
-                        },
-                      },
-                      {
-                        buttonList: {
-                          buttons: [
-                            {
-                              text: "Try again",
-                              onClick: {
-                                action: {
-                                  function: navigateBackUrl,
-                                  parameters: [],
-                                },
-                              },
-                            },
-                          ],
-                        }
-                      },
-                    ],
-                    "header": "Generated summary",
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      }
-    };
-  
-    return response;
-  }
-  
-  exports.createHomePageUi = createHomePageUi;
-  exports.createGenerateSummaryUi = createGenerateSummaryUi;
+    }
+  };
+
+  return response;
+}
+
+exports.createHomePageUi = createHomePageUi;
+exports.createGenerateSummaryUi = createGenerateSummaryUi;

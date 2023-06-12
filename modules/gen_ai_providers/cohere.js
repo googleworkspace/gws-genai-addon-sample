@@ -32,7 +32,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
 
   cohere.init(cohereApiKey);
 
-  const generations = await callCohereTextGenerationApi(cohere, prompt);
+  const generations = await callCohereTextGenerationApi(prompt, cohere);
 
   //This is done to standerize the response to be used by the calling code
   let replies = [];
@@ -45,7 +45,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
   return replies;
 }
 
-async function callCohereTextGenerationApi(cohere, prompt) {
+async function callCohereTextGenerationApi(prompt, cohere) {
   console.log("Calling Cohere..");
 
   const response = await cohere.generate({
@@ -66,7 +66,7 @@ async function callCohereTextGenerationApi(cohere, prompt) {
   return generations;
 }
 
-async function generateSummary(numOfParagraphs, language, text, config) {
+async function generateSummary(lengthSelection, formatSelection, text, config) {
   console.log("Entering Cohere provider module");
 
   const cohereApiKey = config.apiKey;
@@ -74,20 +74,20 @@ async function generateSummary(numOfParagraphs, language, text, config) {
   cohere.init(cohereApiKey);
 
   // TODO split prompt into prompt and context
-  const summary = await callCohereSummarizeEndpoint(cohere, text);
+  const summary = await callCohereSummarizeEndpoint(lengthSelection, formatSelection, text, cohere);
 
   console.log(`Summary is ${JSON.stringify(summary)}`);
 
   return summary;
 }
 
-async function callCohereSummarizeEndpoint(cohere, text) {
+async function callCohereSummarizeEndpoint(lengthSelection, formatSelection, text, cohere) {
   console.log("Calling Cohere..");
 
   const response = await cohere.summarize({
     text: text,
-    length: 'medium', //TODO control this with paragraphs?
-    format: 'paragraph',
+    length: lengthSelection,
+    format: formatSelection,
     model: SUMMARIZE_MODEL_NAME,
     additional_command: '',
     temperature: 0.3,

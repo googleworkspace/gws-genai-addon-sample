@@ -55,7 +55,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
 
 async function callVertexAiPalmChatGenApi(client, prompt) {
   console.log("Calling Vertex AI PaLM APIs..");
-  
+
   const result = await client.generateText({
     model: CHAT_MODEL_NAME, // Required. The model to use to generate the result.
     temperature: 0.5, // Optional. Value `0.0` always uses the highest-probability result.
@@ -75,7 +75,7 @@ async function callVertexAiPalmChatGenApi(client, prompt) {
   return candidates;
 }
 
-async function generateSummary(numOfParagraphs, language, text, config) {
+async function generateSummary(lengthSelection, formatSelection, text, config) {
   console.log("Entering Vertex AI PaLM API provider module");
 
   const vertexAiPalmApiKey = config.apiKey;
@@ -83,11 +83,11 @@ async function generateSummary(numOfParagraphs, language, text, config) {
   let prompt =
     //Add: My name is xyz or "Sign it with my name which is ()"
     //TODO Remove funny
-    'Provide a summary for the text below in ' +
-    numOfParagraphs +
-    ' paragraphs in ' +
-    language +
-    '. \r\n ' + 
+    'Provide a ' +
+    lengthSelection + 
+    ' length summary for the text below in ' +
+    formatSelection +
+    ' format. Short means 1-2 sentences, mediums means 3-4 sentences while large means 4 or more sentences.\r\n ' +
     'Text: ' +
     text;
 

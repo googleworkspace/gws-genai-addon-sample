@@ -43,10 +43,10 @@ async function generateSummaryResponse(event, providers, navigateBackUrl) {
     const formInputs = event.commonEventObject.formInputs;
     
     if (formInputs) {
-        const numOfParagraphs =
-            formInputs.numOfParagraphs.stringInputs.value;
-        const languageSelection =
-            formInputs.languageSelection.stringInputs.value;
+        const lengthSelection =
+            formInputs.lengthSelection.stringInputs.value;
+        const formatSelection =
+            formInputs.formatSelection.stringInputs.value;
 
         let generatedSummary = "";
 
@@ -73,7 +73,7 @@ async function generateSummaryResponse(event, providers, navigateBackUrl) {
                     throw new Error(`No valid modules exists for ${selectedProvider}`);
             }
 
-            generatedSummary = await provider.generateSummary(numOfParagraphs, languageSelection, text, providerConfig);
+            generatedSummary = await provider.generateSummary(lengthSelection, formatSelection, text, providerConfig);
         } else {
             throw new Error('No valid provider selected.');
         }
