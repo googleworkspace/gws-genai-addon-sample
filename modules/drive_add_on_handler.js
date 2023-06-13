@@ -55,7 +55,7 @@ function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvide
     return response;
 }
 
-async function generateSummaryResponse(event, providers, navigateBackUrl) {
+async function generateSummaryResponse(event, providers, exportToDocsUrl, navigateBackUrl) {
     // We only support a single file for now
     // TODO can extract as a method as it's used in two methods now
     const selectedItems = event.drive.selectedItems;
@@ -117,13 +117,54 @@ async function generateSummaryResponse(event, providers, navigateBackUrl) {
 
         console.log(`Provider summary is ${JSON.stringify(generatedSummary)}`);
 
-        const response = driveCardUiGenerator.createGenerateSummaryUi(generatedSummary, navigateBackUrl);
+        const response = driveCardUiGenerator.createGenerateSummaryUi(generatedSummary, exportToDocsUrl, navigateBackUrl);
         return response;
     } else {
         throw new "Missing required form parameters!";
     }
 }
 
+async function exportToDocsUrl(event) {
+    // We only support a single file for now
+    // TODO can extract as a method as it's used in two methods now
+    const selectedItems = event.drive.selectedItems;
+
+    if (selectedItems.length > 1) {
+        const message = "Please select only one file.";
+        const response = driveCardUiGenerator.createSingleCardWithTextUi(message);
+        return response;
+    }
+
+    const selectedItem = selectedItems[0];
+    const fileId = selectedItem.id;
+    const fileName = selectedItem.title;
+
+    const parameters = event.commonEventObject.parameters;
+    let summary = "";
+    if (parameters && parameters.summary) {
+        summary =
+            parameters.summary;
+    } else {
+        throw new Error("Summary must be provided!");
+    }
+
+    const summaryFileName = `Summary for ${fileName}`;
+    const accessToken = event.authorizationEventObject.userOAuthToken;
+
+    // Get location for the file
+    const parents = await driveUtils.getFileParentId(fileId, accessToken);
+
+    // Take the summary and put into a doc in the same folder as the original file
+    const newFileId = await driveUtils.createDocsFileWithText(summary, summaryFileName, parents, accessToken);
+    console.log(`New file ID generated ${newFileId}`);
+
+    const notificationText = `Exported to ${summaryFileName}`;
+    const response = driveCardUiGenerator.createNotificationUi(notificationText);
+
+    return response;
+}
+
 exports.generateHomePageResponse = generateHomePageResponse;
 exports.generateOnItemsSelectedTriggerResponse = generateOnItemsSelectedTriggerResponse;
 exports.generateSummaryResponse = generateSummaryResponse;
+exports.exportToDocsUrl = exportToDocsUrl;

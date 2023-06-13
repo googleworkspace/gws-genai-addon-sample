@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 
 const config = require("config");
 
-const addOnUtils = require("./modules/utils/add_on_utils.js");
+const commonAddOnUtils = require("./modules/utils/common_add_on_utils.js");
 const commonAddOnHandler = require("./modules/common_add_on_handler")
 const gmailAddOnHandler = require("./modules/gmail_add_on_handler");
 const driveAddOnHandler = require("./modules/drive_add_on_handler");
@@ -18,7 +18,7 @@ var routes = function (app) {
   /* Drive Endpoints */
   // Homepage
   app.post("/driveHomePage", asyncHandler(async (req, res) => {
-    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
     const response = driveAddOnHandler.generateHomePageResponse();
@@ -29,7 +29,7 @@ var routes = function (app) {
 
   // OnItemSelectedTrigger
   app.post("/onItemsSelectedTrigger", asyncHandler(async (req, res) => {
-    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
     const providers = config.get('providers');
@@ -43,12 +43,25 @@ var routes = function (app) {
 
   // Generate summary
   app.post("/generateFilesSummary", asyncHandler(async (req, res) => {
-    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
     const providers = config.get('providers');
+    const exportToDocsUrl = config.get('addOnConfig.urls.exportToDocsUrl');
     const navigateBackUrl = config.get('addOnConfig.urls.navigateBackUrl');
-    const response = await driveAddOnHandler.generateSummaryResponse(event, providers, navigateBackUrl);
+    const response = await driveAddOnHandler.generateSummaryResponse(event, providers, exportToDocsUrl, navigateBackUrl);
+    console.log(`JSON Response was ${JSON.stringify(response)}`);
+    res.send(response);
+  })
+  );
+
+
+  // Export summary to Docs
+  app.post("/exportToDocsUrl", asyncHandler(async (req, res) => {
+    await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    const event = req.body;
+    console.log("Received POST: " + JSON.stringify(event));
+    const response = await driveAddOnHandler.exportToDocsUrl(event);
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.send(response);
   })
@@ -57,7 +70,7 @@ var routes = function (app) {
   /* Gmail Endpoints */
   // Homepage
   app.post("/gmailHomePage", asyncHandler(async (req, res) => {
-    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
     const response = gmailAddOnHandler.generateHomePageResponse();
@@ -72,7 +85,7 @@ var routes = function (app) {
   app.post(
     "/contextualTriggers",
     asyncHandler(async (req, res) => {
-      await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+      await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
       // REMOVE WHEN DEALING WITH REAL EMAIL DATA
       const event = req.body;
       console.log("Received POST: " + JSON.stringify(event));
@@ -89,7 +102,7 @@ var routes = function (app) {
   app.post(
     "/generateReply",
     asyncHandler(async (req, res) => {
-      await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+      await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
       const event = req.body;
       console.log("Received POST: " + JSON.stringify(event));
       const providers = config.get('providers');
@@ -105,7 +118,7 @@ var routes = function (app) {
   app.post(
     "/createReplyDraft",
     asyncHandler(async (req, res) => {
-      await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+      await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
       // REMOVE WHEN DEALING WITH REAL EMAIL DATA
       const event = req.body;
       console.log("Received POST: " + JSON.stringify(event));
@@ -119,7 +132,7 @@ var routes = function (app) {
 
   // Navigate Back
   app.post("/navigateBack", asyncHandler(async (req, res) => {
-    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     console.log("Received POST: " + JSON.stringify(req.body));
     const response = commonAddOnHandler.generateNavigateBackResponse();
     console.log(`JSON Response was ${JSON.stringify(response)}`);

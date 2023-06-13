@@ -122,7 +122,7 @@ function createOnItemsSelectedTriggerUi(fileName, providerSelectionItems, genera
   return response;
 }
 
-function createGenerateSummaryUi(summary, navigateBackUrl) {
+function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUrl) {
   const response = {
     render_actions: {
       action: {
@@ -139,16 +139,29 @@ function createGenerateSummaryUi(summary, navigateBackUrl) {
                     },
                     {
                       buttonList: {
-                        buttons: [
-                          {
-                            text: "Try again",
-                            onClick: {
-                              action: {
-                                function: navigateBackUrl,
-                                parameters: [],
-                              },
+                        buttons: [{
+                          text: "Export to Docs",
+                          onClick: {
+                            action: {
+                              function: exportToDocsUrl,
+                              parameters: [
+                                {
+                                  key: "summary",
+                                  value: summary,
+                                },
+                              ],
                             },
                           },
+                        },
+                        {
+                          text: "Go back",
+                          onClick: {
+                            action: {
+                              function: navigateBackUrl,
+                              parameters: [],
+                            },
+                          },
+                        },
                         ],
                       }
                     },
@@ -166,6 +179,20 @@ function createGenerateSummaryUi(summary, navigateBackUrl) {
   return response;
 }
 
+function createNotificationUi(message) {
+  const response = {
+    render_actions: {
+      action: {
+        notification: {
+          text: message
+        }
+      }
+    }
+  };
+
+  return response;
+}
 exports.createSingleCardWithTextUi = createSingleCardWithTextUi;
 exports.createOnItemsSelectedTriggerUi = createOnItemsSelectedTriggerUi;
 exports.createGenerateSummaryUi = createGenerateSummaryUi;
+exports.createNotificationUi = createNotificationUi;

@@ -1,6 +1,6 @@
 const gmailCardUiGenerator = require('./ui/gmail_card_ui_generator');
 const gmailUtils = require('./utils/gmail_utils');
-const addOnUtils = require('./utils/add_on_utils')
+const commonAddOnUtils = require('./utils/common_add_on_utils')
 
 function generateHomePageResponse() {
     const message = "Please select a message to start using this add-on.";
@@ -79,7 +79,7 @@ async function generateCreateDraftResponse(event) {
 async function generateGenerateReplyResponse(event, providers, oauthClientId, createReplyDraftUrl, navigateBackUrl) {
     const message = await gmailUtils.getGmailMessage(event);
     const formInputs = event.commonEventObject.formInputs;
-    const profileInfo = await addOnUtils.getPayloadFromEvent(event, oauthClientId);
+    const profileInfo = await commonAddOnUtils.getPayloadFromEvent(event, oauthClientId);
     // This is for the JSON card UI response
     let sections = [];
     if (formInputs && formInputs.replyTextPrompt) {
