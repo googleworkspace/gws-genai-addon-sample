@@ -44,7 +44,8 @@ var routes = function (app) {
   // Generate summary
   app.post("/generateFilesSummary", asyncHandler(async (req, res) => {
     await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
-    const event = req.body; console.log("Received POST: " + JSON.stringify(event));
+    const event = req.body;
+    console.log("Received POST: " + JSON.stringify(event));
     const providers = config.get('providers');
     const navigateBackUrl = config.get('addOnConfig.urls.navigateBackUrl');
     const response = await driveAddOnHandler.generateSummaryResponse(event, providers, navigateBackUrl);
