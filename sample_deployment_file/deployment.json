@@ -8,7 +8,7 @@
     "https://www.googleapis.com/auth/userinfo.profile",
     "https://www.googleapis.com/auth/script.locale",
     "https://www.googleapis.com/auth/drive.addons.metadata.readonly",
-    "https://www.googleapis.com/auth/drive.readonly"
+    "https://www.googleapis.com/auth/drive"
   ],
   "addOns": {
     "common": {
