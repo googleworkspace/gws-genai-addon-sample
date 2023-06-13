@@ -5,7 +5,7 @@ const config = require("config");
 const addOnUtils = require("./modules/utils/add_on_utils.js");
 const commonAddOnHandler = require("./modules/common_add_on_handler")
 const gmailAddOnHandler = require("./modules/gmail_add_on_handler");
-const docsAddOnHandler = require("./modules/docs_add_on_handler");
+const driveAddOnHandler = require("./modules/drive_add_on_handler");
 
 // Add-on Client ID (to validate token)
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id
@@ -15,28 +15,39 @@ const addOnServiceAccountEmail = config.get("addOnConfig.serviceAccountEmail");
 // TODO use the service account to validate requests
 
 var routes = function (app) {
-  /* Docs Endpoints */
+  /* Drive Endpoints */
   // Homepage
-  app.post("/docsHomePage", asyncHandler(async (req, res) => {
+  app.post("/driveHomePage", asyncHandler(async (req, res) => {
+    await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
+    const event = req.body;
+    console.log("Received POST: " + JSON.stringify(event));
+    const response = driveAddOnHandler.generateHomePageResponse();
+    console.log(`JSON Response was ${JSON.stringify(response)}`);
+    res.send(response);
+  })
+  );
+
+  // OnItemSelectedTrigger
+  app.post("/onItemsSelectedTrigger", asyncHandler(async (req, res) => {
     await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
     const providers = config.get('providers');
     const defaultProvider = config.get('defaultProvider');
-    const generateSummaryUrl = config.get('addOnConfig.urls.generateDocsSummaryUrl');
-    const response = docsAddOnHandler.generateHomePageResponse(providers, defaultProvider, generateSummaryUrl);
+    const generateFilesSummaryUrl = config.get('addOnConfig.urls.generateFilesSummaryUrl');
+    const response = driveAddOnHandler.generateOnItemsSelectedTriggerResponse(event, providers, defaultProvider, generateFilesSummaryUrl);
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.send(response);
   })
   );
 
   // Generate summary
-  app.post("/generateDocsSummary", asyncHandler(async (req, res) => {
+  app.post("/generateFilesSummary", asyncHandler(async (req, res) => {
     await addOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
-    const event = req.body;console.log("Received POST: " + JSON.stringify(event));
+    const event = req.body; console.log("Received POST: " + JSON.stringify(event));
     const providers = config.get('providers');
     const navigateBackUrl = config.get('addOnConfig.urls.navigateBackUrl');
-    const response = await docsAddOnHandler.generateSummaryResponse(event, providers, navigateBackUrl);
+    const response = await driveAddOnHandler.generateSummaryResponse(event, providers, navigateBackUrl);
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.send(response);
   })
