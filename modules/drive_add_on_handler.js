@@ -22,8 +22,8 @@ function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvide
     const fileName = selectedItem.title;
     const mimeType = selectedItem.mimeType;
 
-    if (mimeType !== "application/vnd.google-apps.document") {
-        const message = "Only Google Docs files are supported for now.";
+    if (mimeType !== "application/vnd.google-apps.document" && mimeType !== "text/plain") {
+        const message = "Only Google Docs or text files are supported for now.";
         const response = driveCardUiGenerator.createSingleCardWithTextUi(message);
         return response;
     }
@@ -50,7 +50,7 @@ function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvide
 
     };
 
-    const response = driveCardUiGenerator.createOnItemsSelectedTriggerUi(fileId, fileName, providerSelectionItems, generateDocsSummaryUrl);
+    const response = driveCardUiGenerator.createOnItemsSelectedTriggerUi(fileId, mimeType, fileName, providerSelectionItems, generateDocsSummaryUrl);
     return response;
 }
 
@@ -58,18 +58,21 @@ async function generateSummaryResponse(event, providers, navigateBackUrl) {
     // Extract fileId from form inputs
     const parameters = event.commonEventObject.parameters;
     let fileId = "";
-    if (parameters && parameters.fileId) {
+    let mimeType = "";
+
+    if (parameters && parameters.fileId && parameters.mimeType) {
         fileId =
             parameters.fileId;
+        mimeType = parameters.mimeType;
     } else {
-        throw new Error("fileId must be supplied!");
+        throw new Error("fileId and mimeType must be provided!");
     }
 
     // Extract auth token from event
     const accessToken = event.authorizationEventObject.userOAuthToken;
 
     // Call the drive utils to get file content
-    const fileContent = await driveUtils.getDocsContent(fileId, accessToken);
+    const fileContent = await driveUtils.getDocsContent(fileId, mimeType, accessToken);
 
     // Feed into LLM
     const formInputs = event.commonEventObject.formInputs;

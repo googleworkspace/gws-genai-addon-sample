@@ -24,7 +24,7 @@ function createSingleCardWithTextUi(text) {
   return response;
 }
 
-function createOnItemsSelectedTriggerUi(fileId, fileName, providerSelectionItems, generateDocsSummaryFunctionUrl) {
+function createOnItemsSelectedTriggerUi(fileId, mimeType, fileName, providerSelectionItems, generateDocsSummaryFunctionUrl) {
   const response = {
     action: {
       navigations: [
@@ -107,6 +107,10 @@ function createOnItemsSelectedTriggerUi(fileId, fileName, providerSelectionItems
                                 key: "fileId",
                                 value: fileId,
                               },
+                              {
+                                key: "mimeType",
+                                value: mimeType
+                              }
                             ],
                           }
                         }
