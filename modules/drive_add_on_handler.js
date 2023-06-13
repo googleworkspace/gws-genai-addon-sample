@@ -18,7 +18,6 @@ function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvide
     }
 
     const selectedItem = selectedItems[0];
-    const fileId = selectedItem.id;
     const fileName = selectedItem.title;
     const mimeType = selectedItem.mimeType;
 
@@ -50,23 +49,24 @@ function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvide
 
     };
 
-    const response = driveCardUiGenerator.createOnItemsSelectedTriggerUi(fileId, mimeType, fileName, providerSelectionItems, generateDocsSummaryUrl);
+    const response = driveCardUiGenerator.createOnItemsSelectedTriggerUi(fileName, providerSelectionItems, generateDocsSummaryUrl);
     return response;
 }
 
 async function generateSummaryResponse(event, providers, navigateBackUrl) {
-    // Extract fileId from form inputs
-    const parameters = event.commonEventObject.parameters;
-    let fileId = "";
-    let mimeType = "";
+    // We only support a single file for now
+    // TODO can extract as a method as it's used in two methods now
+    const selectedItems = event.drive.selectedItems;
 
-    if (parameters && parameters.fileId && parameters.mimeType) {
-        fileId =
-            parameters.fileId;
-        mimeType = parameters.mimeType;
-    } else {
-        throw new Error("fileId and mimeType must be provided!");
+    if (selectedItems.length > 1) {
+        const message = "Please select only one file.";
+        const response = driveCardUiGenerator.createSingleCardWithTextUi(message);
+        return response;
     }
+
+    const selectedItem = selectedItems[0];
+    const fileId = selectedItem.id;
+    const mimeType = selectedItem.mimeType;
 
     // Extract auth token from event
     const accessToken = event.authorizationEventObject.userOAuthToken;
