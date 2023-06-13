@@ -19,10 +19,12 @@ function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvide
 
     const selectedItem = selectedItems[0];
     const fileName = selectedItem.title;
-    const mimeType = selectedItem.mimeType;
+    const fileMimeType = selectedItem.mimeType;
 
-    if (mimeType !== "application/vnd.google-apps.document" && mimeType !== "text/plain") {
-        const message = "Only Google Docs or text files are supported for now.";
+    const supportedMimeTypes = ['application/vnd.google-apps.document', 'application/vnd.google-apps.spreadsheet', 'application/vnd.google-apps.presentation', 'text/plain'];
+
+    if (!supportedMimeTypes.includes(fileMimeType)) {
+        const message = "Only Google Docs, Sheets or Slides, or plain text files are supported for now.";
         const response = driveCardUiGenerator.createSingleCardWithTextUi(message);
         return response;
     }
