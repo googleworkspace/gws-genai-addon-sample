@@ -6,24 +6,34 @@
     "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
-    "https://www.googleapis.com/auth/script.locale"
+    "https://www.googleapis.com/auth/script.locale",
+    "https://www.googleapis.com/auth/drive.addons.metadata.readonly",
+    "https://www.googleapis.com/auth/drive.readonly"
   ],
   "addOns": {
     "common": {
-      "name": "GenAI Companion Demo",
+      "name": "GenAI Companion",
       "logoUrl": "https://fonts.gstatic.com/s/i/googlematerialicons/history_edu/v6/black-24dp/1x/gm_history_edu_black_24dp.png",
-      "homepageTrigger": {
-        "runFunction": "https://gen-ai-sample-add-on.malansari.repl.co/homePage"
-      },
       "useLocaleFromApp": true
     },
     "gmail": {
+      "homepageTrigger": {
+        "runFunction": ""
+      },
       "contextualTriggers": [
         {
           "unconditional": {},
-          "onTriggerFunction": "https://gen-ai-sample-add-on.malansari.repl.co/contextualTriggers"
+          "onTriggerFunction": ""
         }
       ]
+    },
+    "drive": {
+      "homepageTrigger": {
+        "runFunction": ""
+      },
+      "onItemsSelectedTrigger": {
+        "runFunction": ""
+      }
     }
   }
 }
