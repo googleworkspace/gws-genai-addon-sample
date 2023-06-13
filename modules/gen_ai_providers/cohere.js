@@ -56,7 +56,7 @@ async function callCohereTextGenerationApi(prompt, cohere) {
     k: 0,
     stop_sequences: [],
     return_likelihoods: "NONE",
-    num_generations: 2, 
+    num_generations: 2,
   });
 
   console.log(`Cohere response is ${JSON.stringify(response)}`);
@@ -86,8 +86,8 @@ async function callCohereSummarizeEndpoint(lengthSelection, formatSelection, tex
 
   const response = await cohere.summarize({
     text: text,
-    length: lengthSelection,
-    format: formatSelection,
+    length: String(lengthSelection), //for some reason it is coming in as an array
+    format: String(formatSelection),
     model: SUMMARIZE_MODEL_NAME,
     additional_command: '',
     temperature: 0.3,

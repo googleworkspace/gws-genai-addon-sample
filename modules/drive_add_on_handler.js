@@ -1,6 +1,33 @@
-const docsCardUiGenerator = require('./ui/docs_card_ui_generator');
+const driveCardUiGenerator = require('./ui/drive_card_ui_generator');
+const driveUtils = require('./utils/drive_utils');
 
-function generateHomePageResponse(providers, defaultProvider, generateDocsSummaryUrl) {
+function generateHomePageResponse() {
+    const message = "Please select a file to start using this add-on.";
+    const response = driveCardUiGenerator.createSingleCardWithTextUi(message);
+    return response;
+}
+
+function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvider, generateDocsSummaryUrl) {
+    const selectedItems = event.drive.selectedItems;
+
+    // We only support a single file for now
+    if (selectedItems.length > 1) {
+        const message = "Please select only one file.";
+        const response = driveCardUiGenerator.createSingleCardWithTextUi(message);
+        return response;
+    }
+
+    const selectedItem = selectedItems[0];
+    const fileId = selectedItem.id;
+    const fileName = selectedItem.title;
+    const mimeType = selectedItem.mimeType;
+
+    if (mimeType !== "application/vnd.google-apps.document") {
+        const message = "Only Google Docs files are supported for now.";
+        const response = driveCardUiGenerator.createSingleCardWithTextUi(message);
+        return response;
+    }
+
     // TODO this can be extracted as it is used in Gmail handler too
     // Generate GenAI selection options and set default per config
     const enabledProviders = providers.filter(provider => provider.enabled == true);
@@ -23,25 +50,30 @@ function generateHomePageResponse(providers, defaultProvider, generateDocsSummar
 
     };
 
-    const response = docsCardUiGenerator.createHomePageUi(providerSelectionItems, generateDocsSummaryUrl);
+    const response = driveCardUiGenerator.createOnItemsSelectedTriggerUi(fileId, fileName, providerSelectionItems, generateDocsSummaryUrl);
     return response;
 }
 
 async function generateSummaryResponse(event, providers, navigateBackUrl) {
-    //Sample for now
-    const text = `
-    Discovery document
-    A Discovery Document is a machine-readable specification for describing and consuming REST APIs. It is used to build client libraries, IDE plugins, and other tools that interact with Google APIs. One service may provide multiple discovery documents. This service provides the following discovery document:
+    // Extract fileId from form inputs
+    const parameters = event.commonEventObject.parameters;
+    let fileId = "";
+    if (parameters && parameters.fileId) {
+        fileId =
+            parameters.fileId;
+    } else {
+        throw new Error("fileId must be supplied!");
+    }
 
-    https://gsuiteaddons.googleapis.com/$discovery/rest?version=v1
-    Service endpoint
-    A service endpoint is a base URL that specifies the network address of an API service. One service might have multiple service endpoints. This service has the following service endpoint and all URIs below are relative to this service endpoint:
+    // Extract auth token from event
+    const accessToken = event.authorizationEventObject.userOAuthToken;
 
-    https://gsuiteaddons.googleapis.com
-    `;
+    // Call the drive utils to get file content
+    const fileContent = await driveUtils.getDocsContent(fileId, accessToken);
 
+    // Feed into LLM
     const formInputs = event.commonEventObject.formInputs;
-    
+
     if (formInputs) {
         const lengthSelection =
             formInputs.lengthSelection.stringInputs.value;
@@ -73,14 +105,14 @@ async function generateSummaryResponse(event, providers, navigateBackUrl) {
                     throw new Error(`No valid modules exists for ${selectedProvider}`);
             }
 
-            generatedSummary = await provider.generateSummary(lengthSelection, formatSelection, text, providerConfig);
+            generatedSummary = await provider.generateSummary(lengthSelection, formatSelection, fileContent, providerConfig);
         } else {
             throw new Error('No valid provider selected.');
         }
 
         console.log(`Provider summary is ${JSON.stringify(generatedSummary)}`);
 
-        const response = docsCardUiGenerator.createGenerateSummaryUi(generatedSummary, navigateBackUrl);
+        const response = driveCardUiGenerator.createGenerateSummaryUi(generatedSummary, navigateBackUrl);
         return response;
     } else {
         throw new "Missing required form parameters!";
@@ -88,4 +120,5 @@ async function generateSummaryResponse(event, providers, navigateBackUrl) {
 }
 
 exports.generateHomePageResponse = generateHomePageResponse;
+exports.generateOnItemsSelectedTriggerResponse = generateOnItemsSelectedTriggerResponse;
 exports.generateSummaryResponse = generateSummaryResponse;

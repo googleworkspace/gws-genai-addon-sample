@@ -6,7 +6,7 @@
       "generateReplyUrl": "",
       "navigateBackUrl": "",
       "createReplyDraftUrl": "",
-      "generateDocsSummaryUrl": ""
+      "generateFilesSummaryUrl": ""
     }
   },
   "defaultProvider": "vertexAiPalmApi",

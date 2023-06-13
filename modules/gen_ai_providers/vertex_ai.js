@@ -7,6 +7,7 @@ const CHAT_MODEL_NAME = "models/text-bison-001";
 const TEXT_GEN_MODEL_NAME = "models/text-bison-001";
 
 // BASED ON https://developers.generativeai.google/tutorials/chat_node_quickstart
+// AND https://developers.generativeai.google/tutorials/text_node_quickstart
 
 // TODO create another exported function for creating content for Google Docs
 // TODO you can move config to the instantiations of the module?
@@ -79,15 +80,30 @@ async function generateSummary(lengthSelection, formatSelection, text, config) {
   console.log("Entering Vertex AI PaLM API provider module");
 
   const vertexAiPalmApiKey = config.apiKey;
+  let numOfSentences = "";
+
+  switch (String(lengthSelection)) {
+    case "short":
+      numOfSentences = "1 - 2";
+      break;
+    case "medium":
+      numOfSentences = "3 - 4";
+      break;
+    case "long":
+      numOfSentences = "4 or more";
+      break;
+    default:
+      numOfSentences = "3 - 4";
+  }
 
   let prompt =
     //Add: My name is xyz or "Sign it with my name which is ()"
     //TODO Remove funny
-    'Provide a ' +
-    lengthSelection + 
-    ' length summary for the text below in ' +
+    'Write a summary in ' +
+    numOfSentences +
+    ' sentences for the following article in a ' +
     formatSelection +
-    ' format. Short means 1-2 sentences, mediums means 3-4 sentences while large means 4 or more sentences.\r\n ' +
+    ' format.\r\n ' +
     'Text: ' +
     text;
 
@@ -113,8 +129,7 @@ async function callVertexAiPalmTextGenApi(client, prompt) {
 
   const result = await client.generateText({
     model: TEXT_GEN_MODEL_NAME, // Required. The model to use to generate the result.
-    temperature: 0.5, // Optional. Value `0.0` always uses the highest-probability result.
-    candidateCount: 2, // Optional. The number of candidate results to generate.
+    temperature: 0.3, // Optional. Value `0.0` always uses the highest-probability result.
     prompt: {
       //       // optional, preamble context to prime responses
       //       context: "Respond to all questions with a rhyming poem.",     

@@ -7,18 +7,14 @@
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
     "https://www.googleapis.com/auth/script.locale",
-    "https://www.googleapis.com/auth/documents.readonly"
+    "https://www.googleapis.com/auth/drive.addons.metadata.readonly",
+    "https://www.googleapis.com/auth/drive.readonly"
   ],
   "addOns": {
     "common": {
       "name": "GenAI Companion",
       "logoUrl": "https://fonts.gstatic.com/s/i/googlematerialicons/history_edu/v6/black-24dp/1x/gm_history_edu_black_24dp.png",
       "useLocaleFromApp": true
-    },
-    "docs": {
-      "homepageTrigger": {
-        "runFunction": ""
-      }
     },
     "gmail": {
       "homepageTrigger": {
@@ -30,6 +26,14 @@
           "onTriggerFunction": ""
         }
       ]
+    },
+    "drive": {
+      "homepageTrigger": {
+        "runFunction": ""
+      },
+      "onItemsSelectedTrigger": {
+        "runFunction": ""
+      }
     }
   }
 }
