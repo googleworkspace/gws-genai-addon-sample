@@ -15,10 +15,12 @@ app.enable('trust proxy');
 
 app.use(bearerToken());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
-const routes = require("./routes.js")(app);
+require("./routes.js")(app);
 
-const server = app.listen(3000, function () {
-  console.log("Listening on port %s", server.address().port);
-});
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
+
+module.exports = app;

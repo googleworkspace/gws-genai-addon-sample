@@ -28,6 +28,8 @@ gcloud services enable \
   run.googleapis.com \
   cloudbuild.googleapis.com \
   cloudresourcemanager.googleapis.com \
+  artifactregistry.googleapis.com \
+  appsmarket-component.googleapis.com \
   gsuiteaddons.googleapis.com
 ```
 
@@ -64,14 +66,19 @@ gcloud run services list --platform managed
 ### Upload the deployment descriptor
 
 ```sh
-gcloud workspace-add-ons deployments create genai-gmail-companion
+gcloud workspace-add-ons deployments create genai-gmail-companion --deployment-file=deployment.json
 ```
 
 ### Authorize access to the add-on backend
 
 ```sh
 SERVICE_ACCOUNT_EMAIL=$(gcloud workspace-add-ons get-authorization --format="value(serviceAccountEmail)")
-gcloud run services add-iam-policy-binding genai-gmail-companion --platform managed --region us-west1 --role roles/run.invoker --member "serviceAccount:$SERVICE_ACCOUNT_EMAIL"
+gcloud run services add-iam-policy-binding \
+    genai-gmail-companion \
+    --member=serviceAccount:$SERVICE_ACCOUNT_EMAIL \
+    --role=roles/run.invoker \
+    --region=us-west1 \
+    --platform=managed
 ```
 
 ###  Install the add-on
