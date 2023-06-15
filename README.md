@@ -30,6 +30,8 @@ gcloud services enable \
   cloudresourcemanager.googleapis.com \
   artifactregistry.googleapis.com \
   appsmarket-component.googleapis.com \
+  gmail.googleapis.com \
+  drive.googleapis.com \
   gsuiteaddons.googleapis.com
 ```
 
@@ -85,4 +87,10 @@ gcloud run services add-iam-policy-binding \
 
 ```sh
 gcloud workspace-add-ons deployments install genai-gmail-companion
+```
+
+### To replace deployment.json
+
+```sh
+gcloud workspace-add-ons deployments replace genai-gmail-companion --deployment-file=deployment.json
 ```
