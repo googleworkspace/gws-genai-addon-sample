@@ -1,4 +1,4 @@
-const { OAuth2Client } = require("google-auth-library");
+const {OAuth2Client} = require("google-auth-library");
 
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#extract_the_user_id_and_email
 // and https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id on how to configure
@@ -21,7 +21,7 @@ async function authenticateRequest(request, serviceAccountEmail) {
   if (!idToken) throw 'Missing bearer token';
   const audience = `${request.protocol}://${request.hostname}${request.originalUrl}`;
   const authClient = new OAuth2Client();
-  const ticket = await authClient.verifyIdToken({ idToken, audience });
+  const ticket = await authClient.verifyIdToken({idToken, audience});
   if (ticket.getPayload().email !== serviceAccountEmail) {
     throw 'Invalid service account email. You cannot run this code for this add-on.';
   }
