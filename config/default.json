@@ -3,11 +3,11 @@
     "oauthClientId": "",
     "serviceAccountEmail": "",
     "urls": {
-      "generateReplyUrl": "",
-      "navigateBackUrl": "",
-      "createReplyDraftUrl": "",
-      "generateFilesSummaryUrl": "",
-      "exportToDocsUrl": ""
+      "generateReplyUrl": "<DEPLOYMENT_URL>/generateReplyUrl",
+      "navigateBackUrl": "<DEPLOYMENT_URL>/navigateBackUrl",
+      "createReplyDraftUrl": "<DEPLOYMENT_URL>/createReplyDraftUrl",
+      "generateFilesSummaryUrl": "<DEPLOYMENT_URL>/generateFilesSummaryUrl",
+      "exportToDocsUrl": "<DEPLOYMENT_URL>/exportToDocsUrl"
     }
   },
   "defaultProvider": "vertexAiPalmApi",
@@ -23,14 +23,6 @@
     {
       "name": "Cohere",
       "value": "cohere",
-      "enabled": true,
-      "config": {
-        "apiKey": ""
-      }
-    },
-    {
-      "name": "Jasper AI",
-      "value": "jasperAiApi",
       "enabled": false,
       "config": {
         "apiKey": ""
