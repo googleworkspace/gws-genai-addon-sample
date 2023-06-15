@@ -18,21 +18,21 @@
     },
     "gmail": {
       "homepageTrigger": {
-        "runFunction": ""
+        "runFunction": "<DEPLOYMENT_URL>/gmailHomePage"
       },
       "contextualTriggers": [
         {
           "unconditional": {},
-          "onTriggerFunction": ""
+          "onTriggerFunction": "<DEPLOYMENT_URL>/contextualTriggers"
         }
       ]
     },
     "drive": {
       "homepageTrigger": {
-        "runFunction": ""
+        "runFunction": "<DEPLOYMENT_URL>/driveHomePage"
       },
       "onItemsSelectedTrigger": {
-        "runFunction": ""
+        "runFunction": "<DEPLOYMENT_URL>/onItemsSelectedTrigger"
       }
     }
   }
