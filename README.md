@@ -25,15 +25,16 @@ gcloud config set project <PROJECT_ID>
 
 ```sh
 gcloud services enable \
-  run.googleapis.com \
+  aiplatform.googleapis.com \
+  appsmarket-component.googleapis.com \
+  artifactregistry.googleapis.com \
   cloudbuild.googleapis.com \
   cloudresourcemanager.googleapis.com \
-  artifactregistry.googleapis.com \
-  appsmarket-component.googleapis.com \
-  gmail.googleapis.com \
   drive.googleapis.com \
-  aiplatform.googleapis.com \
+  generativelanguage.googleapis.com \
+  gmail.googleapis.com \
   gsuiteaddons.googleapis.com \
+  run.googleapis.com
 ```
 
 ## Deploy to Cloud Run
