@@ -1,6 +1,6 @@
-const { TextServiceClient } =
+const {TextServiceClient} =
   require("@google-ai/generativelanguage").v1beta2;
-const { GoogleAuth } = require("google-auth-library");
+const {GoogleAuth} = require("google-auth-library");
 
 //TODO list the other modules (or link to it)
 const CHAT_MODEL_NAME = "models/text-bison-001";
@@ -12,7 +12,7 @@ const TEXT_GEN_MODEL_NAME = "models/text-bison-001";
 // TODO create another exported function for creating content for Google Docs
 // TODO you can move config to the instantiations of the module?
 async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
-  console.log("Entering Vertex AI PaLM API provider module");
+  console.log("Entering PaLM API provider module");
 
   const vertexAiPalmApiKey = config.apiKey;
 
@@ -47,7 +47,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
   let replies = [];
   // TODO can you remove the for loop and move to an array method ?
   for (let i = 0; i < candidates.length; i++) {
-    replies.push({ "suggestedText": candidates[i].output });
+    replies.push({"suggestedText": candidates[i].output});
   }
 
   return replies;
@@ -55,7 +55,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
 
 
 async function callVertexAiPalmChatGenApi(client, prompt) {
-  console.log("Calling Vertex AI PaLM APIs..");
+  console.log("Calling PaLM APIs..");
 
   const result = await client.generateText({
     model: CHAT_MODEL_NAME, // Required. The model to use to generate the result.
@@ -69,7 +69,7 @@ async function callVertexAiPalmChatGenApi(client, prompt) {
     },
   });
 
-  console.log(`Vertex AI PaLM API response is ${JSON.stringify(result)}`);
+  console.log(`PaLM API response is ${JSON.stringify(result)}`);
 
   const candidates = result[0].candidates;
 
@@ -77,7 +77,7 @@ async function callVertexAiPalmChatGenApi(client, prompt) {
 }
 
 async function generateSummary(lengthSelection, formatSelection, text, config) {
-  console.log("Entering Vertex AI PaLM API provider module");
+  console.log("Entering PaLM API provider module");
 
   const vertexAiPalmApiKey = config.apiKey;
   let numOfSentences = "";
@@ -125,7 +125,7 @@ async function generateSummary(lengthSelection, formatSelection, text, config) {
 }
 
 async function callVertexAiPalmTextGenApi(client, prompt) {
-  console.log("Calling Vertex AI PaLM APIs..");
+  console.log("Calling PaLM APIs..");
 
   const result = await client.generateText({
     model: TEXT_GEN_MODEL_NAME, // Required. The model to use to generate the result.
@@ -138,7 +138,7 @@ async function callVertexAiPalmTextGenApi(client, prompt) {
     },
   });
 
-  console.log(`Vertex AI PaLM API response is ${JSON.stringify(result)}`);
+  console.log(`PaLM API response is ${JSON.stringify(result)}`);
 
   const candidates = result[0].candidates;
 
