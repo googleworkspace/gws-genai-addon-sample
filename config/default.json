@@ -3,18 +3,18 @@
     "oauthClientId": "",
     "serviceAccountEmail": "",
     "urls": {
-      "generateReplyUrl": "<DEPLOYMENT_URL>/generateReplyUrl",
-      "navigateBackUrl": "<DEPLOYMENT_URL>/navigateBackUrl",
-      "createReplyDraftUrl": "<DEPLOYMENT_URL>/createReplyDraftUrl",
-      "generateFilesSummaryUrl": "<DEPLOYMENT_URL>/generateFilesSummaryUrl",
-      "exportToDocsUrl": "<DEPLOYMENT_URL>/exportToDocsUrl"
+      "generateReplyUrl": "<DEPLOYMENT_URL>/generateReply",
+      "navigateBackUrl": "<DEPLOYMENT_URL>/navigateBack",
+      "createReplyDraftUrl": "<DEPLOYMENT_URL>/createReplyDraft",
+      "generateFilesSummaryUrl": "<DEPLOYMENT_URL>/generateFilesSummary",
+      "exportToDocsUrl": "<DEPLOYMENT_URL>/exportToDocs"
     }
   },
-  "defaultProvider": "vertexAiPalmApi",
+  "defaultProvider": "palmApi",
   "providers": [
     {
-      "name": "Vertex AI PaLM",
-      "value": "vertexAiPalmApi",
+      "name": "PaLM",
+      "value": "palmApi",
       "enabled": true,
       "config": {
         "apiKey": ""
