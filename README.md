@@ -1,5 +1,5 @@
 # genai-gmail-companion
-A Google Workspace add-on for Gmail and Google Drive using Node.js and Googel Cloud Vertex AI PaLM API
+A Google Workspace add-on for Gmail and Google Drive using Node.js and Googel Cloud PaLM API
 
 ## Setup
 
@@ -113,11 +113,11 @@ These function URLs are used for interactions between cards in the add-on.
 
 This add-on can be used with the list of providers below. For each provider, you can configure the `enabled` flag to show in the add-on, and any applicable configuration (i.e. API key) for that provider.
 
-#### Vertex AI PaLM API
+#### PaLM API
 
 The add-on can use [PaLM API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#palm-api) to generate and summarize text. To use this provider, you need to [create an API key](https://cloud.google.com/docs/authentication/api-keys) and save it in the `apiKey` parameter in the add-on configuration file.
 
-Additional configurations for the provider are found in the `modules/gen_ai_providers/vertex_ai.js` file, including the models used, maximum tokens returned, and other configuration.
+Additional configurations for the provider are found in the `modules/gen_ai_providers/palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
 
 #### Cohere.ai
 
