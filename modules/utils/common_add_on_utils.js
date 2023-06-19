@@ -21,8 +21,8 @@ async function authenticateRequest(request, serviceAccountEmail) {
   if (!idToken) throw 'Missing bearer token';
   const audience = `${request.protocol}://${request.hostname}${request.originalUrl}`;
   const authClient = new OAuth2Client();
-  const ticket = await authClient.verifyIdToken({idToken, audience});
-  if (ticket.getPayload().email !== serviceAccountEmail) {
+  const ticket = await authClient.verifyIdToken({ idToken, audience });
+  if (serviceAccountEmail && serviceAccountEmail !== ticket.getPayload().email) {
     throw 'Invalid service account email. You cannot run this code for this add-on.';
   }
 }

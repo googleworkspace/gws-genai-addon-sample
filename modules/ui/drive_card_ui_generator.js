@@ -1,3 +1,14 @@
+const cardUiUtils = require('../utils/card_ui_utils');
+
+
+function createRenderActionWithTextUi(text) {
+  const response = {
+    render_actions: createSingleCardWithTextUi(text)
+  };
+
+  return response;
+
+}
 function createSingleCardWithTextUi(text) {
   const response = {
     action: {
@@ -123,6 +134,40 @@ function createOnItemsSelectedTriggerUi(fileName, providerSelectionItems, genera
 }
 
 function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUrl) {
+  console.log('entering createGenerateSummaryUi');
+
+  const responseWidgets = cardUiUtils.convertMarkdownToWidgets(summary);
+  console.log(`responseWidgets: ${JSON.stringify(responseWidgets)}`);
+
+  responseWidgets.push({
+    buttonList: {
+      buttons: [{
+        text: "Export to Docs",
+        onClick: {
+          action: {
+            function: exportToDocsUrl,
+            parameters: [
+              {
+                key: "summary",
+                value: summary,
+              },
+            ],
+          },
+        },
+      },
+      {
+        text: "Go back",
+        onClick: {
+          action: {
+            function: navigateBackUrl,
+            parameters: [],
+          },
+        },
+      },
+      ],
+    }
+  });
+
   const response = {
     render_actions: {
       action: {
@@ -131,41 +176,7 @@ function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUrl) {
             pushCard: {
               sections: [
                 {
-                  widgets: [
-                    {
-                      textParagraph: {
-                        text: summary,
-                      },
-                    },
-                    {
-                      buttonList: {
-                        buttons: [{
-                          text: "Export to Docs",
-                          onClick: {
-                            action: {
-                              function: exportToDocsUrl,
-                              parameters: [
-                                {
-                                  key: "summary",
-                                  value: summary,
-                                },
-                              ],
-                            },
-                          },
-                        },
-                        {
-                          text: "Go back",
-                          onClick: {
-                            action: {
-                              function: navigateBackUrl,
-                              parameters: [],
-                            },
-                          },
-                        },
-                        ],
-                      }
-                    },
-                  ],
+                  widgets: responseWidgets,
                   "header": "Generated summary",
                 },
               ],
@@ -192,6 +203,8 @@ function createNotificationUi(message) {
 
   return response;
 }
+
+exports.createRenderActionWithTextUi = createRenderActionWithTextUi;
 exports.createSingleCardWithTextUi = createSingleCardWithTextUi;
 exports.createOnItemsSelectedTriggerUi = createOnItemsSelectedTriggerUi;
 exports.createGenerateSummaryUi = createGenerateSummaryUi;
