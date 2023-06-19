@@ -95,9 +95,15 @@ async function callCohereSummarizeEndpoint(lengthSelection, formatSelection, tex
 
   console.log(`Cohere response is ${JSON.stringify(response)}`);
 
-  const summary = response.body.summary;
+  const statusCode = response.statusCode;
 
-  return summary;
+  if (statusCode === 200) {
+    const summary = response.body.summary;
+    return summary;
+  } else {
+    console.log(`Error generating summary. API HTTP response code: ${statusCode}.`);
+    return null;
+  }
 }
 
 exports.generateEmailReply = generateEmailReply;
