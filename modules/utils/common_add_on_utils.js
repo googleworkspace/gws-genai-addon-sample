@@ -1,4 +1,4 @@
-const {OAuth2Client} = require("google-auth-library");
+const { OAuth2Client } = require("google-auth-library");
 
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#extract_the_user_id_and_email
 // and https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id on how to configure
