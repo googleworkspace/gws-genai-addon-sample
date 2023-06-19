@@ -27,7 +27,7 @@ async function generateContextualTriggerResponse(event, providers, defaultProvid
   const userLocale = event.commonEventObject.userLocale;
   const formattedSentDateTime = new Date(messageDate).toLocaleString(
     userLocale,
-    {timeZone: userTimeZone}
+    { timeZone: userTimeZone }
   );
 
   // Generate GenAI selection options and set default per config
@@ -78,7 +78,7 @@ async function generateCreateDraftResponse(event) {
 
 async function generateGenerateReplyResponse(event, providers, oauthClientId, createReplyDraftUrl, navigateBackUrl) {
   const message = await gmailUtils.getGmailMessage(event);
-  console.log(JSON.stringify({message}));
+  console.log(JSON.stringify({ message }));
   const formInputs = event.commonEventObject.formInputs;
   const profileInfo = await commonAddOnUtils.getPayloadFromEvent(event, oauthClientId);
   // This is for the JSON card UI response
