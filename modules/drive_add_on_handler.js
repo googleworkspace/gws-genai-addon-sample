@@ -111,14 +111,20 @@ async function generateSummaryResponse(event, providers, exportToDocsUrl, naviga
       }
 
       generatedSummary = await provider.generateSummary(lengthSelection, formatSelection, fileContent, providerConfig);
+
+      if (generatedSummary !== null) {
+        console.log(`Provider summary is ${JSON.stringify(generatedSummary)}`);
+
+        const response = driveCardUiGenerator.createGenerateSummaryUi(generatedSummary, exportToDocsUrl, navigateBackUrl);
+        return response;
+      } else {
+        const message = "No summary generated.";
+        const response = driveCardUiGenerator.createRenderActionWithTextUi(message);
+        return response;
+      }
     } else {
       throw new Error('No valid provider selected.');
     }
-
-    console.log(`Provider summary is ${JSON.stringify(generatedSummary)}`);
-
-    const response = driveCardUiGenerator.createGenerateSummaryUi(generatedSummary, exportToDocsUrl, navigateBackUrl);
-    return response;
   } else {
     throw new "Missing required form parameters!";
   }
