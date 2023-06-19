@@ -118,7 +118,7 @@ async function generateSummaryResponse(event, providers, exportToDocsUrl, naviga
         const response = driveCardUiGenerator.createGenerateSummaryUi(generatedSummary, exportToDocsUrl, navigateBackUrl);
         return response;
       } else {
-        const message = "Errory generating summary. Try again or check API settings or add-on logs.";
+        const message = "Error generating summary. Try again or check API settings or add-on logs.";
         const response = driveCardUiGenerator.createRenderActionWithTextUi(message);
         return response;
       }
