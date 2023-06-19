@@ -14,7 +14,7 @@ const TEXT_GEN_MODEL_NAME = "models/text-bison-001";
 async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
   console.log("Entering PaLM API provider module");
 
-  const vertexAiPalmApiKey = config.apiKey;
+  const palmApiKey = config.apiKey;
 
   let prompt =
     //Add: My name is xyz or "Sign it with my name which is ()"
@@ -37,11 +37,11 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
   console.log("Prompt to be sent to API is: " + prompt);
 
   const client = new TextServiceClient({
-    authClient: new GoogleAuth().fromAPIKey(vertexAiPalmApiKey),
+    authClient: new GoogleAuth().fromAPIKey(palmApiKey),
   });
 
   // TODO split prompt into prompt and context
-  const candidates = await callVertexAiPalmChatGenApi(client, prompt);
+  const candidates = await callPalmApiChatModelGen(client, prompt);
 
   //This is done to standerize the response to be used by the calling code
   let replies = [];
@@ -54,7 +54,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
 }
 
 
-async function callVertexAiPalmChatGenApi(client, prompt) {
+async function callPalmApiChatModelGen(client, prompt) {
   console.log("Calling PaLM APIs..");
 
   const result = await client.generateText({
@@ -79,7 +79,7 @@ async function callVertexAiPalmChatGenApi(client, prompt) {
 async function generateSummary(lengthSelection, formatSelection, text, config) {
   console.log("Entering PaLM API provider module");
 
-  const vertexAiPalmApiKey = config.apiKey;
+  const palmApiKey = config.apiKey;
   let numOfSentences = "";
 
   switch (String(lengthSelection)) {
@@ -110,11 +110,11 @@ async function generateSummary(lengthSelection, formatSelection, text, config) {
   console.log("Prompt to be sent to API is: " + prompt);
 
   const client = new TextServiceClient({
-    authClient: new GoogleAuth().fromAPIKey(vertexAiPalmApiKey),
+    authClient: new GoogleAuth().fromAPIKey(palmApiKey),
   });
 
   // TODO split prompt into prompt and context
-  const results = await callVertexAiPalmTextGenApi(client, prompt);
+  const results = await callPalmApiTextModelGen(client, prompt);
 
   // TODO might want to do multiple summaries in the future
   const summary = results[0].output;
@@ -124,7 +124,7 @@ async function generateSummary(lengthSelection, formatSelection, text, config) {
   return summary;
 }
 
-async function callVertexAiPalmTextGenApi(client, prompt) {
+async function callPalmApiTextModelGen(client, prompt) {
   console.log("Calling PaLM APIs..");
 
   const result = await client.generateText({

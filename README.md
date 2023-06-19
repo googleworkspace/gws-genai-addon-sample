@@ -1,5 +1,5 @@
 # genai-gmail-companion
-A Google Workspace add-on for Gmail and Google Drive using Node.js and Googel Cloud PaLM API
+A Google Workspace add-on for Gmail and Google Drive using Node.js and Googel Developer PaLM API
 
 ## Setup
 
@@ -25,13 +25,11 @@ gcloud config set project <PROJECT_ID>
 
 ```sh
 gcloud services enable \
-  aiplatform.googleapis.com \
   appsmarket-component.googleapis.com \
   artifactregistry.googleapis.com \
   cloudbuild.googleapis.com \
   cloudresourcemanager.googleapis.com \
   drive.googleapis.com \
-  generativelanguage.googleapis.com \
   gmail.googleapis.com \
   gsuiteaddons.googleapis.com \
   run.googleapis.com
@@ -99,7 +97,7 @@ gcloud workspace-add-ons deployments replace genai-gmail-companion --deployment-
 
 ## Configure the add-on
 
-The following configuration should be made inside the `config/default.json` file that is deployed with the code. You will have to redeploy your code once you've made the changes to the file.
+Most of the configuration below should be made inside the `config/default.json` file that is deployed with the code. You will have to redeploy your code once you've made the changes to the file.
 
 ### Function URLs
 
@@ -113,11 +111,20 @@ These function URLs are used for interactions between cards in the add-on.
 
 This add-on can be used with the list of providers below. For each provider, you can configure the `enabled` flag to show in the add-on, and any applicable configuration (i.e. API key) for that provider.
 
-#### PaLM API
+#### Google Developer PaLM API
 
-The add-on can use [PaLM API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#palm-api) to generate and summarize text. To use this provider, you need to [create an API key](https://cloud.google.com/docs/authentication/api-keys) and save it in the `apiKey` parameter in the add-on configuration file.
+The add-on can use [PaLM API](https://developers.generativeai.google/) to generate and summarize text. 
 
-Additional configurations for the provider are found in the `modules/gen_ai_providers/palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
+> **_NOTE:_**  Access to the PaLM API / MakerSuite is granted via a waitlist. You must get access through the [waitlist](https://makersuite.google.com/waitlist) before you can enable the service and generate an API key. 
+
+You use this provider, you first need to enable the service in your Google Cloud project using the same account that you applied for (and granted access to) via the waitlist.
+
+```sh
+gcloud services enable generativelanguage.googleapis.com
+
+```
+
+Next you should [create an API key](https://makersuite.google.com/) and save it in the `apiKey` parameter in the relevant section for `palmAPI` in the add-on configuration file. Additional configurations for the provider are found in the `modules/gen_ai_providers/palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
 
 #### Cohere.ai
 
