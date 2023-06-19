@@ -1,6 +1,6 @@
-const {TextServiceClient} =
+const { TextServiceClient } =
   require("@google-ai/generativelanguage").v1beta2;
-const {GoogleAuth} = require("google-auth-library");
+const { GoogleAuth } = require("google-auth-library");
 
 //TODO list the other modules (or link to it)
 const CHAT_MODEL_NAME = "models/text-bison-001";
@@ -47,7 +47,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
   let replies = [];
   // TODO can you remove the for loop and move to an array method ?
   for (let i = 0; i < candidates.length; i++) {
-    replies.push({"suggestedText": candidates[i].output});
+    replies.push({ "suggestedText": candidates[i].output });
   }
 
   return replies;
