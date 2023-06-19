@@ -61,12 +61,37 @@ async function callPalmApiChatModelGen(client, prompt) {
     model: CHAT_MODEL_NAME, // Required. The model to use to generate the result.
     temperature: 0.5, // Optional. Value `0.0` always uses the highest-probability result.
     candidateCount: 2, // Optional. The number of candidate results to generate.
+    maxOutputTokens: 1024, // Max for Chat Bison
     prompt: {
       //       // optional, preamble context to prime responses
       //       context: "Respond to all questions with a rhyming poem.",     
       // TODO split prompt into prompt and context
       text: prompt,
     },
+    safetySettings: [
+      {
+        "category": "HARM_CATEGORY_UNSPECIFIED",
+        "threshold": "BLOCK_NONE"
+      },
+      {
+        "category": "HARM_CATEGORY_DEROGATORY",
+        "threshold": "BLOCK_NONE"
+      },
+      {
+        "category": "HARM_CATEGORY_VIOLENCE",
+        "threshold": "BLOCK_NONE"
+      },
+      {
+        "category": "HARM_CATEGORY_SEXUAL",
+        "threshold": "BLOCK_NONE"
+      }, {
+        "category": "HARM_CATEGORY_MEDICAL",
+        "threshold": "BLOCK_NONE"
+      }, {
+        "category": "HARM_CATEGORY_DANGEROUS",
+        "threshold": "BLOCK_NONE"
+      }
+    ]
   });
 
   console.log(`PaLM API response is ${JSON.stringify(result)}`);
@@ -117,11 +142,14 @@ async function generateSummary(lengthSelection, formatSelection, text, config) {
   const results = await callPalmApiTextModelGen(client, prompt);
 
   // TODO might want to do multiple summaries in the future
-  const summary = results[0].output;
-
-  console.log(`Summary is ${JSON.stringify(summary)}`);
-
-  return summary;
+  if (results.length > 0) {
+    const summary = results[0].output;
+    console.log(`Summary is ${JSON.stringify(summary)}`);
+    return summary;
+  } else {
+    console.log("No summary found");
+    return null;
+  }
 }
 
 async function callPalmApiTextModelGen(client, prompt) {
@@ -130,11 +158,38 @@ async function callPalmApiTextModelGen(client, prompt) {
   const result = await client.generateText({
     model: TEXT_GEN_MODEL_NAME, // Required. The model to use to generate the result.
     temperature: 0.3, // Optional. Value `0.0` always uses the highest-probability result.
+    maxOutputTokens: 1024, // Max for Bison
     prompt: {
       //       // optional, preamble context to prime responses
       //       context: "Respond to all questions with a rhyming poem.",     
       // TODO split prompt into prompt and context
       text: prompt,
+      safetySettings: [
+        {
+          "category": "HARM_CATEGORY_UNSPECIFIED",
+          "threshold": "BLOCK_NONE"
+        },
+        {
+          "category": "HARM_CATEGORY_DEROGATORY",
+          "threshold": "BLOCK_NONE"
+        },
+        {
+          "category": "HARM_CATEGORY_VIOLENCE",
+          "threshold": "BLOCK_NONE"
+        },
+        {
+          "category": "HARM_CATEGORY_SEXUAL",
+          "threshold": "BLOCK_NONE"
+        },
+        {
+          "category": "HARM_CATEGORY_MEDICAL",
+          "threshold": "BLOCK_NONE"
+        },
+        {
+          "category": "HARM_CATEGORY_DANGEROUS",
+          "threshold": "BLOCK_NONE"
+        }
+      ]
     },
   });
 
