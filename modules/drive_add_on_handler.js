@@ -130,7 +130,7 @@ async function generateSummaryResponse(event, providers, exportToDocsUrl, naviga
   }
 }
 
-async function exportToDocsUrl(event) {
+async function exportToDocs(event) {
   // We only support a single file for now
   // TODO can extract as a method as it's used in two methods now
   const selectedItems = event.drive.selectedItems;
@@ -173,4 +173,4 @@ async function exportToDocsUrl(event) {
 exports.generateHomePageResponse = generateHomePageResponse;
 exports.generateOnItemsSelectedTriggerResponse = generateOnItemsSelectedTriggerResponse;
 exports.generateSummaryResponse = generateSummaryResponse;
-exports.exportToDocsUrl = exportToDocsUrl;
+exports.exportToDocs = exportToDocs;
