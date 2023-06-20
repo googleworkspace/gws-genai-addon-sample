@@ -1,2 +1,6 @@
 .DS_Store
 node_modules/
+
+# configs
+config/default.json
+deployment.json
