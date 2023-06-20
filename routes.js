@@ -57,11 +57,11 @@ var routes = function (app) {
 
 
   // Export summary to Docs
-  app.post("/exportToDocsUrl", asyncHandler(async (req, res) => {
+  app.post("/exportToDocs", asyncHandler(async (req, res) => {
     await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     const event = req.body;
     console.log("Received POST: " + JSON.stringify(event));
-    const response = await driveAddOnHandler.exportToDocsUrl(event);
+    const response = await driveAddOnHandler.exportToDocs(event);
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.send(response);
   })
