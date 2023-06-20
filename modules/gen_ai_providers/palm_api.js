@@ -163,34 +163,34 @@ async function callPalmApiTextModelGen(client, prompt) {
       //       // optional, preamble context to prime responses
       //       context: "Respond to all questions with a rhyming poem.",     
       // TODO split prompt into prompt and context
-      text: prompt,
-      safetySettings: [
-        {
-          "category": "HARM_CATEGORY_UNSPECIFIED",
-          "threshold": "BLOCK_NONE"
-        },
-        {
-          "category": "HARM_CATEGORY_DEROGATORY",
-          "threshold": "BLOCK_NONE"
-        },
-        {
-          "category": "HARM_CATEGORY_VIOLENCE",
-          "threshold": "BLOCK_NONE"
-        },
-        {
-          "category": "HARM_CATEGORY_SEXUAL",
-          "threshold": "BLOCK_NONE"
-        },
-        {
-          "category": "HARM_CATEGORY_MEDICAL",
-          "threshold": "BLOCK_NONE"
-        },
-        {
-          "category": "HARM_CATEGORY_DANGEROUS",
-          "threshold": "BLOCK_NONE"
-        }
-      ]
+      text: prompt
     },
+    safetySettings: [
+      {
+        "category": "HARM_CATEGORY_UNSPECIFIED",
+        "threshold": "BLOCK_NONE"
+      },
+      {
+        "category": "HARM_CATEGORY_DEROGATORY",
+        "threshold": "BLOCK_NONE"
+      },
+      {
+        "category": "HARM_CATEGORY_VIOLENCE",
+        "threshold": "BLOCK_NONE"
+      },
+      {
+        "category": "HARM_CATEGORY_SEXUAL",
+        "threshold": "BLOCK_NONE"
+      },
+      {
+        "category": "HARM_CATEGORY_MEDICAL",
+        "threshold": "BLOCK_NONE"
+      },
+      {
+        "category": "HARM_CATEGORY_DANGEROUS",
+        "threshold": "BLOCK_NONE"
+      }
+    ]
   });
 
   console.log(`PaLM API response is ${JSON.stringify(result)}`);
