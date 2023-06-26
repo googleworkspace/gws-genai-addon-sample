@@ -11,14 +11,14 @@ const TEXT_GEN_MODEL_NAME = 'models/text-bison-001';
 // TODO create another exported function for creating content for Google Docs
 // TODO you can move config to the instantiations of the module?
 export async function generateEmailReply(
-    subject,
-    senderName,
-    messageBody,
-    replyTextPrompt,
-    tone,
-    language,
-    authorName,
-    config,
+  subject,
+  senderName,
+  messageBody,
+  replyTextPrompt,
+  tone,
+  language,
+  authorName,
+  config,
 ) {
   console.log('Entering PaLM API provider module');
 
@@ -51,14 +51,7 @@ export async function generateEmailReply(
   // TODO split prompt into prompt and context
   const candidates = await callPalmApiChatModelGen(client, prompt);
 
-  // This is done to standerize the response to be used by the calling code
-  const replies = [];
-  // TODO can you remove the for loop and move to an array method ?
-  for (let i = 0; i < candidates.length; i++) {
-    replies.push({suggestedText: candidates[i].output});
-  }
-
-  return replies;
+  return candidates.map(candidate => ({suggestedText: candidate.output}));
 }
 
 async function callPalmApiChatModelGen(client, prompt) {
@@ -105,16 +98,14 @@ async function callPalmApiChatModelGen(client, prompt) {
 
   console.log(`PaLM API response is ${JSON.stringify(result)}`);
 
-  const candidates = result[0].candidates;
-
-  return candidates;
+  return result[0].candidates;
 }
 
 export async function generateSummary(
-    lengthSelection,
-    formatSelection,
-    text,
-    config,
+  lengthSelection,
+  formatSelection,
+  text,
+  config,
 ) {
   console.log('Entering PaLM API provider module');
 
@@ -156,14 +147,13 @@ export async function generateSummary(
   const results = await callPalmApiTextModelGen(client, prompt);
 
   // TODO might want to do multiple summaries in the future
-  if (results.length > 0) {
+  if (results.length) {
     const summary = results[0].output;
     console.log(`Summary is ${JSON.stringify(summary)}`);
     return summary;
-  } else {
-    console.log('No summary found');
-    return null;
   }
+  console.log('No summary found');
+  return null;
 }
 
 async function callPalmApiTextModelGen(client, prompt) {
@@ -209,7 +199,5 @@ async function callPalmApiTextModelGen(client, prompt) {
 
   console.log(`PaLM API response is ${JSON.stringify(result)}`);
 
-  const candidates = result[0].candidates;
-
-  return candidates;
+  return result[0].candidates;
 }

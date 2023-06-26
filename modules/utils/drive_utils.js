@@ -37,9 +37,7 @@ async function getDriveTextFileContent(fileId, accessToken) {
     alt: 'media',
   });
 
-  const content = docsResponse.data;
-
-  return content;
+  return docsResponse.data;
 }
 
 // This is used for Google Workspace files only (Docs, Sheets, Slides)
@@ -48,11 +46,9 @@ async function exportDriveFile(fileId, fileMimeType, accessToken) {
   oauth2Client.setCredentials({access_token: accessToken});
 
   const drive = google.drive({version: 'v3', auth: oauth2Client});
-  let exportedMimeType = '';
+  let exportedMimeType = 'text/plain';
   if (fileMimeType == 'application/vnd.google-apps.spreadsheet') {
     exportedMimeType = 'text/csv';
-  } else {
-    exportedMimeType = 'text/plain';
   }
 
   const docsResponse = await drive.files.export({
@@ -60,9 +56,7 @@ async function exportDriveFile(fileId, fileMimeType, accessToken) {
     mimeType: exportedMimeType,
   });
 
-  const content = docsResponse.data;
-
-  return content;
+  return docsResponse.data;
 }
 
 export async function getFileParentId(fileId, accessToken) {
@@ -88,10 +82,10 @@ export async function getFileParentId(fileId, accessToken) {
 }
 
 export async function createDocsFileWithText(
-    text,
-    fileName,
-    parents,
-    accessToken,
+  text,
+  fileName,
+  parents,
+  accessToken,
 ) {
   const oauth2Client = new OAuth2Client();
   oauth2Client.setCredentials({access_token: accessToken});

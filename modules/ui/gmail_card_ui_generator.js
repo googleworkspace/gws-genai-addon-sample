@@ -1,6 +1,6 @@
 // TODO can split the card generation from the action-->navigation wrapper
 export function createHomePageUi(text) {
-  const response = {
+  return {
     action: {
       navigations: [
         {
@@ -21,18 +21,16 @@ export function createHomePageUi(text) {
       ],
     },
   };
-
-  return response;
 }
 
 export function createStartGenerationUi(
-    senderName,
-    subject,
-    formattedSentDateTime,
-    providerSelectionItems,
-    generateReplyFunctionUrl,
+  senderName,
+  subject,
+  formattedSentDateTime,
+  providerSelectionItems,
+  generateReplyFunctionUrl,
 ) {
-  const response = {
+  return {
     action: {
       navigations: [
         {
@@ -158,12 +156,10 @@ export function createStartGenerationUi(
       ],
     },
   };
-
-  return response;
 }
 
 export function createCreateDraftUi(draftId, draftThreadId) {
-  const response = {
+  return {
     render_actions: {
       host_app_action: {
         gmail_action: {
@@ -180,21 +176,16 @@ export function createCreateDraftUi(draftId, draftThreadId) {
       },
     },
   };
-
-  return response;
 }
 
 export function createGeneratedRepliesUi(
-    generatedReplies,
-    numOfRepliesToInclude,
-    createDraftUrl,
+  generatedReplies,
+  numOfRepliesToInclude,
+  createDraftUrl,
 ) {
   const sections = [];
-  for (
-    let i = 0;
-    i < Math.min(generatedReplies.length, numOfRepliesToInclude);
-    i++
-  ) {
+  const replies = Math.min(generatedReplies.length, numOfRepliesToInclude);
+  for (let i = 0; i < replies; i++) {
     replyText = generatedReplies[i].suggestedText;
     const responseSection = {
       header: 'Suggested reply #' + (i + 1),
@@ -232,7 +223,7 @@ export function createGeneratedRepliesUi(
 }
 
 export function createTryAgainUi(navigateBackUrl) {
-  const response = {
+  return {
     widgets: [
       {
         buttonList: {
@@ -251,12 +242,10 @@ export function createTryAgainUi(navigateBackUrl) {
       },
     ],
   };
-
-  return response;
 }
 
 export function createTryAgainWithMessage(message, navigateBackUrl) {
-  const response = {
+  return {
     widgets: [
       {
         textParagraph: {
@@ -280,6 +269,4 @@ export function createTryAgainWithMessage(message, navigateBackUrl) {
       },
     ],
   };
-
-  return response;
 }
