@@ -1,10 +1,10 @@
 import {jest} from '@jest/globals';
-import {TextServiceClient} from "@google-ai/generativelanguage";
-import {GoogleAuth} from "google-auth-library";
-import {generateEmailReply, generateSummary} from "./palm_api";
+import {TextServiceClient} from '@google-ai/generativelanguage';
+import {GoogleAuth} from 'google-auth-library';
+import {generateEmailReply, generateSummary} from './palm_api';
 
-jest.mock("@google-ai/generativelanguage");
-jest.mock("google-auth-library");
+jest.mock('@google-ai/generativelanguage');
+jest.mock('google-auth-library');
 
 describe('generateEmailReply', () => {
   it('should expose a function', () => {

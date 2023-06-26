@@ -1,5 +1,5 @@
 export default function createNavigateBackUi() {
-  let response = {
+  const response = {
     renderActions: {
       action: {
         navigations: [

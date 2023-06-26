@@ -6,6 +6,8 @@ describe('createNavigateBackUi', () => {
   });
 
   it('createNavigateBackUi should return expected output', () => {
-    expect(createNavigateBackUi()).toEqual({"renderActions": {"action": {"navigations": [{"pop": true}]}}});
+    expect(createNavigateBackUi()).toEqual({
+      renderActions: {action: {navigations: [{pop: true}]}},
+    });
   });
 });

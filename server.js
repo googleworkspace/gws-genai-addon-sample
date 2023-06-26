@@ -5,10 +5,10 @@
 // end-points we're going to be using, and we pass it the `app` variable. Lastly, we specify the
 // port to listen to for requests. In this case, port 3000.
 //
-import express from "express";
-import bearerToken from "express-bearer-token";
-import bodyParser from "body-parser";
-import routes from "./routes.js";
+import express from 'express';
+import bearerToken from 'express-bearer-token';
+import bodyParser from 'body-parser';
+import routes from './routes.js';
 
 const app = express();
 

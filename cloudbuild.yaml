@@ -11,18 +11,18 @@ steps:
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-    - 'run'
-    - 'deploy'
-    - '$_SERVICE_NAME'
-    - '--image'
-    - 'gcr.io/$PROJECT_ID/$_SERVICE_NAME'
-    - '--region'
-    - '$_REGION'
-    - '--platform'
-    - 'managed'
+      - 'run'
+      - 'deploy'
+      - '$_SERVICE_NAME'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/$_SERVICE_NAME'
+      - '--region'
+      - '$_REGION'
+      - '--platform'
+      - 'managed'
 
 images:
-- 'gcr.io/$PROJECT_ID/$_SERVICE_NAME'
+  - 'gcr.io/$PROJECT_ID/$_SERVICE_NAME'
 
 substitutions:
   _SERVICE_NAME: genai-gmail-companion

@@ -1,4 +1,5 @@
 # genai-gmail-companion
+
 A Google Workspace add-on for Gmail and Google Drive using Node.js and Googel Developer PaLM API
 
 ## Setup
@@ -83,7 +84,7 @@ gcloud run services add-iam-policy-binding \
     --platform=managed
 ```
 
-###  Install the add-on
+### Install the add-on
 
 ```sh
 gcloud workspace-add-ons deployments install genai-gmail-companion
@@ -101,7 +102,7 @@ Most of the configuration below should be made inside the `config/default.json` 
 
 ### Function URLs
 
-Configure all the variables under `urls` in the `addOnConfig` section to point to the specific endpoints within your deployment. 
+Configure all the variables under `urls` in the `addOnConfig` section to point to the specific endpoints within your deployment.
 
 For example, if you deployed your code to `http://www.mydeployment.com/` then the value of `generateReplyUrl` will be `https://www.mydeployment.com/generateReplyUrl`
 
@@ -113,9 +114,9 @@ This add-on can be used with the list of providers below. For each provider, you
 
 #### Google Developer PaLM API
 
-The add-on can use [PaLM API](https://developers.generativeai.google/) to generate and summarize text. 
+The add-on can use [PaLM API](https://developers.generativeai.google/) to generate and summarize text.
 
-> **_NOTE:_**  Access to the PaLM API / MakerSuite is granted via a waitlist. You must get access through the [waitlist](https://makersuite.google.com/waitlist) before you can enable the service and generate an API key. 
+> **_NOTE:_** Access to the PaLM API / MakerSuite is granted via a waitlist. You must get access through the [waitlist](https://makersuite.google.com/waitlist) before you can enable the service and generate an API key.
 
 You use this provider, you first need to enable the service in your Google Cloud project using the same account that you applied for (and granted access to) via the waitlist.
 
@@ -150,6 +151,6 @@ gcloud workspace-add-ons get-authorization
 
 #### OAuth Client ID
 
-We verify the user ID token and extract their profile name. In order to do that, we need the OAuth client ID for the add-on. 
+We verify the user ID token and extract their profile name. In order to do that, we need the OAuth client ID for the add-on.
 
 To get the client ID, follow the steps [here](https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id) and then add the value to the `oauthClientId` variable in the `addOnConfig` section.

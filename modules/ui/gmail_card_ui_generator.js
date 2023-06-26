@@ -1,4 +1,4 @@
-//TODO can split the card generation from the action-->navigation wrapper
+// TODO can split the card generation from the action-->navigation wrapper
 export function createHomePageUi(text) {
   const response = {
     action: {
@@ -25,77 +25,83 @@ export function createHomePageUi(text) {
   return response;
 }
 
-export function createStartGenerationUi(senderName, subject, formattedSentDateTime, providerSelectionItems, generateReplyFunctionUrl) {
-  let response = {
+export function createStartGenerationUi(
+    senderName,
+    subject,
+    formattedSentDateTime,
+    providerSelectionItems,
+    generateReplyFunctionUrl,
+) {
+  const response = {
     action: {
       navigations: [
         {
           pushCard: {
             sections: [
               {
-                header: "Email details",
+                header: 'Email details',
                 widgets: [
                   {
                     decoratedText: {
                       text: senderName,
-                      bottomLabel: "",
-                      topLabel: "From",
+                      bottomLabel: '',
+                      topLabel: 'From',
                     },
                   },
                   {
                     decoratedText: {
-                      topLabel: "Subject",
+                      topLabel: 'Subject',
                       text: subject,
                       wrapText: true,
-                      bottomLabel: "",
+                      bottomLabel: '',
                     },
                   },
                   {
                     decoratedText: {
-                      topLabel: "Sent on",
+                      topLabel: 'Sent on',
                       text: formattedSentDateTime,
-                      bottomLabel: "",
+                      bottomLabel: '',
                     },
                   },
                 ],
                 collapsible: false,
               },
               {
-                header: "What do you want to say?",
+                header: 'What do you want to say?',
                 widgets: [
                   {
                     textInput: {
-                      label: "Prompt",
-                      type: "SINGLE_LINE",
-                      name: "replyTextPrompt",
+                      label: 'Prompt',
+                      type: 'SINGLE_LINE',
+                      name: 'replyTextPrompt',
                       hintText:
-                        "For example, thank you for sending this information'",
+                        'For example, thank you for sending this information\'',
                     },
                   },
                   {
                     selectionInput: {
-                      type: "DROPDOWN",
-                      label: "Tone",
-                      name: "toneSelection",
+                      type: 'DROPDOWN',
+                      label: 'Tone',
+                      name: 'toneSelection',
                       items: [
                         {
-                          text: "Professional",
-                          value: "professional",
+                          text: 'Professional',
+                          value: 'professional',
                           selected: true,
                         },
                         {
-                          text: "Apologetic",
-                          value: "apologetic",
+                          text: 'Apologetic',
+                          value: 'apologetic',
                           selected: false,
                         },
                         {
-                          text: "Snarky",
-                          value: "snarky",
+                          text: 'Snarky',
+                          value: 'snarky',
                           selected: false,
                         },
                         {
-                          text: "Neutral",
-                          value: "neutral",
+                          text: 'Neutral',
+                          value: 'neutral',
                           selected: false,
                         },
                       ],
@@ -103,18 +109,18 @@ export function createStartGenerationUi(senderName, subject, formattedSentDateTi
                   },
                   {
                     selectionInput: {
-                      type: "DROPDOWN",
-                      label: "Language",
-                      name: "languageSelection",
+                      type: 'DROPDOWN',
+                      label: 'Language',
+                      name: 'languageSelection',
                       items: [
                         {
-                          text: "English",
-                          value: "english",
+                          text: 'English',
+                          value: 'english',
                           selected: true,
                         },
                         {
-                          text: "French",
-                          value: "french",
+                          text: 'French',
+                          value: 'french',
                           selected: false,
                         },
                       ],
@@ -122,9 +128,9 @@ export function createStartGenerationUi(senderName, subject, formattedSentDateTi
                   },
                   {
                     selectionInput: {
-                      type: "DROPDOWN",
-                      label: "Generative AI Provider",
-                      name: "providerSelection",
+                      type: 'DROPDOWN',
+                      label: 'Generative AI Provider',
+                      name: 'providerSelection',
                       items: providerSelectionItems,
                     },
                   },
@@ -132,7 +138,7 @@ export function createStartGenerationUi(senderName, subject, formattedSentDateTi
                     buttonList: {
                       buttons: [
                         {
-                          text: "Generate reply",
+                          text: 'Generate reply',
                           onClick: {
                             action: {
                               function: generateReplyFunctionUrl,
@@ -150,40 +156,48 @@ export function createStartGenerationUi(senderName, subject, formattedSentDateTi
           },
         },
       ],
-    }
+    },
   };
 
   return response;
 }
 
 export function createCreateDraftUi(draftId, draftThreadId) {
-  let response = {
+  const response = {
     render_actions: {
       host_app_action: {
         gmail_action: {
           open_created_draft_action_markup: {
             draft_id: draftId,
-            draft_thread_id: draftThreadId
-          }
-        }
+            draft_thread_id: draftThreadId,
+          },
+        },
       },
       action: {
         notification: {
-          text: "Draft created!"
-        }
-      }
-    }
+          text: 'Draft created!',
+        },
+      },
+    },
   };
 
   return response;
 }
 
-export function createGeneratedRepliesUi(generatedReplies, numOfRepliesToInclude, createDraftUrl) {
-  let sections = [];
-  for (let i = 0; i < Math.min(generatedReplies.length, numOfRepliesToInclude); i++) {
+export function createGeneratedRepliesUi(
+    generatedReplies,
+    numOfRepliesToInclude,
+    createDraftUrl,
+) {
+  const sections = [];
+  for (
+    let i = 0;
+    i < Math.min(generatedReplies.length, numOfRepliesToInclude);
+    i++
+  ) {
     replyText = generatedReplies[i].suggestedText;
-    let responseSection = {
-      header: "Suggested reply #" + (i + 1),
+    const responseSection = {
+      header: 'Suggested reply #' + (i + 1),
       widgets: [
         {
           textParagraph: {
@@ -194,13 +208,13 @@ export function createGeneratedRepliesUi(generatedReplies, numOfRepliesToInclude
           buttonList: {
             buttons: [
               {
-                text: "Use this reply",
+                text: 'Use this reply',
                 onClick: {
                   action: {
                     function: createDraftUrl,
                     parameters: [
                       {
-                        key: "replyText",
+                        key: 'replyText',
                         value: replyText,
                       },
                     ],
@@ -224,7 +238,7 @@ export function createTryAgainUi(navigateBackUrl) {
         buttonList: {
           buttons: [
             {
-              text: "Try again",
+              text: 'Try again',
               onClick: {
                 action: {
                   function: navigateBackUrl,
@@ -253,7 +267,7 @@ export function createTryAgainWithMessage(message, navigateBackUrl) {
         buttonList: {
           buttons: [
             {
-              text: "Try again",
+              text: 'Try again',
               onClick: {
                 action: {
                   function: navigateBackUrl,
