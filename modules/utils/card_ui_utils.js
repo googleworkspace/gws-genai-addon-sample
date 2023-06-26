@@ -1,5 +1,5 @@
 /**  Written with the help of AI **/
-function convertMarkdownToWidgets(markdownText) {
+export default function convertMarkdownToWidgets(markdownText) {
   console.log(`convertMarkdownToWidgets: ${markdownText}`);
 
   const results = [];
@@ -104,5 +104,3 @@ function markdownToSimpleHtml(markdown) {
 
   return markdown;
 }
-
-exports.convertMarkdownToWidgets = convertMarkdownToWidgets;

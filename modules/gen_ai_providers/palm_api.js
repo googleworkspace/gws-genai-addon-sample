@@ -1,6 +1,5 @@
-const { TextServiceClient } =
-  require("@google-ai/generativelanguage").v1beta2;
-const { GoogleAuth } = require("google-auth-library");
+import {TextServiceClient} from "@google-ai/generativelanguage";
+import {GoogleAuth} from "google-auth-library";
 
 //TODO list the other modules (or link to it)
 const CHAT_MODEL_NAME = "models/text-bison-001";
@@ -11,7 +10,7 @@ const TEXT_GEN_MODEL_NAME = "models/text-bison-001";
 
 // TODO create another exported function for creating content for Google Docs
 // TODO you can move config to the instantiations of the module?
-async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
+export async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
   console.log("Entering PaLM API provider module");
 
   const palmApiKey = config.apiKey;
@@ -47,7 +46,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
   let replies = [];
   // TODO can you remove the for loop and move to an array method ?
   for (let i = 0; i < candidates.length; i++) {
-    replies.push({ "suggestedText": candidates[i].output });
+    replies.push({"suggestedText": candidates[i].output});
   }
 
   return replies;
@@ -101,7 +100,7 @@ async function callPalmApiChatModelGen(client, prompt) {
   return candidates;
 }
 
-async function generateSummary(lengthSelection, formatSelection, text, config) {
+export async function generateSummary(lengthSelection, formatSelection, text, config) {
   console.log("Entering PaLM API provider module");
 
   const palmApiKey = config.apiKey;
@@ -199,6 +198,3 @@ async function callPalmApiTextModelGen(client, prompt) {
 
   return candidates;
 }
-
-exports.generateEmailReply = generateEmailReply;
-exports.generateSummary = generateSummary;

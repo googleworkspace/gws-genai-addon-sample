@@ -1,8 +1,5 @@
-const commonCardUiGenerator = require('./ui/common_card_ui_generator');
+import createNavigateBackUi from './ui/common_card_ui_generator.js';
 
-function generateNavigateBackResponse() {
-    const response = commonCardUiGenerator.createNavigateBackUi();
-    return response;
+export default function generateNavigateBackResponse() {
+  return createNavigateBackUi();
 }
-
-exports.generateNavigateBackResponse = generateNavigateBackResponse;

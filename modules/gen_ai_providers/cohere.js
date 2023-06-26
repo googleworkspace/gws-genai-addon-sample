@@ -1,11 +1,11 @@
-cohere = require("cohere-ai");
+import cohere from "cohere-ai";
 
 // For models check https://docs.cohere.com/docs/models
 const TEXT_GEN_MODEL_NAME = 'command-light'; //TODO use command-nightly or command-xlarge-nightly
 const SUMMARIZE_MODEL_NAME = 'summarize-medium'; //TODO summarize-xlarge once timeout issue is done
 
 // TODO create another exported function for creating content for Google Docs
-async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
+export async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
   console.log("Entering Cohere provider module");
 
   const cohereApiKey = config.apiKey;
@@ -39,7 +39,7 @@ async function generateEmailReply(subject, senderName, messageBody, replyTextPro
 
   // TODO can you remove the for loop and move to an array method ?
   for (let i = 0; i < generations.length; i++) {
-    replies.push({ "suggestedText": generations[i].text });
+    replies.push({"suggestedText": generations[i].text});
   }
 
   return replies;
@@ -66,7 +66,7 @@ async function callCohereTextGenerationApi(prompt, cohere) {
   return generations;
 }
 
-async function generateSummary(lengthSelection, formatSelection, text, config) {
+export async function generateSummary(lengthSelection, formatSelection, text, config) {
   console.log("Entering Cohere provider module");
 
   const cohereApiKey = config.apiKey;
@@ -105,6 +105,3 @@ async function callCohereSummarizeEndpoint(lengthSelection, formatSelection, tex
     return null;
   }
 }
-
-exports.generateEmailReply = generateEmailReply;
-exports.generateSummary = generateSummary;
