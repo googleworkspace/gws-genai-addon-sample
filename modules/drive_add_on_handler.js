@@ -10,10 +10,10 @@ export function generateHomePageResponse() {
 }
 
 export function generateOnItemsSelectedTriggerResponse(
-    event,
-    providers,
-    defaultProvider,
-    generateDocsSummaryUrl,
+  event,
+  providers,
+  defaultProvider,
+  generateDocsSummaryUrl,
 ) {
   const selectedItems = event.drive.selectedItems;
 
@@ -45,7 +45,7 @@ export function generateOnItemsSelectedTriggerResponse(
   // TODO this can be extracted as it is used in Gmail handler too
   // Generate GenAI selection options and set default per config
   const enabledProviders = providers.filter(
-      (provider) => provider.enabled == true,
+    (provider) => provider.enabled == true,
   );
   console.log('Enabled providers: ' + JSON.stringify(enabledProviders));
   if (enabledProviders.length == 0) {
@@ -53,9 +53,8 @@ export function generateOnItemsSelectedTriggerResponse(
   }
 
   const providerSelectionItems = [];
-  for (let i = 0; i < enabledProviders.length; i++) {
+  for (const provider of enabledProviders) {
     console.log('ping');
-    const provider = enabledProviders[i];
     const providerItem = {
       text: provider.name,
       value: provider.value,
@@ -65,19 +64,18 @@ export function generateOnItemsSelectedTriggerResponse(
     providerSelectionItems.push(providerItem);
   }
 
-  const response = driveCardUiGenerator.createOnItemsSelectedTriggerUi(
-      fileName,
-      providerSelectionItems,
-      generateDocsSummaryUrl,
+  return driveCardUiGenerator.createOnItemsSelectedTriggerUi(
+    fileName,
+    providerSelectionItems,
+    generateDocsSummaryUrl,
   );
-  return response;
 }
 
 export async function generateSummaryResponse(
-    event,
-    providers,
-    exportToDocsUrl,
-    navigateBackUrl,
+  event,
+  providers,
+  exportToDocsUrl,
+  navigateBackUrl,
 ) {
   // We only support a single file for now
   // TODO can extract as a method as it's used in two methods now
@@ -98,73 +96,68 @@ export async function generateSummaryResponse(
 
   // Call the drive utils to get file content
   const fileContent = await driveUtils.getDocsContent(
-      fileId,
-      mimeType,
-      accessToken,
+    fileId,
+    mimeType,
+    accessToken,
   );
 
   // Feed into LLM
   const formInputs = event.commonEventObject.formInputs;
 
-  if (formInputs) {
-    const lengthSelection = formInputs.lengthSelection.stringInputs.value;
-    const formatSelection = formInputs.formatSelection.stringInputs.value;
-
-    let generatedSummary = '';
-
-    const selectedProvider = formInputs.providerSelection.stringInputs.value;
-    console.log(`Selected provider is ${selectedProvider}`);
-    if (selectedProvider != '') {
-      const providerConfig = providers.find(
-          (provider) => provider.value == selectedProvider,
-      ).config;
-
-      console.log(`Calling ${selectedProvider} provider`);
-      console.log(`Config is ${JSON.stringify(providerConfig)}`);
-
-      let provider = null;
-
-      // TODO I hate having to convert the type ... should look into what the type comes as from config file
-      switch (String(selectedProvider)) {
-        case 'cohere':
-          provider = cohere;
-          break;
-        case 'palmApi':
-          // TODO move provider module file name to config file
-          provider = palm;
-          break;
-        default:
-          throw new Error(`No valid modules exists for ${selectedProvider}`);
-      }
-
-      generatedSummary = await provider.generateSummary(
-          lengthSelection,
-          formatSelection,
-          fileContent,
-          providerConfig,
-      );
-
-      if (generatedSummary !== null) {
-        console.log(`Provider summary is ${JSON.stringify(generatedSummary)}`);
-
-        const response = driveCardUiGenerator.createGenerateSummaryUi(
-            generatedSummary,
-            exportToDocsUrl,
-            navigateBackUrl,
-        );
-        return response;
-      } else {
-        const message =
-          'Error generating summary. Try again or check API settings or add-on logs.';
-        const response =
-          driveCardUiGenerator.createRenderActionWithTextUi(message);
-        return response;
-      }
-    } else {
-      throw new Error('No valid provider selected.');
-    }
-  } else {
+  if (!formInputs) {
     throw new 'Missing required form parameters!'();
+  }
+  const lengthSelection = formInputs.lengthSelection.stringInputs.value;
+  const formatSelection = formInputs.formatSelection.stringInputs.value;
+
+  let generatedSummary = '';
+
+  const selectedProvider = formInputs.providerSelection.stringInputs.value;
+  console.log(`Selected provider is ${selectedProvider}`);
+  if (selectedProvider === '') {
+    throw new Error('No valid provider selected.');
+  }
+  const providerConfig = providers.find(
+    (provider) => provider.value == selectedProvider,
+  ).config;
+
+  console.log(`Calling ${selectedProvider} provider`);
+  console.log(`Config is ${JSON.stringify(providerConfig)}`);
+
+  let provider = null;
+
+  // TODO I hate having to convert the type ... should look into what the type comes as from config file
+  switch (String(selectedProvider)) {
+    case 'cohere':
+      provider = cohere;
+      break;
+    case 'palmApi':
+      // TODO move provider module file name to config file
+      provider = palm;
+      break;
+    default:
+      throw new Error(`No valid modules exists for ${selectedProvider}`);
+  }
+
+  generatedSummary = await provider.generateSummary(
+    lengthSelection,
+    formatSelection,
+    fileContent,
+    providerConfig,
+  );
+
+  if (generatedSummary !== null) {
+    console.log(`Provider summary is ${JSON.stringify(generatedSummary)}`);
+
+    return driveCardUiGenerator.createGenerateSummaryUi(
+      generatedSummary,
+      exportToDocsUrl,
+      navigateBackUrl,
+    );
+  } else {
+    const message =
+      'Error generating summary. Try again or check API settings or add-on logs.';
+    return driveCardUiGenerator.createRenderActionWithTextUi(message);
   }
 }
 
@@ -199,15 +192,13 @@ export async function exportToDocs(event) {
 
   // Take the summary and put into a doc in the same folder as the original file
   const newFileId = await driveUtils.createDocsFileWithText(
-      summary,
-      summaryFileName,
-      parents,
-      accessToken,
+    summary,
+    summaryFileName,
+    parents,
+    accessToken,
   );
   console.log(`New file ID generated ${newFileId}`);
 
   const notificationText = `Exported to ${summaryFileName}`;
-  const response = driveCardUiGenerator.createNotificationUi(notificationText);
-
-  return response;
+  return driveCardUiGenerator.createNotificationUi(notificationText);
 }

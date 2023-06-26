@@ -6,14 +6,14 @@ const SUMMARIZE_MODEL_NAME = 'summarize-medium'; // TODO summarize-xlarge once t
 
 // TODO create another exported function for creating content for Google Docs
 export async function generateEmailReply(
-    subject,
-    senderName,
-    messageBody,
-    replyTextPrompt,
-    tone,
-    language,
-    authorName,
-    config,
+  subject,
+  senderName,
+  messageBody,
+  replyTextPrompt,
+  tone,
+  language,
+  authorName,
+  config,
 ) {
   console.log('Entering Cohere provider module');
 
@@ -43,15 +43,7 @@ export async function generateEmailReply(
 
   const generations = await callCohereTextGenerationApi(prompt, cohere);
 
-  // This is done to standerize the response to be used by the calling code
-  const replies = [];
-
-  // TODO can you remove the for loop and move to an array method ?
-  for (let i = 0; i < generations.length; i++) {
-    replies.push({suggestedText: generations[i].text});
-  }
-
-  return replies;
+  return generations.map(generation => ({suggestedText: generation.text}));
 }
 
 async function callCohereTextGenerationApi(prompt, cohere) {
@@ -70,16 +62,14 @@ async function callCohereTextGenerationApi(prompt, cohere) {
 
   console.log(`Cohere response is ${JSON.stringify(response)}`);
 
-  const generations = response.body.generations;
-
-  return generations;
+  return response.body.generations;
 }
 
 export async function generateSummary(
-    lengthSelection,
-    formatSelection,
-    text,
-    config,
+  lengthSelection,
+  formatSelection,
+  text,
+  config,
 ) {
   console.log('Entering Cohere provider module');
 
@@ -89,10 +79,10 @@ export async function generateSummary(
 
   // TODO split prompt into prompt and context
   const summary = await callCohereSummarizeEndpoint(
-      lengthSelection,
-      formatSelection,
-      text,
-      cohere,
+    lengthSelection,
+    formatSelection,
+    text,
+    cohere,
   );
 
   console.log(`Summary is ${JSON.stringify(summary)}`);
@@ -101,10 +91,10 @@ export async function generateSummary(
 }
 
 async function callCohereSummarizeEndpoint(
-    lengthSelection,
-    formatSelection,
-    text,
-    cohere,
+  lengthSelection,
+  formatSelection,
+  text,
+  cohere,
 ) {
   console.log('Calling Cohere..');
 
@@ -124,10 +114,10 @@ async function callCohereSummarizeEndpoint(
   if (statusCode === 200) {
     const summary = response.body.summary;
     return summary;
-  } else {
-    console.log(
-        `Error generating summary. API HTTP response code: ${statusCode}.`,
-    );
-    return null;
   }
+
+  console.log(
+    `Error generating summary. API HTTP response code: ${statusCode}.`,
+  );
+  return null;
 }

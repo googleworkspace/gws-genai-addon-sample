@@ -1,15 +1,13 @@
 import convertMarkdownToWidgets from '../utils/card_ui_utils.js';
 
 export function createRenderActionWithTextUi(text) {
-  const response = {
+  return {
     render_actions: createSingleCardWithTextUi(text),
   };
-
-  return response;
 }
 
 export function createSingleCardWithTextUi(text) {
-  const response = {
+  return {
     action: {
       navigations: [
         {
@@ -30,16 +28,14 @@ export function createSingleCardWithTextUi(text) {
       ],
     },
   };
-
-  return response;
 }
 
 export function createOnItemsSelectedTriggerUi(
-    fileName,
-    providerSelectionItems,
-    generateDocsSummaryFunctionUrl,
+  fileName,
+  providerSelectionItems,
+  generateDocsSummaryFunctionUrl,
 ) {
-  const response = {
+  return {
     action: {
       navigations: [
         {
@@ -133,14 +129,12 @@ export function createOnItemsSelectedTriggerUi(
       ],
     },
   };
-
-  return response;
 }
 
 export function createGenerateSummaryUi(
-    summary,
-    exportToDocsUrl,
-    navigateBackUrl,
+  summary,
+  exportToDocsUrl,
+  navigateBackUrl,
 ) {
   console.log('entering createGenerateSummaryUi');
 
@@ -177,7 +171,7 @@ export function createGenerateSummaryUi(
     },
   });
 
-  const response = {
+  return {
     render_actions: {
       action: {
         navigations: [
@@ -195,12 +189,10 @@ export function createGenerateSummaryUi(
       },
     },
   };
-
-  return response;
 }
 
 export function createNotificationUi(message) {
-  const response = {
+  return {
     render_actions: {
       action: {
         notification: {
@@ -209,6 +201,4 @@ export function createNotificationUi(message) {
       },
     },
   };
-
-  return response;
 }

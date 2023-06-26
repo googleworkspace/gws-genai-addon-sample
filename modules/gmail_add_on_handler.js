@@ -6,40 +6,39 @@ import * as palm from './gen_ai_providers/palm_api.js';
 
 export function generateHomePageResponse() {
   const message = 'Please select a message to start using this add-on.';
-  const response = gmailCardUiGenerator.createHomePageUi(message);
-  return response;
+  return gmailCardUiGenerator.createHomePageUi(message);
 }
 
 export async function generateContextualTriggerResponse(
-    event,
-    providers,
-    defaultProvider,
-    generateReplyUrl,
+  event,
+  providers,
+  defaultProvider,
+  generateReplyUrl,
 ) {
   const message = await gmailUtils.getGmailMessage(event);
 
   // TODO can extract to another function?
   const subject = message.payload.headers.find(
-      (header) => header.name === 'Subject',
+    (header) => header.name === 'Subject',
   ).value;
   const senderName = message.payload.headers.find(
-      (header) => header.name === 'From',
+    (header) => header.name === 'From',
   ).value;
   const messageDate = message.payload.headers.find(
-      (header) => header.name === 'Date',
+    (header) => header.name === 'Date',
   ).value;
 
   // Convert message date to local timezone per user locale and timezone
   const userTimeZone = event.commonEventObject.timeZone.id;
   const userLocale = event.commonEventObject.userLocale;
   const formattedSentDateTime = new Date(messageDate).toLocaleString(
-      userLocale,
-      {timeZone: userTimeZone},
+    userLocale,
+    {timeZone: userTimeZone},
   );
 
   // Generate GenAI selection options and set default per config
   const enabledProviders = providers.filter(
-      (provider) => provider.enabled == true,
+    (provider) => provider.enabled == true,
   );
   console.log('Enabled providers: ' + JSON.stringify(enabledProviders));
   if (enabledProviders.length == 0) {
@@ -47,9 +46,8 @@ export async function generateContextualTriggerResponse(
   }
 
   const providerSelectionItems = [];
-  for (let i = 0; i < enabledProviders.length; i++) {
+  for (const provider of enabledProviders) {
     console.log('ping');
-    const provider = enabledProviders[i];
     const providerItem = {
       text: provider.name,
       value: provider.value,
@@ -59,11 +57,11 @@ export async function generateContextualTriggerResponse(
     providerSelectionItems.push(providerItem);
   }
   const response = gmailCardUiGenerator.createStartGenerationUi(
-      senderName,
-      subject,
-      formattedSentDateTime,
-      providerSelectionItems,
-      generateReplyUrl,
+    senderName,
+    subject,
+    formattedSentDateTime,
+    providerSelectionItems,
+    generateReplyUrl,
   );
   return response;
 }
@@ -85,26 +83,26 @@ export async function generateCreateDraftResponse(event) {
   console.log('Draft is ' + JSON.stringify(draft));
 
   const response = gmailCardUiGenerator.createCreateDraftUi(
-      draft.id,
-      draft.message.threadId,
+    draft.id,
+    draft.message.threadId,
   );
 
   return response;
 }
 
 export async function generateGenerateReplyResponse(
-    event,
-    providers,
-    oauthClientId,
-    createReplyDraftUrl,
-    navigateBackUrl,
+  event,
+  providers,
+  oauthClientId,
+  createReplyDraftUrl,
+  navigateBackUrl,
 ) {
   const message = await gmailUtils.getGmailMessage(event);
   console.log(JSON.stringify({message}));
   const formInputs = event.commonEventObject.formInputs;
   const profileInfo = await commonAddOnUtils.getPayloadFromEvent(
-      event,
-      oauthClientId,
+    event,
+    oauthClientId,
   );
   // This is for the JSON card UI response
   let sections = [];
@@ -115,15 +113,15 @@ export async function generateGenerateReplyResponse(
     console.log('User prompt was: ' + replyTextPromptValue);
 
     const subject = message.payload.headers.find(
-        (header) => header.name === 'Subject',
+      (header) => header.name === 'Subject',
     ).value;
 
     const senderName = message.payload.headers.find(
-        (header) => header.name === 'From',
+      (header) => header.name === 'From',
     ).value;
 
     const messageBodyText = gmailUtils.decodeGmailBodyPayload(
-        message.payload.parts[0].body.data,
+      message.payload.parts[0].body.data,
     );
 
     let generatedReplies = [];
@@ -132,7 +130,7 @@ export async function generateGenerateReplyResponse(
     console.log(`Selected provider is ${selectedProvider}`);
     if (selectedProvider != '') {
       const providerConfig = providers.find(
-          (provider) => provider.value == selectedProvider,
+        (provider) => provider.value == selectedProvider,
       ).config;
 
       console.log(`Calling ${selectedProvider} provider`);
@@ -154,14 +152,14 @@ export async function generateGenerateReplyResponse(
       }
 
       generatedReplies = await provider.generateEmailReply(
-          subject,
-          senderName,
-          messageBodyText,
-          replyTextPromptValue,
-          toneSelection,
-          languageSelection,
-          profileInfo.given_name,
-          providerConfig,
+        subject,
+        senderName,
+        messageBodyText,
+        replyTextPromptValue,
+        toneSelection,
+        languageSelection,
+        profileInfo.given_name,
+        providerConfig,
       );
     } else {
       throw new Error('No valid provider selected.');
@@ -175,14 +173,14 @@ export async function generateGenerateReplyResponse(
     // for each of them.
     const generatedRepliesUiSection =
       gmailCardUiGenerator.createGeneratedRepliesUi(
-          generatedReplies,
-          2,
-          createReplyDraftUrl,
+        generatedReplies,
+        2,
+        createReplyDraftUrl,
       );
     console.log(
-        `Generated replies UI section is ${JSON.stringify(
-            generatedRepliesUiSection,
-        )}`,
+      `Generated replies UI section is ${JSON.stringify(
+        generatedRepliesUiSection,
+      )}`,
     );
     console.log(`Sections before: ${JSON.stringify(sections)}`);
     sections = sections.concat(generatedRepliesUiSection);
@@ -194,8 +192,8 @@ export async function generateGenerateReplyResponse(
   } else {
     const noPromptProvidedUiSection =
       gmailCardUiGenerator.createTryAgainWithMessage(
-          'You did not enter a prompt!',
-          navigateBackUrl,
+        'You did not enter a prompt!',
+        navigateBackUrl,
       );
     sections.push(noPromptProvidedUiSection);
   }
