@@ -152,4 +152,4 @@ gcloud workspace-add-ons get-authorization
 
 We verify the user ID token and extract their profile name. In order to do that, we need the OAuth client ID for the add-on. 
 
-To get the client ID, follow the steps [here] and then add the value to the `oauthClientId` variable in the `addOnConfig` section.
+To get the client ID, follow the steps [here](https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id) and then add the value to the `oauthClientId` variable in the `addOnConfig` section.
