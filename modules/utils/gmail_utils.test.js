@@ -1,12 +1,16 @@
 import {jest} from '@jest/globals';
-import {google} from "googleapis";
-import {OAuth2Client} from "google-auth-library";
-import {Base64 as Base64} from "js-base64";
-import {getGmailMessage, decodeGmailBodyPayload, createDraft} from "./gmail_utils";
+import {google} from 'googleapis';
+import {OAuth2Client} from 'google-auth-library';
+import {Base64 as Base64} from 'js-base64';
+import {
+  getGmailMessage,
+  decodeGmailBodyPayload,
+  createDraft,
+} from './gmail_utils';
 
-jest.mock("googleapis");
-jest.mock("google-auth-library");
-jest.mock("js-base64");
+jest.mock('googleapis');
+jest.mock('google-auth-library');
+jest.mock('js-base64');
 
 describe('getGmailMessage', () => {
   it('should expose a function', () => {

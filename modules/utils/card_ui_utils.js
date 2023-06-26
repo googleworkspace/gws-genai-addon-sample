@@ -25,21 +25,21 @@ export default function convertMarkdownToWidgets(markdownText) {
       const bulletListItemText = match[0].slice(2);
 
       results.push({
-        "decoratedText": {
-          "text": markdownToSimpleHtml(bulletListItemText),
-          "startIcon": {
-            "knownIcon": "STAR"
+        decoratedText: {
+          text: markdownToSimpleHtml(bulletListItemText),
+          startIcon: {
+            knownIcon: 'STAR',
           },
-          "wrapText": true
-        }
+          wrapText: true,
+        },
       });
     } else {
       // Otherwise, convert markdown text to the supported HTML tags
       // in the paragraph widget
       results.push({
-        "textParagraph": {
-          "text": markdownToSimpleHtml(line)
-        }
+        textParagraph: {
+          text: markdownToSimpleHtml(line),
+        },
       });
     }
   });
@@ -54,48 +54,48 @@ function markdownToSimpleHtml(markdown) {
     // Bold
     {
       pattern: /\*\*([^\*\*]+)\*\*/g,
-      replacement: "<b>$1</b>",
+      replacement: '<b>$1</b>',
     },
     // Italics
     {
       pattern: /_([^_]+)_/g,
-      replacement: "<i>$1</i>",
+      replacement: '<i>$1</i>',
     },
     // Underlined
     {
       pattern: /__([^_]+)__/g,
-      replacement: "<u>$1</u>",
+      replacement: '<u>$1</u>',
     },
     // Strikethrough
     {
       pattern: /~~([^~]+)~~/g,
-      replacement: "<s>$1</s>",
+      replacement: '<s>$1</s>',
     },
     // Newline
     {
       pattern: /\r\n/g,
-      replacement: "<br>",
+      replacement: '<br>',
     },
     // Links
     {
       pattern: /\[(([^\]]+))\]\((([^)]+))\)/g,
-      replacement: "<a href=\"$2\">$1</a>",
+      replacement: '<a href="$2">$1</a>',
     },
     // Newline
     {
       pattern: /\n/g,
-      replacement: "<br>",
+      replacement: '<br>',
     },
     // Newline
     {
       pattern: /\r/g,
-      replacement: "<br>",
+      replacement: '<br>',
     },
     // Tab
     {
       pattern: /\t/g,
-      replacement: "    ",
-    }
+      replacement: '    ',
+    },
   ];
 
   for (const regex of regexes) {

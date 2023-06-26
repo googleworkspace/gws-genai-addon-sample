@@ -1,4 +1,11 @@
-import {createHomePageUi, createStartGenerationUi, createCreateDraftUi, createGeneratedRepliesUi, createTryAgainUi, createTryAgainWithMessage} from './gmail_card_ui_generator';
+import {
+  createHomePageUi,
+  createStartGenerationUi,
+  createCreateDraftUi,
+  createGeneratedRepliesUi,
+  createTryAgainUi,
+  createTryAgainWithMessage,
+} from './gmail_card_ui_generator';
 
 describe('createHomePageUi', () => {
   it('should expose a function', () => {

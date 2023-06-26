@@ -1,12 +1,11 @@
-import convertMarkdownToWidgets from "../utils/card_ui_utils.js";
+import convertMarkdownToWidgets from '../utils/card_ui_utils.js';
 
 export function createRenderActionWithTextUi(text) {
   const response = {
-    render_actions: createSingleCardWithTextUi(text)
+    render_actions: createSingleCardWithTextUi(text),
   };
 
   return response;
-
 }
 
 export function createSingleCardWithTextUi(text) {
@@ -35,95 +34,100 @@ export function createSingleCardWithTextUi(text) {
   return response;
 }
 
-export function createOnItemsSelectedTriggerUi(fileName, providerSelectionItems, generateDocsSummaryFunctionUrl) {
+export function createOnItemsSelectedTriggerUi(
+    fileName,
+    providerSelectionItems,
+    generateDocsSummaryFunctionUrl,
+) {
   const response = {
     action: {
       navigations: [
         {
           pushCard: {
-            "sections": [
+            sections: [
               {
-                "widgets": [{
-                  "decoratedText": {
-                    "topLabel": "Selected file",
-                    "text": fileName
-                  }
-                },
-                {
-                  textParagraph: {
-                    text: "Please select options below:",
+                widgets: [
+                  {
+                    decoratedText: {
+                      topLabel: 'Selected file',
+                      text: fileName,
+                    },
                   },
-                },
-                {
-                  "selectionInput": {
-                    "type": "DROPDOWN",
-                    "label": "Length",
-                    "name": "lengthSelection",
-                    "items": [
-                      {
-                        "text": "Short (1-2 sentences)",
-                        "value": "short",
-                        "selected": false
-                      },
-                      {
-                        "text": "Medium (3-4 sentences)",
-                        "value": "medium",
-                        "selected": true
-                      },
-                      {
-                        "text": "Long (4 or more sentences)",
-                        "value": "long",
-                        "selected": false
-                      }
-                    ]
-                  }
-                },
-                {
-                  selectionInput: {
-                    type: "DROPDOWN",
-                    label: "Format",
-                    name: "formatSelection",
-                    items: [
-                      {
-                        text: "Paragraphs",
-                        value: "paragraph",
-                        selected: true,
-                      },
-                      {
-                        text: "Bullet Points",
-                        value: "bullets",
-                        selected: false,
-                      },
-                    ],
+                  {
+                    textParagraph: {
+                      text: 'Please select options below:',
+                    },
                   },
-                },
-                {
-                  selectionInput: {
-                    type: "DROPDOWN",
-                    label: "Generative AI Provider",
-                    name: "providerSelection",
-                    items: providerSelectionItems,
+                  {
+                    selectionInput: {
+                      type: 'DROPDOWN',
+                      label: 'Length',
+                      name: 'lengthSelection',
+                      items: [
+                        {
+                          text: 'Short (1-2 sentences)',
+                          value: 'short',
+                          selected: false,
+                        },
+                        {
+                          text: 'Medium (3-4 sentences)',
+                          value: 'medium',
+                          selected: true,
+                        },
+                        {
+                          text: 'Long (4 or more sentences)',
+                          value: 'long',
+                          selected: false,
+                        },
+                      ],
+                    },
                   },
-                },
-                {
-                  "buttonList": {
-                    "buttons": [
-                      {
-                        "text": "Generate Summary",
-                        "onClick": {
-                          "action": {
-                            "function": generateDocsSummaryFunctionUrl,
-                            parameters: [],
-                          }
-                        }
-                      }
-                    ]
-                  }
-                }
+                  {
+                    selectionInput: {
+                      type: 'DROPDOWN',
+                      label: 'Format',
+                      name: 'formatSelection',
+                      items: [
+                        {
+                          text: 'Paragraphs',
+                          value: 'paragraph',
+                          selected: true,
+                        },
+                        {
+                          text: 'Bullet Points',
+                          value: 'bullets',
+                          selected: false,
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    selectionInput: {
+                      type: 'DROPDOWN',
+                      label: 'Generative AI Provider',
+                      name: 'providerSelection',
+                      items: providerSelectionItems,
+                    },
+                  },
+                  {
+                    buttonList: {
+                      buttons: [
+                        {
+                          text: 'Generate Summary',
+                          onClick: {
+                            action: {
+                              function: generateDocsSummaryFunctionUrl,
+                              parameters: [],
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  },
                 ],
-                "header": "Summarize Document",
-              }
-            ]
+                header: 'Summarize Document',
+              },
+            ],
           },
         },
       ],
@@ -133,7 +137,11 @@ export function createOnItemsSelectedTriggerUi(fileName, providerSelectionItems,
   return response;
 }
 
-export function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUrl) {
+export function createGenerateSummaryUi(
+    summary,
+    exportToDocsUrl,
+    navigateBackUrl,
+) {
   console.log('entering createGenerateSummaryUi');
 
   const responseWidgets = convertMarkdownToWidgets(summary);
@@ -141,31 +149,32 @@ export function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUr
 
   responseWidgets.push({
     buttonList: {
-      buttons: [{
-        text: "Export to Docs",
-        onClick: {
-          action: {
-            function: exportToDocsUrl,
-            parameters: [
-              {
-                key: "summary",
-                value: summary,
-              },
-            ],
+      buttons: [
+        {
+          text: 'Export to Docs',
+          onClick: {
+            action: {
+              function: exportToDocsUrl,
+              parameters: [
+                {
+                  key: 'summary',
+                  value: summary,
+                },
+              ],
+            },
           },
         },
-      },
-      {
-        text: "Go back",
-        onClick: {
-          action: {
-            function: navigateBackUrl,
-            parameters: [],
+        {
+          text: 'Go back',
+          onClick: {
+            action: {
+              function: navigateBackUrl,
+              parameters: [],
+            },
           },
         },
-      },
       ],
-    }
+    },
   });
 
   const response = {
@@ -177,14 +186,14 @@ export function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUr
               sections: [
                 {
                   widgets: responseWidgets,
-                  "header": "Generated summary",
+                  header: 'Generated summary',
                 },
               ],
             },
           },
         ],
       },
-    }
+    },
   };
 
   return response;
@@ -195,10 +204,10 @@ export function createNotificationUi(message) {
     render_actions: {
       action: {
         notification: {
-          text: message
-        }
-      }
-    }
+          text: message,
+        },
+      },
+    },
   };
 
   return response;

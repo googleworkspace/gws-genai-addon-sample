@@ -1,18 +1,27 @@
-import cohere from "cohere-ai";
+import cohere from 'cohere-ai';
 
 // For models check https://docs.cohere.com/docs/models
-const TEXT_GEN_MODEL_NAME = 'command-light'; //TODO use command-nightly or command-xlarge-nightly
-const SUMMARIZE_MODEL_NAME = 'summarize-medium'; //TODO summarize-xlarge once timeout issue is done
+const TEXT_GEN_MODEL_NAME = 'command-light'; // TODO use command-nightly or command-xlarge-nightly
+const SUMMARIZE_MODEL_NAME = 'summarize-medium'; // TODO summarize-xlarge once timeout issue is done
 
 // TODO create another exported function for creating content for Google Docs
-export async function generateEmailReply(subject, senderName, messageBody, replyTextPrompt, tone, language, authorName, config) {
-  console.log("Entering Cohere provider module");
+export async function generateEmailReply(
+    subject,
+    senderName,
+    messageBody,
+    replyTextPrompt,
+    tone,
+    language,
+    authorName,
+    config,
+) {
+  console.log('Entering Cohere provider module');
 
   const cohereApiKey = config.apiKey;
 
-  let prompt =
-    //Add: My name is xyz or "Sign it with my name which is ()"
-    //TODO Remove funny
+  const prompt =
+    // Add: My name is xyz or "Sign it with my name which is ()"
+    // TODO Remove funny
     'Given an email with the subject "' +
     subject +
     '" from the sender "' +
@@ -23,30 +32,30 @@ export async function generateEmailReply(subject, senderName, messageBody, reply
     replyTextPrompt +
     '" in a ' +
     tone +
-    " tone in " +
+    ' tone in ' +
     language +
-    " and sign it with the name " +
+    ' and sign it with the name ' +
     authorName;
 
-  console.log("Prompt to be sent to API is: " + prompt);
+  console.log('Prompt to be sent to API is: ' + prompt);
 
   cohere.init(cohereApiKey);
 
   const generations = await callCohereTextGenerationApi(prompt, cohere);
 
-  //This is done to standerize the response to be used by the calling code
-  let replies = [];
+  // This is done to standerize the response to be used by the calling code
+  const replies = [];
 
   // TODO can you remove the for loop and move to an array method ?
   for (let i = 0; i < generations.length; i++) {
-    replies.push({"suggestedText": generations[i].text});
+    replies.push({suggestedText: generations[i].text});
   }
 
   return replies;
 }
 
 async function callCohereTextGenerationApi(prompt, cohere) {
-  console.log("Calling Cohere..");
+  console.log('Calling Cohere..');
 
   const response = await cohere.generate({
     model: TEXT_GEN_MODEL_NAME,
@@ -55,7 +64,7 @@ async function callCohereTextGenerationApi(prompt, cohere) {
     temperature: 0.5,
     k: 0,
     stop_sequences: [],
-    return_likelihoods: "NONE",
+    return_likelihoods: 'NONE',
     num_generations: 2,
   });
 
@@ -66,27 +75,42 @@ async function callCohereTextGenerationApi(prompt, cohere) {
   return generations;
 }
 
-export async function generateSummary(lengthSelection, formatSelection, text, config) {
-  console.log("Entering Cohere provider module");
+export async function generateSummary(
+    lengthSelection,
+    formatSelection,
+    text,
+    config,
+) {
+  console.log('Entering Cohere provider module');
 
   const cohereApiKey = config.apiKey;
 
   cohere.init(cohereApiKey);
 
   // TODO split prompt into prompt and context
-  const summary = await callCohereSummarizeEndpoint(lengthSelection, formatSelection, text, cohere);
+  const summary = await callCohereSummarizeEndpoint(
+      lengthSelection,
+      formatSelection,
+      text,
+      cohere,
+  );
 
   console.log(`Summary is ${JSON.stringify(summary)}`);
 
   return summary;
 }
 
-async function callCohereSummarizeEndpoint(lengthSelection, formatSelection, text, cohere) {
-  console.log("Calling Cohere..");
+async function callCohereSummarizeEndpoint(
+    lengthSelection,
+    formatSelection,
+    text,
+    cohere,
+) {
+  console.log('Calling Cohere..');
 
   const response = await cohere.summarize({
     text: text,
-    length: String(lengthSelection), //for some reason it is coming in as an array
+    length: String(lengthSelection), // for some reason it is coming in as an array
     format: String(formatSelection),
     model: SUMMARIZE_MODEL_NAME,
     additional_command: '',
@@ -101,7 +125,9 @@ async function callCohereSummarizeEndpoint(lengthSelection, formatSelection, tex
     const summary = response.body.summary;
     return summary;
   } else {
-    console.log(`Error generating summary. API HTTP response code: ${statusCode}.`);
+    console.log(
+        `Error generating summary. API HTTP response code: ${statusCode}.`,
+    );
     return null;
   }
 }

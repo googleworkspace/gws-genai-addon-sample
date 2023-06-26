@@ -1,8 +1,14 @@
 import {jest} from '@jest/globals';
-import convertMarkdownToWidgets from "../utils/card_ui_utils.js";
-import {createRenderActionWithTextUi, createSingleCardWithTextUi, createOnItemsSelectedTriggerUi, createGenerateSummaryUi, createNotificationUi} from "./drive_card_ui_generator";
+import convertMarkdownToWidgets from '../utils/card_ui_utils.js';
+import {
+  createRenderActionWithTextUi,
+  createSingleCardWithTextUi,
+  createOnItemsSelectedTriggerUi,
+  createGenerateSummaryUi,
+  createNotificationUi,
+} from './drive_card_ui_generator';
 
-jest.mock("../utils/card_ui_utils.js");
+jest.mock('../utils/card_ui_utils.js');
 
 describe('createRenderActionWithTextUi', () => {
   it('should expose a function', () => {

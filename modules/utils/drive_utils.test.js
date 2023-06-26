@@ -1,10 +1,14 @@
 import {jest} from '@jest/globals';
-import {google} from "googleapis";
-import {OAuth2Client} from "google-auth-library";
-import {getFileContent, getFileParentId, createDocsFileWithText} from "./drive_utils";
+import {google} from 'googleapis';
+import {OAuth2Client} from 'google-auth-library';
+import {
+  getFileContent,
+  getFileParentId,
+  createDocsFileWithText,
+} from './drive_utils';
 
-jest.mock("googleapis");
-jest.mock("google-auth-library");
+jest.mock('googleapis');
+jest.mock('google-auth-library');
 
 describe('getFileContent', () => {
   it('should expose a function', () => {

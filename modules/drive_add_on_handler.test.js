@@ -1,14 +1,19 @@
 import {jest} from '@jest/globals';
-import * as driveCardUiGenerator from "./ui/drive_card_ui_generator.js";
-import * as driveUtils from "./utils/drive_utils.js";
-import * as cohere from "./gen_ai_providers/cohere.js";
-import * as palm from "./gen_ai_providers/palm_api.js";
-import {generateHomePageResponse, generateOnItemsSelectedTriggerResponse, generateSummaryResponse, exportToDocs} from "./drive_add_on_handler";
+import * as driveCardUiGenerator from './ui/drive_card_ui_generator.js';
+import * as driveUtils from './utils/drive_utils.js';
+import * as cohere from './gen_ai_providers/cohere.js';
+import * as palm from './gen_ai_providers/palm_api.js';
+import {
+  generateHomePageResponse,
+  generateOnItemsSelectedTriggerResponse,
+  generateSummaryResponse,
+  exportToDocs,
+} from './drive_add_on_handler';
 
-jest.mock("./ui/drive_card_ui_generator.js");
-jest.mock("./utils/drive_utils.js");
-jest.mock("./gen_ai_providers/cohere.js");
-jest.mock("./gen_ai_providers/palm_api.js");
+jest.mock('./ui/drive_card_ui_generator.js');
+jest.mock('./utils/drive_utils.js');
+jest.mock('./gen_ai_providers/cohere.js');
+jest.mock('./gen_ai_providers/palm_api.js');
 
 describe('generateHomePageResponse', () => {
   it('should expose a function', () => {

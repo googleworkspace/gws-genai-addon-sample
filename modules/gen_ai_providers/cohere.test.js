@@ -1,8 +1,8 @@
 import {jest} from '@jest/globals';
-import cohere from "cohere-ai";
-import {generateEmailReply, generateSummary} from "./cohere";
+import cohere from 'cohere-ai';
+import {generateEmailReply, generateSummary} from './cohere';
 
-jest.mock("cohere-ai");
+jest.mock('cohere-ai');
 
 describe('generateEmailReply', () => {
   it('should expose a function', () => {

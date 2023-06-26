@@ -1,8 +1,11 @@
 import {jest} from '@jest/globals';
-import {OAuth2Client} from "google-auth-library";
-import {getPayloadFromEvent, authenticateRequest} from "./common_add_on_utils";
+import {OAuth2Client} from 'google-auth-library';
+import {
+  getPayloadFromEvent,
+  authenticateRequest,
+} from './common_add_on_utils';
 
-jest.mock("google-auth-library");
+jest.mock('google-auth-library');
 
 describe('getPayloadFromEvent', () => {
   it('should expose a function', () => {

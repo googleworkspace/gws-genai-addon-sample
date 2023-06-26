@@ -1,24 +1,28 @@
-import {google} from "googleapis";
-import {OAuth2Client} from "google-auth-library";
+import {google} from 'googleapis';
+import {OAuth2Client} from 'google-auth-library';
 
 export async function getFileContent(fileId, fileMimeType, accessToken) {
-  let content = "";
+  let content = '';
   console.log(`mimeType is ${fileMimeType}`);
   try {
-    supportedGoogleWorkspaceMimeTypes = ['application/vnd.google-apps.document', 'application/vnd.google-apps.spreadsheet', 'application/vnd.google-apps.presentation'];
+    supportedGoogleWorkspaceMimeTypes = [
+      'application/vnd.google-apps.document',
+      'application/vnd.google-apps.spreadsheet',
+      'application/vnd.google-apps.presentation',
+    ];
     if (supportedGoogleWorkspaceMimeTypes.includes(fileMimeType)) {
       content = await exportDriveFile(fileId, fileMimeType, accessToken);
-    } else if (fileMimeType == 'text/plain') { //TODO support PDFs
+    } else if (fileMimeType == 'text/plain') {
+      // TODO support PDFs
       content = await getDriveTextFileContent(fileId, accessToken);
     } else {
-      throw new Error("Unsupported file format");
+      throw new Error('Unsupported file format');
     }
     console.log(`content is ${JSON.stringify(content)}`);
     return content;
-
   } catch (error) {
     console.log(`Error retrieving file content from Google Drive. ${error}`);
-    return "";
+    return '';
   }
 }
 
@@ -44,16 +48,16 @@ async function exportDriveFile(fileId, fileMimeType, accessToken) {
   oauth2Client.setCredentials({access_token: accessToken});
 
   const drive = google.drive({version: 'v3', auth: oauth2Client});
-  let exportedMimeType = ''
+  let exportedMimeType = '';
   if (fileMimeType == 'application/vnd.google-apps.spreadsheet') {
-    exportedMimeType = 'text/csv'
+    exportedMimeType = 'text/csv';
   } else {
-    exportedMimeType = 'text/plain'
+    exportedMimeType = 'text/plain';
   }
 
   const docsResponse = await drive.files.export({
     fileId: fileId,
-    mimeType: exportedMimeType
+    mimeType: exportedMimeType,
   });
 
   const content = docsResponse.data;
@@ -70,7 +74,7 @@ export async function getFileParentId(fileId, accessToken) {
   try {
     const fileMetaData = await drive.files.get({
       fileId: fileId,
-      fields: 'parents'
+      fields: 'parents',
     });
 
     console.log(`File metadata: ${JSON.stringify(fileMetaData)}`);
@@ -78,13 +82,17 @@ export async function getFileParentId(fileId, accessToken) {
     const parents = fileMetaData.data.parents;
 
     return parents;
-
   } catch (err) {
     throw err;
   }
 }
 
-export async function createDocsFileWithText(text, fileName, parents, accessToken) {
+export async function createDocsFileWithText(
+    text,
+    fileName,
+    parents,
+    accessToken,
+) {
   const oauth2Client = new OAuth2Client();
   oauth2Client.setCredentials({access_token: accessToken});
 
@@ -93,7 +101,7 @@ export async function createDocsFileWithText(text, fileName, parents, accessToke
   const fileMetadata = {
     name: fileName,
     mimeType: 'application/vnd.google-apps.document',
-    parents: parents
+    parents: parents,
   };
   const media = {
     mimeType: 'text/plain',
