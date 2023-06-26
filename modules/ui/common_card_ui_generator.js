@@ -1,5 +1,4 @@
-
-function createNavigateBackUi() {
+export default function createNavigateBackUi() {
   let response = {
     renderActions: {
       action: {
@@ -14,5 +13,3 @@ function createNavigateBackUi() {
 
   return response;
 }
-
-exports.createNavigateBackUi = createNavigateBackUi;  

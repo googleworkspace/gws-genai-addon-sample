@@ -1,13 +1,15 @@
-const driveCardUiGenerator = require('./ui/drive_card_ui_generator');
-const driveUtils = require('./utils/drive_utils');
+import * as driveCardUiGenerator from "./ui/drive_card_ui_generator.js";
+import * as driveUtils from "./utils/drive_utils.js";
+import * as cohere from "./gen_ai_providers/cohere.js";
+import * as palm from "./gen_ai_providers/palm_api.js";
 
-function generateHomePageResponse() {
+export function generateHomePageResponse() {
   const message = "Please select a file to start using this add-on.";
   const response = driveCardUiGenerator.createSingleCardWithTextUi(message);
   return response;
 }
 
-function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvider, generateDocsSummaryUrl) {
+export function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvider, generateDocsSummaryUrl) {
   const selectedItems = event.drive.selectedItems;
 
   // We only support a single file for now
@@ -55,7 +57,7 @@ function generateOnItemsSelectedTriggerResponse(event, providers, defaultProvide
   return response;
 }
 
-async function generateSummaryResponse(event, providers, exportToDocsUrl, navigateBackUrl) {
+export async function generateSummaryResponse(event, providers, exportToDocsUrl, navigateBackUrl) {
   // We only support a single file for now
   // TODO can extract as a method as it's used in two methods now
   const selectedItems = event.drive.selectedItems;
@@ -100,11 +102,11 @@ async function generateSummaryResponse(event, providers, exportToDocsUrl, naviga
       //TODO I hate having to convert the type ... should look into what the type comes as from config file
       switch (String(selectedProvider)) {
         case "cohere":
-          provider = require("./gen_ai_providers/cohere.js");
+          provider = cohere;
           break;
         case "palmApi":
           //TODO move provider module file name to config file
-          provider = require("./gen_ai_providers/palm_api.js");
+          provider = palm;
           break;
         default:
           throw new Error(`No valid modules exists for ${selectedProvider}`);
@@ -130,7 +132,7 @@ async function generateSummaryResponse(event, providers, exportToDocsUrl, naviga
   }
 }
 
-async function exportToDocs(event) {
+export async function exportToDocs(event) {
   // We only support a single file for now
   // TODO can extract as a method as it's used in two methods now
   const selectedItems = event.drive.selectedItems;
@@ -169,8 +171,3 @@ async function exportToDocs(event) {
 
   return response;
 }
-
-exports.generateHomePageResponse = generateHomePageResponse;
-exports.generateOnItemsSelectedTriggerResponse = generateOnItemsSelectedTriggerResponse;
-exports.generateSummaryResponse = generateSummaryResponse;
-exports.exportToDocs = exportToDocs;

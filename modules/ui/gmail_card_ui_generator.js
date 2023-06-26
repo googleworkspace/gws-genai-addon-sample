@@ -1,6 +1,5 @@
-
 //TODO can split the card generation from the action-->navigation wrapper
-function createHomePageUi(text) {
+export function createHomePageUi(text) {
   const response = {
     action: {
       navigations: [
@@ -26,7 +25,7 @@ function createHomePageUi(text) {
   return response;
 }
 
-function createStartGenerationUi(senderName, subject, formattedSentDateTime, providerSelectionItems, generateReplyFunctionUrl) {
+export function createStartGenerationUi(senderName, subject, formattedSentDateTime, providerSelectionItems, generateReplyFunctionUrl) {
   let response = {
     action: {
       navigations: [
@@ -157,7 +156,7 @@ function createStartGenerationUi(senderName, subject, formattedSentDateTime, pro
   return response;
 }
 
-function createCreateDraftUi(draftId, draftThreadId) {
+export function createCreateDraftUi(draftId, draftThreadId) {
   let response = {
     render_actions: {
       host_app_action: {
@@ -179,7 +178,7 @@ function createCreateDraftUi(draftId, draftThreadId) {
   return response;
 }
 
-function createGeneratedRepliesUi(generatedReplies, numOfRepliesToInclude, createDraftUrl) {
+export function createGeneratedRepliesUi(generatedReplies, numOfRepliesToInclude, createDraftUrl) {
   let sections = [];
   for (let i = 0; i < Math.min(generatedReplies.length, numOfRepliesToInclude); i++) {
     replyText = generatedReplies[i].suggestedText;
@@ -218,7 +217,7 @@ function createGeneratedRepliesUi(generatedReplies, numOfRepliesToInclude, creat
   return sections;
 }
 
-function createTryAgainUi(navigateBackUrl) {
+export function createTryAgainUi(navigateBackUrl) {
   const response = {
     widgets: [
       {
@@ -242,7 +241,7 @@ function createTryAgainUi(navigateBackUrl) {
   return response;
 }
 
-function createTryAgainWithMessage(message, navigateBackUrl) {
+export function createTryAgainWithMessage(message, navigateBackUrl) {
   const response = {
     widgets: [
       {
@@ -270,10 +269,3 @@ function createTryAgainWithMessage(message, navigateBackUrl) {
 
   return response;
 }
-
-exports.createHomePageUi = createHomePageUi;
-exports.createStartGenerationUi = createStartGenerationUi;
-exports.createCreateDraftUi = createCreateDraftUi;
-exports.createGeneratedRepliesUi = createGeneratedRepliesUi;
-exports.createTryAgainUi = createTryAgainUi;
-exports.createTryAgainWithMessage = createTryAgainWithMessage;

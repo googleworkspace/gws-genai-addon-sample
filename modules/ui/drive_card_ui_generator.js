@@ -1,7 +1,6 @@
-const cardUiUtils = require('../utils/card_ui_utils');
+import convertMarkdownToWidgets from "../utils/card_ui_utils.js";
 
-
-function createRenderActionWithTextUi(text) {
+export function createRenderActionWithTextUi(text) {
   const response = {
     render_actions: createSingleCardWithTextUi(text)
   };
@@ -9,7 +8,8 @@ function createRenderActionWithTextUi(text) {
   return response;
 
 }
-function createSingleCardWithTextUi(text) {
+
+export function createSingleCardWithTextUi(text) {
   const response = {
     action: {
       navigations: [
@@ -35,7 +35,7 @@ function createSingleCardWithTextUi(text) {
   return response;
 }
 
-function createOnItemsSelectedTriggerUi(fileName, providerSelectionItems, generateDocsSummaryFunctionUrl) {
+export function createOnItemsSelectedTriggerUi(fileName, providerSelectionItems, generateDocsSummaryFunctionUrl) {
   const response = {
     action: {
       navigations: [
@@ -133,10 +133,10 @@ function createOnItemsSelectedTriggerUi(fileName, providerSelectionItems, genera
   return response;
 }
 
-function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUrl) {
+export function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUrl) {
   console.log('entering createGenerateSummaryUi');
 
-  const responseWidgets = cardUiUtils.convertMarkdownToWidgets(summary);
+  const responseWidgets = convertMarkdownToWidgets(summary);
   console.log(`responseWidgets: ${JSON.stringify(responseWidgets)}`);
 
   responseWidgets.push({
@@ -190,7 +190,7 @@ function createGenerateSummaryUi(summary, exportToDocsUrl, navigateBackUrl) {
   return response;
 }
 
-function createNotificationUi(message) {
+export function createNotificationUi(message) {
   const response = {
     render_actions: {
       action: {
@@ -203,9 +203,3 @@ function createNotificationUi(message) {
 
   return response;
 }
-
-exports.createRenderActionWithTextUi = createRenderActionWithTextUi;
-exports.createSingleCardWithTextUi = createSingleCardWithTextUi;
-exports.createOnItemsSelectedTriggerUi = createOnItemsSelectedTriggerUi;
-exports.createGenerateSummaryUi = createGenerateSummaryUi;
-exports.createNotificationUi = createNotificationUi;

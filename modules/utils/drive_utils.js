@@ -1,7 +1,7 @@
-const { google } = require("googleapis");
-const { OAuth2Client } = require("google-auth-library");
+import {google} from "googleapis";
+import {OAuth2Client} from "google-auth-library";
 
-async function getFileContent(fileId, fileMimeType, accessToken) {
+export async function getFileContent(fileId, fileMimeType, accessToken) {
   let content = "";
   console.log(`mimeType is ${fileMimeType}`);
   try {
@@ -24,9 +24,9 @@ async function getFileContent(fileId, fileMimeType, accessToken) {
 
 async function getDriveTextFileContent(fileId, accessToken) {
   const oauth2Client = new OAuth2Client();
-  oauth2Client.setCredentials({ access_token: accessToken });
+  oauth2Client.setCredentials({access_token: accessToken});
 
-  const drive = google.drive({ version: 'v3', auth: oauth2Client });
+  const drive = google.drive({version: 'v3', auth: oauth2Client});
 
   const docsResponse = await drive.files.get({
     fileId: fileId,
@@ -41,9 +41,9 @@ async function getDriveTextFileContent(fileId, accessToken) {
 // This is used for Google Workspace files only (Docs, Sheets, Slides)
 async function exportDriveFile(fileId, fileMimeType, accessToken) {
   const oauth2Client = new OAuth2Client();
-  oauth2Client.setCredentials({ access_token: accessToken });
+  oauth2Client.setCredentials({access_token: accessToken});
 
-  const drive = google.drive({ version: 'v3', auth: oauth2Client });
+  const drive = google.drive({version: 'v3', auth: oauth2Client});
   let exportedMimeType = ''
   if (fileMimeType == 'application/vnd.google-apps.spreadsheet') {
     exportedMimeType = 'text/csv'
@@ -61,11 +61,11 @@ async function exportDriveFile(fileId, fileMimeType, accessToken) {
   return content;
 }
 
-async function getFileParentId(fileId, accessToken) {
+export async function getFileParentId(fileId, accessToken) {
   const oauth2Client = new OAuth2Client();
-  oauth2Client.setCredentials({ access_token: accessToken });
+  oauth2Client.setCredentials({access_token: accessToken});
 
-  const drive = google.drive({ version: 'v3', auth: oauth2Client });
+  const drive = google.drive({version: 'v3', auth: oauth2Client});
 
   try {
     const fileMetaData = await drive.files.get({
@@ -78,17 +78,17 @@ async function getFileParentId(fileId, accessToken) {
     const parents = fileMetaData.data.parents;
 
     return parents;
-    
+
   } catch (err) {
     throw err;
   }
 }
 
-async function createDocsFileWithText(text, fileName, parents, accessToken) {
+export async function createDocsFileWithText(text, fileName, parents, accessToken) {
   const oauth2Client = new OAuth2Client();
-  oauth2Client.setCredentials({ access_token: accessToken });
+  oauth2Client.setCredentials({access_token: accessToken});
 
-  const drive = google.drive({ version: 'v3', auth: oauth2Client });
+  const drive = google.drive({version: 'v3', auth: oauth2Client});
 
   const fileMetadata = {
     name: fileName,
@@ -112,7 +112,3 @@ async function createDocsFileWithText(text, fileName, parents, accessToken) {
     throw err;
   }
 }
-
-exports.getDocsContent = getFileContent;
-exports.createDocsFileWithText = createDocsFileWithText;
-exports.getFileParentId = getFileParentId;

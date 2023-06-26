@@ -1,14 +1,16 @@
-const gmailCardUiGenerator = require('./ui/gmail_card_ui_generator');
-const gmailUtils = require('./utils/gmail_utils');
-const commonAddOnUtils = require('./utils/common_add_on_utils')
+import * as gmailCardUiGenerator from "./ui/gmail_card_ui_generator.js";
+import * as gmailUtils from "./utils/gmail_utils.js";
+import * as commonAddOnUtils from "./utils/common_add_on_utils.js";
+import * as cohere from "./gen_ai_providers/cohere.js";
+import * as palm from "./gen_ai_providers/palm_api.js";
 
-function generateHomePageResponse() {
+export function generateHomePageResponse() {
   const message = "Please select a message to start using this add-on.";
   const response = gmailCardUiGenerator.createHomePageUi(message);
   return response;
 }
 
-async function generateContextualTriggerResponse(event, providers, defaultProvider, generateReplyUrl) {
+export async function generateContextualTriggerResponse(event, providers, defaultProvider, generateReplyUrl) {
   const message = await gmailUtils.getGmailMessage(event);
 
   // TODO can extract to another function?
@@ -27,7 +29,7 @@ async function generateContextualTriggerResponse(event, providers, defaultProvid
   const userLocale = event.commonEventObject.userLocale;
   const formattedSentDateTime = new Date(messageDate).toLocaleString(
     userLocale,
-    { timeZone: userTimeZone }
+    {timeZone: userTimeZone}
   );
 
   // Generate GenAI selection options and set default per config
@@ -54,7 +56,7 @@ async function generateContextualTriggerResponse(event, providers, defaultProvid
   return response;
 }
 
-async function generateCreateDraftResponse(event) {
+export async function generateCreateDraftResponse(event) {
   const parameters = event.commonEventObject.parameters;
   let replyText = "";
   if (parameters && parameters.replyText) {
@@ -76,9 +78,9 @@ async function generateCreateDraftResponse(event) {
   return response;
 }
 
-async function generateGenerateReplyResponse(event, providers, oauthClientId, createReplyDraftUrl, navigateBackUrl) {
+export async function generateGenerateReplyResponse(event, providers, oauthClientId, createReplyDraftUrl, navigateBackUrl) {
   const message = await gmailUtils.getGmailMessage(event);
-  console.log(JSON.stringify({ message }));
+  console.log(JSON.stringify({message}));
   const formInputs = event.commonEventObject.formInputs;
   const profileInfo = await commonAddOnUtils.getPayloadFromEvent(event, oauthClientId);
   // This is for the JSON card UI response
@@ -118,11 +120,11 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId, cr
       //TODO I hate having to convert the type ... should look into what the type comes as from config file
       switch (String(selectedProvider)) {
         case "cohere":
-          provider = require("./gen_ai_providers/cohere.js");
+          provider = cohere;
           break;
         case "palmApi":
           //TODO move provider module file name to config file
-          provider = require("./gen_ai_providers/palm_api.js");
+          provider = palm;
           break;
         default:
           throw new Error(`No valid modules exists for ${selectedProvider}`);
@@ -170,8 +172,3 @@ async function generateGenerateReplyResponse(event, providers, oauthClientId, cr
   console.log(`Response is ${JSON.stringify(response)}`);
   return response;
 }
-
-exports.generateHomePageResponse = generateHomePageResponse;
-exports.generateContextualTriggerResponse = generateContextualTriggerResponse;
-exports.generateCreateDraftResponse = generateCreateDraftResponse;
-exports.generateGenerateReplyResponse = generateGenerateReplyResponse;

@@ -1,11 +1,11 @@
-const asyncHandler = require("express-async-handler");
+import asyncHandler from "express-async-handler";
 
-const config = require("config");
+import config from "config";
 
-const commonAddOnUtils = require("./modules/utils/common_add_on_utils.js");
-const commonAddOnHandler = require("./modules/common_add_on_handler")
-const gmailAddOnHandler = require("./modules/gmail_add_on_handler");
-const driveAddOnHandler = require("./modules/drive_add_on_handler");
+import * as commonAddOnUtils from "./modules/utils/common_add_on_utils.js";
+import generateNavigateBackResponse from "./modules/common_add_on_handler.js";
+import * as gmailAddOnHandler from "./modules/gmail_add_on_handler.js";
+import * as driveAddOnHandler from "./modules/drive_add_on_handler.js";
 
 // Add-on Client ID (to validate token)
 // See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id
@@ -14,7 +14,7 @@ const addOnServiceAccountEmail = config.get("addOnConfig.serviceAccountEmail");
 
 // TODO use the service account to validate requests
 
-var routes = function (app) {
+export default function routes(app) {
   /* Drive Endpoints */
   // Homepage
   app.post("/driveHomePage", asyncHandler(async (req, res) => {
@@ -134,12 +134,10 @@ var routes = function (app) {
   app.post("/navigateBack", asyncHandler(async (req, res) => {
     await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
     console.log("Received POST: " + JSON.stringify(req.body));
-    const response = commonAddOnHandler.generateNavigateBackResponse();
+    const response = generateNavigateBackResponse();
     console.log(`JSON Response was ${JSON.stringify(response)}`);
     res.status(200).send(response);
   })
   );
 
 };
-
-module.exports = routes;

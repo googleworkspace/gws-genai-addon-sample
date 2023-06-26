@@ -5,9 +5,11 @@
 // end-points we're going to be using, and we pass it the `app` variable. Lastly, we specify the
 // port to listen to for requests. In this case, port 3000.
 //
-const express = require("express");
-const bearerToken = require("express-bearer-token");
-const bodyParser = require("body-parser");
+import express from "express";
+import bearerToken from "express-bearer-token";
+import bodyParser from "body-parser";
+import routes from "./routes.js";
+
 const app = express();
 
 // Needed if there is a proxy forwarding https to http
@@ -17,10 +19,10 @@ app.use(bearerToken());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-require("./routes.js")(app);
+routes(app);
 
 const port = process.env.PORT || 8080;
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
-module.exports = app;
+export default app;
