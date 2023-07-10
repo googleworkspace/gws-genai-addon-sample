@@ -141,7 +141,7 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 
 #### Google Developer PaLM API
 
-The add-on can use [PaLM API](https://developers.generativeai.google/) to generate and summarize text.
+The add-on can use [Google Developer PaLM API](https://developers.generativeai.google/) to generate and summarize text.
 
 > **_NOTE:_** Access to the PaLM API / MakerSuite is granted via a waitlist. You must get access through the [waitlist](https://makersuite.google.com/waitlist) before you can enable the service and generate an API key.
 
