@@ -2,6 +2,7 @@ import * as driveCardUiGenerator from './ui/drive_card_ui_generator.js';
 import * as driveUtils from './utils/drive_utils.js';
 import * as cohere from './gen_ai_providers/cohere.js';
 import * as palm from './gen_ai_providers/palm_api.js';
+import * as vertexAiPalm from `./gen_ai_providers/vertex_palm_api.js`;
 
 export function generateHomePageResponse() {
   const message = 'Please select a file to start using this add-on.';
@@ -134,6 +135,9 @@ export async function generateSummaryResponse(
     case 'palmApi':
       // TODO move provider module file name to config file
       provider = palm;
+      break;
+    case 'vertexPalmApi':
+      provider = vertexAiPalm;
       break;
     default:
       throw new Error(`No valid modules exists for ${selectedProvider}`);
