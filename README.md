@@ -92,6 +92,8 @@ gcloud workspace-add-ons deployments install genai-gmail-companion
 
 ### To replace deployment.json
 
+If you make any changes to the `deployment.json` file and need to redeploy the add-on, use the following command:
+
 ```sh
 gcloud workspace-add-ons deployments replace genai-gmail-companion --deployment-file=deployment.json
 ```
@@ -116,7 +118,26 @@ This add-on can be used with the list of providers below. For each provider, you
 
 The add-on can use [Google Cloud Vertex AI PaLM API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#palm-api) to generate and summarize text.
 
-[TODO] add configuration instructions.
+You use this provider, you first need to enable the service in your Google Cloud project using the same account that you applied for (and granted access to) via the waitlist.
+
+```sh
+gcloud services enable aiplatform.endpoints.predict
+```
+
+The code uses the service account attached to the Cloud Run deployment to generate access tokens to use the Vertex AI PaLM APIs. This service account by default is the  the [default Comptue Engine service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account).
+
+You need to grant this service account the following role in order to access the Vertex AI APIs:
+
+`Vertex AI User (roles/aiplatform.user)`
+
+You can either do this via the [Google Cloud Console](https://cloud.google.com/iam/docs/grant-role-console), or by using the following command (make sure to update PROJECT_NUMBER and PROJECT_ID with the relevant values for your project):
+
+```sh
+gcloud projects add-iam-policy-binding PROJECT_ID \
+      --member='serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com' \
+      --role='roles/aiplatform.user'
+```
+> Learn more on service account best practices and other ways to authenticate  [here](https://cloud.google.com/iam/docs/best-practices-service-accounts). 
 
 #### Google Developer PaLM API
 
@@ -128,7 +149,6 @@ You use this provider, you first need to enable the service in your Google Cloud
 
 ```sh
 gcloud services enable generativelanguage.googleapis.com
-
 ```
 
 Next you should [create an API key](https://makersuite.google.com/) and save it in the `apiKey` parameter in the relevant section for `palmAPI` in the add-on configuration file. Additional configurations for the provider are found in the `modules/gen_ai_providers/palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
