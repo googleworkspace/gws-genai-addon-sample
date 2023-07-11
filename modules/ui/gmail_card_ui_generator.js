@@ -186,7 +186,7 @@ export function createGeneratedRepliesUi(
   const sections = [];
   const replies = Math.min(generatedReplies.length, numOfRepliesToInclude);
   for (let i = 0; i < replies; i++) {
-    replyText = generatedReplies[i].suggestedText;
+    const replyText = generatedReplies[i].suggestedText;
     const responseSection = {
       header: 'Suggested reply #' + (i + 1),
       widgets: [
