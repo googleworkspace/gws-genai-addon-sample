@@ -1,13 +1,13 @@
 {
   "addOnConfig": {
-    "oauthClientId": "",
-    "serviceAccountEmail": "",
+    "oauthClientId": "<REPLACE_WITH_OAUTH_CLIENT_ID>",
+    "serviceAccountEmail": "<REPLACE_WITH_ADD_ON_SERVICE_ACCOUNT_EMAIL>",
     "urls": {
-      "generateReplyUrl": "<DEPLOYMENT_URL>/generateReply",
-      "navigateBackUrl": "<DEPLOYMENT_URL>/navigateBack",
-      "createReplyDraftUrl": "<DEPLOYMENT_URL>/createReplyDraft",
-      "generateFilesSummaryUrl": "<DEPLOYMENT_URL>/generateFilesSummary",
-      "exportToDocsUrl": "<DEPLOYMENT_URL>/exportToDocs"
+      "generateReplyUrl": "<REPLACE_WITH_DEPLOYMENT_URL>/generateReply",
+      "navigateBackUrl": "<REPLACE_WITH_DEPLOYMENT_URL>/navigateBack",
+      "createReplyDraftUrl": "<REPLACE_WITH_DEPLOYMENT_URL>/createReplyDraft",
+      "generateFilesSummaryUrl": "<REPLACE_WITH_DEPLOYMENT_URL>/generateFilesSummary",
+      "exportToDocsUrl": "<REPLACE_WITH_DEPLOYMENT_URL>/exportToDocs"
     }
   },
   "defaultProvider": "palmApi",
