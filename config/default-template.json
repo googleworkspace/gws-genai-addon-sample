@@ -1,0 +1,40 @@
+{
+  "addOnConfig": {
+    "oauthClientId": "<ADD_ON_OAUTH_CLIENT_ID>",
+    "serviceAccountEmail": "<ADD_ON_SERVICE_ACCOUNT_EMAIL>",
+    "urls": {
+      "generateReplyUrl": "<DEPLOYMENT_URL>/generateReply",
+      "navigateBackUrl": "<DEPLOYMENT_URL>/navigateBack",
+      "createReplyDraftUrl": "<DEPLOYMENT_URL>/createReplyDraft",
+      "generateFilesSummaryUrl": "<DEPLOYMENT_URL>/generateFilesSummary",
+      "exportToDocsUrl": "<DEPLOYMENT_URL>/exportToDocs"
+    }
+  },
+  "defaultProvider": "palmApi",
+  "providers": [
+    {
+      "name": "Vertex AI PaLM",
+      "value": "vertexPalmApi",
+      "enabled": true,
+      "config": {
+        "region": "us-central1"
+      }
+    },
+    {
+      "name": "PaLM",
+      "value": "palmApi",
+      "enabled": true,
+      "config": {
+        "apiKey": ""
+      }
+    },
+    {
+      "name": "Cohere",
+      "value": "cohere",
+      "enabled": false,
+      "config": {
+        "apiKey": ""
+      }
+    }
+  ]
+}
