@@ -158,7 +158,7 @@ The add-on can use [Google Cloud Vertex AI PaLM API](https://cloud.google.com/ve
 You use this provider, you first need to enable the service in your Google Cloud project using the same account that you applied for (and granted access to) via the waitlist.
 
 ```sh
-gcloud services enable aiplatform.endpoints.predict
+gcloud services enable aiplatform.googleapis.com
 ```
 
 The code uses the service account attached to the Cloud Run deployment to generate access tokens to use the Vertex AI PaLM APIs. This service account by default is the  the [default Comptue Engine service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account).
