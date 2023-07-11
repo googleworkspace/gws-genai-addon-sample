@@ -2,7 +2,7 @@ import * as driveCardUiGenerator from './ui/drive_card_ui_generator.js';
 import * as driveUtils from './utils/drive_utils.js';
 import * as cohere from './gen_ai_providers/cohere.js';
 import * as palm from './gen_ai_providers/palm_api.js';
-import * as vertexAiPalm from `./gen_ai_providers/vertex_palm_api.js`;
+import * as vertexAiPalm from `./gen_ai_providers/vertex_ai_palm_api.js`;
 
 export function generateHomePageResponse() {
   const message = 'Please select a file to start using this add-on.';

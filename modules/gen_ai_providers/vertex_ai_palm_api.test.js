@@ -1,7 +1,6 @@
 import {jest} from '@jest/globals';
-import {generateEmailReply, generateSummary} from './palm_api';
+import {generateEmailReply, generateSummary} from './vertex_ai_palm_api';
 
-jest.mock('@google-ai/generativelanguage');
 jest.mock('google-auth-library');
 
 describe('generateEmailReply', () => {
