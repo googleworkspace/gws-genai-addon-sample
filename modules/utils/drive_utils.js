@@ -5,7 +5,7 @@ export async function getFileContent(fileId, fileMimeType, accessToken) {
   let content = '';
   console.log(`mimeType is ${fileMimeType}`);
   try {
-    supportedGoogleWorkspaceMimeTypes = [
+    const supportedGoogleWorkspaceMimeTypes = [
       'application/vnd.google-apps.document',
       'application/vnd.google-apps.spreadsheet',
       'application/vnd.google-apps.presentation',
