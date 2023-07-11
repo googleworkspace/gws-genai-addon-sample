@@ -12,11 +12,15 @@ gcloud auth list
 
 ### Set active account
 
+Set active account using the account provided in the previous step.
+
 ```sh
 gcloud config set account <ACCOUNT>
 ```
 
 ### Set Project
+
+Set the project ID to the project ID you are using.
 
 ```sh
 gcloud config set project <PROJECT_ID>
@@ -65,6 +69,11 @@ gcloud run services list --platform managed
 ```
 
 ## Register the add-on
+
+### Prepare the deployment descriptor
+
+Make a copy of the `sample_deployment_file/deployment.json` in the main directory, and then edit the file to replace
+the `<DEPLOYMENT_URL>` variables with the deployment ID of the Cloud Run service above.
 
 ### Upload the deployment descriptor
 
