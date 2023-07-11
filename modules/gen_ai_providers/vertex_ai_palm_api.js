@@ -1,7 +1,6 @@
 import {GoogleAuth} from 'google-auth-library';
 
 // TODO list the other modules (or link to it)
-const CHAT_MODEL_NAME = 'chat-bison';
 const TEXT_GEN_MODEL_NAME = 'text-bison';
 
 // BASED ON https://developers.generativeai.google/tutorials/chat_node_quickstart
@@ -21,7 +20,7 @@ export async function generateEmailReply(
 ) {
   console.log('Entering Vertex AI PaLM API provider module');
 
-  const palmApiKey = config.apiKey;
+  const region = config.region;
 
   const prompt =
     // Add: My name is xyz or "Sign it with my name which is ()"
@@ -44,57 +43,9 @@ export async function generateEmailReply(
   console.log('Prompt to be sent to API is: ' + prompt);
 
   // TODO split prompt into prompt and context
-  const candidates = await callVertexAiPalmApiChatModelGen(prompt);
+  const candidates = await callVertexAiPalmApiTextModelGen(region, prompt);
 
-  return candidates.map(candidate => ({suggestedText: candidate.output}));
-}
-
-async function callVertexAiPalmApiChatModelGen(prompt) {
-  // console.log('Calling Vertex AI PaLM APIs..');
-
-  // const result = await client.generateText({
-  //   model: CHAT_MODEL_NAME, // Required. The model to use to generate the result.
-  //   temperature: 0.5, // Optional. Value `0.0` always uses the highest-probability result.
-  //   candidateCount: 2, // Optional. The number of candidate results to generate.
-  //   maxOutputTokens: 1024, // Max for Chat Bison
-  //   prompt: {
-  //     //       // optional, preamble context to prime responses
-  //     //       context: "Respond to all questions with a rhyming poem.",
-  //     // TODO split prompt into prompt and context
-  //     text: prompt,
-  //   },
-  //   safetySettings: [
-  //     {
-  //       category: 'HARM_CATEGORY_UNSPECIFIED',
-  //       threshold: 'BLOCK_NONE',
-  //     },
-  //     {
-  //       category: 'HARM_CATEGORY_DEROGATORY',
-  //       threshold: 'BLOCK_NONE',
-  //     },
-  //     {
-  //       category: 'HARM_CATEGORY_VIOLENCE',
-  //       threshold: 'BLOCK_NONE',
-  //     },
-  //     {
-  //       category: 'HARM_CATEGORY_SEXUAL',
-  //       threshold: 'BLOCK_NONE',
-  //     },
-  //     {
-  //       category: 'HARM_CATEGORY_MEDICAL',
-  //       threshold: 'BLOCK_NONE',
-  //     },
-  //     {
-  //       category: 'HARM_CATEGORY_DANGEROUS',
-  //       threshold: 'BLOCK_NONE',
-  //     },
-  //   ],
-  // });
-
-  // console.log(`PaLM API response is ${JSON.stringify(result)}`);
-
-  // return result[0].candidates;
-  throw new Error("Not implemented");
+  return candidates.map(candidate => ({suggestedText: candidate.content}));
 }
 
 export async function generateSummary(
