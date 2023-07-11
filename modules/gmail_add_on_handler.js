@@ -3,6 +3,7 @@ import * as gmailUtils from './utils/gmail_utils.js';
 import * as commonAddOnUtils from './utils/common_add_on_utils.js';
 import * as cohere from './gen_ai_providers/cohere.js';
 import * as palm from './gen_ai_providers/palm_api.js';
+import * as vertexAiPalm from './gen_ai_providers/vertex_ai_palm_api.js';
 
 export function generateHomePageResponse() {
   const message = 'Please select a message to start using this add-on.';
@@ -146,6 +147,9 @@ export async function generateGenerateReplyResponse(
         case 'palmApi':
           // TODO move provider module file name to config file
           provider = palm;
+          break;
+        case 'vertexPalmApi':
+          provider = vertexAiPalm;
           break;
         default:
           throw new Error(`No valid modules exists for ${selectedProvider}`);

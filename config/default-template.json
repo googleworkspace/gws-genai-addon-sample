@@ -1,7 +1,7 @@
 {
   "addOnConfig": {
-    "oauthClientId": "",
-    "serviceAccountEmail": "",
+    "oauthClientId": "<ADD_ON_OAUTH_CLIENT_ID>",
+    "serviceAccountEmail": "<ADD_ON_SERVICE_ACCOUNT_EMAIL>",
     "urls": {
       "generateReplyUrl": "<DEPLOYMENT_URL>/generateReply",
       "navigateBackUrl": "<DEPLOYMENT_URL>/navigateBack",
@@ -12,6 +12,14 @@
   },
   "defaultProvider": "palmApi",
   "providers": [
+    {
+      "name": "Vertex AI PaLM",
+      "value": "vertexPalmApi",
+      "enabled": true,
+      "config": {
+        "region": "us-central1"
+      }
+    },
     {
       "name": "PaLM",
       "value": "palmApi",
