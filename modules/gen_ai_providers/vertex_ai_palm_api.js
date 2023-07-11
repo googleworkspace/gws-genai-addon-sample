@@ -171,7 +171,7 @@ async function callVertexAiPalmApiTextModelGen(region, prompt) {
       "topP": 0.95
     }
   }
-  const res = await client.request({ url, data });
+  const res = await client.request({ method: 'POST', url, data });
   console.log(`Vertex AI PaLM API response is ${JSON.stringify(res.data)}`);
 
   return res.data.predictions;
