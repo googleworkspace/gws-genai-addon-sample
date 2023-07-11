@@ -42,6 +42,12 @@ gcloud services enable \
 
 ## Deploy to Cloud Run
 
+### Prepare configuration file
+
+Make a copy of the `config/default-template.json` file in the `config` folder and name it `default.json`. 
+
+This file will be used later for configuring the add-on code. We first will deploy the code with a template version, and later modify it after and redeploy again.
+
 ### Grant Cloud Build permission to deploy
 
 ```sh
@@ -68,12 +74,14 @@ gcloud builds submit
 gcloud run services list --platform managed
 ```
 
+Note the `URL` value in the response, as this will be your deployment URL to be used later in configuring the add-on.
+
 ## Register the add-on
 
 ### Prepare the deployment descriptor
 
 Make a copy of the `sample_deployment_file/deployment.json` in the main directory, and then edit the file to replace
-the `<DEPLOYMENT_URL>` variables with the deployment ID of the Cloud Run service above.
+the `<DEPLOYMENT_URL>` variables with the deployment URL for the Cloud Run service above.
 
 ### Upload the deployment descriptor
 
@@ -101,7 +109,7 @@ gcloud workspace-add-ons deployments install genai-gmail-companion
 
 ### To replace deployment.json
 
-If you make any changes to the `deployment.json` file and need to redeploy the add-on, use the following command:
+If you later make any changes to the `deployment.json` file (i.e. logo, name of the add-on, etc) and need to redeploy the add-on, use the following command:
 
 ```sh
 gcloud workspace-add-ons deployments replace genai-gmail-companion --deployment-file=deployment.json
@@ -109,11 +117,31 @@ gcloud workspace-add-ons deployments replace genai-gmail-companion --deployment-
 
 ## Configure the add-on
 
-Most of the configuration below should be made inside the `config/default.json` file that is deployed with the code. You will have to redeploy your code once you've made the changes to the file.
+The configuration below should be made inside the `config/default.json` file that is deployed with the code. 
+
+### Security
+
+#### Service Account Email
+
+We verify all requests that hits the endpoints are coming from the add-on. We do this by comparing the service account email in the request against the configured value in `serviceAccountEmail` under the `addOnConfig` section.
+
+To get your service account email for the add-on, follow the steps [here](https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#validate-requests-from-google) or run the following command:
+
+```sh
+gcloud workspace-add-ons get-authorization
+```
+
+#### OAuth Client ID
+
+We verify the user ID token and extract their profile name. In order to do that, we need the OAuth client ID for the add-on.
+
+To get the client ID, follow the steps [here](https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id) and then add the value to the `oauthClientId` variable in the `addOnConfig` section.
 
 ### Function URLs
 
-Configure all the variables under `urls` in the `addOnConfig` section to point to the specific endpoints within your deployment.
+Configure all the variables under `urls` in the `addOnConfig` section to point to the correct endpoints.
+
+Update the `<DEPLOYMENT_URL>` variable with the deployment URL you retrieved when you deployed your Cloud Run service.
 
 For example, if you deployed your code to `http://www.mydeployment.com/` then the value of `generateReplyUrl` will be `https://www.mydeployment.com/generateReplyUrl`
 
@@ -172,22 +200,16 @@ Please note that we use the specialized summarization endpoint for the sumamriza
 
 Additional configurations for the provider are found in the `modules/gen_ai_providers/cohere.js` file, including the models used, maximum tokens returned, and other configuration.
 
-### Security
+### Redeploy the code
 
-#### Service Account Email
+Once you have finished configuring the code, you must redeploy the Cloud Run service again.
 
-We verify all requests that hits the endpoints are coming from the add-on. We do this by comparing the service account email in the request against the configured value in `serviceAccountEmail` under the `addOnConfig` section.
+To do so, run the following command:
 
-To get your service account email for the add-on, follow the steps [here](https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#validate-requests-from-google) or run the following command:
+You will have to redeploy your code once you've made the changes to the file using the following command:
 
 ```sh
-
-gcloud workspace-add-ons get-authorization
-
+gcloud builds submit
 ```
 
-#### OAuth Client ID
-
-We verify the user ID token and extract their profile name. In order to do that, we need the OAuth client ID for the add-on.
-
-To get the client ID, follow the steps [here](https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id) and then add the value to the `oauthClientId` variable in the `addOnConfig` section.
+Once the service is deployed, you can use the add-on.

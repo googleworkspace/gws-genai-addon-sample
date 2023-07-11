@@ -96,7 +96,7 @@ export async function generateSummaryResponse(
   const accessToken = event.authorizationEventObject.userOAuthToken;
 
   // Call the drive utils to get file content
-  const fileContent = await driveUtils.getDocsContent(
+  const fileContent = await driveUtils.getFileContent(
     fileId,
     mimeType,
     accessToken,
