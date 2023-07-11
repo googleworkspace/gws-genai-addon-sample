@@ -130,7 +130,7 @@ You need to grant this service account the following role in order to access the
 
 `Vertex AI User (roles/aiplatform.user)`
 
-You can either do this via the [Google Cloud Console](https://cloud.google.com/iam/docs/grant-role-console), or by using the following command (make sure to update PROJECT_NUMBER and PROJECT_ID with the relevant values for your project):
+You can either do this via the [Google Cloud Console](https://cloud.google.com/iam/docs/grant-role-console), or by using the following command (make sure to update `PROJECT_NUMBER` and `PROJECT_ID` with the relevant values for your project):
 
 ```sh
 gcloud projects add-iam-policy-binding PROJECT_ID \
@@ -138,6 +138,8 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
       --role='roles/aiplatform.user'
 ```
 > Learn more on service account best practices and other ways to authenticate  [here](https://cloud.google.com/iam/docs/best-practices-service-accounts). 
+
+You can configure the region for the API in the `region` parameter (default is `us-central1`) in the relevant section for `vertexAiPalmApi` in the add-on configuration file. Additional configurations for the provider are found in the `modules/gen_ai_providers/vertex_ai_palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
 
 #### Google Developer PaLM API
 

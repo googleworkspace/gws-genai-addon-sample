@@ -17,6 +17,7 @@
       "value": "vertexPalmApi",
       "enabled": true,
       "config": {
+        "region": "us-central1"
       }
     },
     {
