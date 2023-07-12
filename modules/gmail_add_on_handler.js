@@ -41,14 +41,12 @@ export async function generateContextualTriggerResponse(
   const enabledProviders = providers.filter(
     (provider) => provider.enabled == true,
   );
-  console.log('Enabled providers: ' + JSON.stringify(enabledProviders));
   if (enabledProviders.length == 0) {
     throw new Error('No enabled providers!');
   }
 
   const providerSelectionItems = [];
   for (const provider of enabledProviders) {
-    console.log('ping');
     const providerItem = {
       text: provider.name,
       value: provider.value,
@@ -81,8 +79,6 @@ export async function generateCreateDraftResponse(event) {
   // TODO 3 instead of sending entire event, send only needed params
   const draft = await gmailUtils.createDraft(event, replyText);
 
-  console.log('Draft is ' + JSON.stringify(draft));
-
   const response = gmailCardUiGenerator.createCreateDraftUi(
     draft.id,
     draft.message.threadId,
@@ -99,7 +95,6 @@ export async function generateGenerateReplyResponse(
   navigateBackUrl,
 ) {
   const message = await gmailUtils.getGmailMessage(event);
-  console.log(JSON.stringify({message}));
   const formInputs = event.commonEventObject.formInputs;
   const profileInfo = await commonAddOnUtils.getPayloadFromEvent(
     event,
@@ -111,7 +106,6 @@ export async function generateGenerateReplyResponse(
     const replyTextPromptValue = formInputs.replyTextPrompt.stringInputs.value;
     const toneSelection = formInputs.toneSelection.stringInputs.value;
     const languageSelection = formInputs.languageSelection.stringInputs.value;
-    console.log('User prompt was: ' + replyTextPromptValue);
 
     const subject = message.payload.headers.find(
       (header) => header.name === 'Subject',
@@ -128,14 +122,10 @@ export async function generateGenerateReplyResponse(
     let generatedReplies = [];
 
     const selectedProvider = formInputs.providerSelection.stringInputs.value;
-    console.log(`Selected provider is ${selectedProvider}`);
     if (selectedProvider != '') {
       const providerConfig = providers.find(
         (provider) => provider.value == selectedProvider,
       ).config;
-
-      console.log(`Calling ${selectedProvider} provider`);
-      console.log(`Config is ${JSON.stringify(providerConfig)}`);
 
       let provider = null;
 
@@ -169,8 +159,6 @@ export async function generateGenerateReplyResponse(
       throw new Error('No valid provider selected.');
     }
 
-    console.log(`Provider replies are ${JSON.stringify(generatedReplies)}`);
-
     const replyText = '';
 
     // Pick the first two responses and generate a JSON section
@@ -181,14 +169,8 @@ export async function generateGenerateReplyResponse(
         2,
         createReplyDraftUrl,
       );
-    console.log(
-      `Generated replies UI section is ${JSON.stringify(
-        generatedRepliesUiSection,
-      )}`,
-    );
-    console.log(`Sections before: ${JSON.stringify(sections)}`);
     sections = sections.concat(generatedRepliesUiSection);
-    console.log(`Sections after: ${JSON.stringify(sections)}`);
+    
     // Add the remaining sections
     const tryAgainUiSection =
       gmailCardUiGenerator.createTryAgainUi(navigateBackUrl);
@@ -217,6 +199,5 @@ export async function generateGenerateReplyResponse(
     },
   };
 
-  console.log(`Response is ${JSON.stringify(response)}`);
   return response;
 }
