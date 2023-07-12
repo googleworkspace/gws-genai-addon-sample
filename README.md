@@ -176,7 +176,9 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 ```
 > Learn more on service account best practices and other ways to authenticate  [here](https://cloud.google.com/iam/docs/best-practices-service-accounts). 
 
-You can configure the region for the API in the `region` parameter (default is `us-central1`) in the relevant section for `vertexAiPalmApi` in the add-on configuration file. Additional configurations for the provider are found in the `modules/gen_ai_providers/vertex_ai_palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
+You can configure the region for the API in the `region` parameter (default is `us-central1`) in the relevant section for `vertexAiPalmApi` in the add-on configuration file. Please make sure the value you select corresponds to one of the Vertex AI service endpoint listed [here](https://cloud.google.com/vertex-ai/docs/reference/rest#service-endpoint).
+
+Additional configurations for the provider are found in the `modules/gen_ai_providers/vertex_ai_palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
 
 #### Google Developer PaLM API
 
