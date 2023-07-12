@@ -9,9 +9,6 @@ export async function getPayloadFromEvent(event, oauthClientId) {
     audience: oauthClientId,
   });
   const payload = decodedToken.getPayload();
-
-  console.log('User ID token payload: ' + JSON.stringify(payload));
-  // E.g. payload.email for email,  payload.sub for user ID
   return payload;
 }
 

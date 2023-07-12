@@ -136,11 +136,8 @@ export function createGenerateSummaryUi(
   exportToDocsUrl,
   navigateBackUrl,
 ) {
-  console.log('entering createGenerateSummaryUi');
-
   const responseWidgets = convertMarkdownToWidgets(summary);
-  console.log(`responseWidgets: ${JSON.stringify(responseWidgets)}`);
-
+  
   responseWidgets.push({
     buttonList: {
       buttons: [
