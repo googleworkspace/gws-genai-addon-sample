@@ -21,17 +21,13 @@ export async function getGmailMessage(event) {
 
   const message = gmailResponse.data;
 
-  console.log('Message data is ' + JSON.stringify(message));
-
   return message;
 }
 
 export function decodeGmailBodyPayload(base64EncodedText) {
-  console.log('Encoded message body is ' + base64EncodedText);
   const decodedBodyText = Buffer.from(base64EncodedText, 'base64').toString(
       'utf8',
   );
-  console.log('Decoded message body is ' + decodedBodyText);
   return decodedBodyText;
 }
 
@@ -102,7 +98,6 @@ export async function createDraft(event, draftContent) {
 
   messageContent += 'Subject: ' + subject + '\n';
   messageContent += '\n' + body;
-  console.log('messageContent: ' + messageContent);
 
   const newDraft = await gmail.users.drafts.create({
     userId: 'me',
@@ -115,6 +110,5 @@ export async function createDraft(event, draftContent) {
     oauth2Client,
     headers: {'X-Goog-Gmail-Access-Token': accessToken},
   });
-  console.log('newDraft: ' + JSON.stringify(newDraft.data));
   return newDraft.data;
 }
