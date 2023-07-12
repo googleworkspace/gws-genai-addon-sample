@@ -7,12 +7,8 @@ import generateNavigateBackResponse from './modules/common_add_on_handler.js';
 import * as gmailAddOnHandler from './modules/gmail_add_on_handler.js';
 import * as driveAddOnHandler from './modules/drive_add_on_handler.js';
 
-// Add-on Client ID (to validate token)
-// See https://developers.google.com/workspace/add-ons/guides/alternate-runtimes#get_the_client_id
 const oauthClientId = config.get('addOnConfig.oauthClientId');
 const addOnServiceAccountEmail = config.get('addOnConfig.serviceAccountEmail');
-
-// TODO use the service account to validate requests
 
 export default function routes(app) {
   /* Drive Endpoints */
@@ -22,9 +18,7 @@ export default function routes(app) {
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
         const event = req.body;
-        console.log('Received POST: ' + JSON.stringify(event));
         const response = driveAddOnHandler.generateHomePageResponse();
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.send(response);
       }),
   );
@@ -35,7 +29,6 @@ export default function routes(app) {
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
         const event = req.body;
-        console.log('Received POST: ' + JSON.stringify(event));
         const providers = config.get('providers');
         const defaultProvider = config.get('defaultProvider');
         const generateFilesSummaryUrl = config.get(
@@ -47,7 +40,6 @@ export default function routes(app) {
             defaultProvider,
             generateFilesSummaryUrl,
         );
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.send(response);
       }),
   );
@@ -58,7 +50,6 @@ export default function routes(app) {
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
         const event = req.body;
-        console.log('Received POST: ' + JSON.stringify(event));
         const providers = config.get('providers');
         const exportToDocsUrl = config.get('addOnConfig.urls.exportToDocsUrl');
         const navigateBackUrl = config.get('addOnConfig.urls.navigateBackUrl');
@@ -68,7 +59,6 @@ export default function routes(app) {
             exportToDocsUrl,
             navigateBackUrl,
         );
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.send(response);
       }),
   );
@@ -79,9 +69,7 @@ export default function routes(app) {
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
         const event = req.body;
-        console.log('Received POST: ' + JSON.stringify(event));
         const response = await driveAddOnHandler.exportToDocs(event);
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.send(response);
       }),
   );
@@ -92,24 +80,17 @@ export default function routes(app) {
       '/gmailHomePage',
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
-        const event = req.body;
-        console.log('Received POST: ' + JSON.stringify(event));
         const response = gmailAddOnHandler.generateHomePageResponse();
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.send(response);
       }),
   );
 
   // Contextual triggers
-  // Look at at following resource on how to build
-  // https://developers.google.com/apps-script/add-ons/gmail/extending-message-ui#contextual_trigger_function
   app.post(
       '/contextualTriggers',
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
-        // REMOVE WHEN DEALING WITH REAL EMAIL DATA
         const event = req.body;
-        console.log('Received POST: ' + JSON.stringify(event));
         const providers = config.get('providers');
         const defaultProvider = config.get('defaultProvider');
         const generateReplyUrl = config.get('addOnConfig.urls.generateReplyUrl');
@@ -120,7 +101,6 @@ export default function routes(app) {
             defaultProvider,
             generateReplyUrl,
         );
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.send(response);
       }),
   );
@@ -131,7 +111,6 @@ export default function routes(app) {
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
         const event = req.body;
-        console.log('Received POST: ' + JSON.stringify(event));
         const providers = config.get('providers');
         const createReplyDraftUrl = config.get(
             'addOnConfig.urls.createReplyDraftUrl',
@@ -144,7 +123,6 @@ export default function routes(app) {
             createReplyDraftUrl,
             navigateBackUrl,
         );
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.status(200).send(response);
       }),
   );
@@ -154,13 +132,10 @@ export default function routes(app) {
       '/createReplyDraft',
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
-        // REMOVE WHEN DEALING WITH REAL EMAIL DATA
         const event = req.body;
-        console.log('Received POST: ' + JSON.stringify(event));
         const response = await gmailAddOnHandler.generateCreateDraftResponse(
             event,
         );
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.status(200).send(response);
       }),
   );
@@ -172,9 +147,7 @@ export default function routes(app) {
       '/navigateBack',
       asyncHandler(async (req, res) => {
         await commonAddOnUtils.authenticateRequest(req, addOnServiceAccountEmail);
-        console.log('Received POST: ' + JSON.stringify(req.body));
         const response = generateNavigateBackResponse();
-        console.log(`JSON Response was ${JSON.stringify(response)}`);
         res.status(200).send(response);
       }),
   );
