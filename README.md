@@ -151,6 +151,8 @@ These function URLs are used for interactions between cards in the add-on.
 
 This add-on can be used with the list of providers below. For each provider, you can configure the `enabled` flag to show in the add-on, and any applicable configuration (i.e. API key) for that provider.
 
+Make sure to set the `defaultProvider` variable to an enabled provider that you want to be selected by default.
+
 #### Google Cloud Vertex AI PaLM API
 
 The add-on can use [Google Cloud Vertex AI PaLM API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#palm-api) to generate and summarize text.

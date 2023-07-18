@@ -10,7 +10,7 @@
       "exportToDocsUrl": "<DEPLOYMENT_URL>/exportToDocs"
     }
   },
-  "defaultProvider": "palmApi",
+  "defaultProvider": "vertexPalmApi",
   "providers": [
     {
       "name": "Vertex AI PaLM",
