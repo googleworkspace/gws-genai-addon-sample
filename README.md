@@ -1,10 +1,24 @@
 # genai-gmail-companion
 
-A Google Workspace add-on for Gmail and Google Drive using Node.js and Googel Developer PaLM API
+A Google Workspace add-on for Gmail and Google Drive using Node.js and various Generative AI APIs
 
 ## Setup
 
+### Prerequisites
+
+- [A Google Cloud Project](https://developers.google.com/workspace/guides/create-project).
+- Make sure that you turn on billing for your Cloud project. Learn how to [verify the billing status of your projects](https://cloud.google.com/billing/docs/how-to/verify-billing-enabled).
+- The [Cloud SDK](https://cloud.google.com/sdk/docs/install-sdk) configured with the Cloud project. You can skip this step if using Cloud Shell.
+
+### Setup your environment
+
+Follows the steps in [this guide](https://developers.google.com/workspace/add-ons/quickstart/alternate-runtimes#set-environment) to setup your environment before proceeding with the next steps. 
+
+Once completed, you can use the `gcloud` command (for example in Cloud Shell) to proceed.
+
 ### Authenticate
+
+Run the following command and note the `ACCOUNT` value that is provided.
 
 ```sh
 gcloud auth list
@@ -18,15 +32,15 @@ Set active account using the account provided in the previous step.
 gcloud config set account <ACCOUNT>
 ```
 
-### Set Project
+### Set active project
 
-Set the project ID to the project ID you are using.
+Set the project ID to the project you are using.
 
 ```sh
 gcloud config set project <PROJECT_ID>
 ```
 
-## Enable Cloud APIs
+### Enable Cloud APIs
 
 ```sh
 gcloud services enable \
@@ -40,13 +54,15 @@ gcloud services enable \
   run.googleapis.com
 ```
 
-## Deploy to Cloud Run
+## Deploy backend to Cloud Run
 
-### Prepare configuration file
+We will deploy the backend that handles requests from the add-on to Cloud Run.
+
+### Prepare addconfiguration file
 
 Make a copy of the `config/default-template.json` file in the `config` folder and name it `default.json`. 
 
-This file will be used later for configuring the add-on code. We first will deploy the code with a template version, and later modify it after and redeploy again.
+This file will be used later for configuring the add-on code. You will first deploy the code with the basic template configuration, and once you retrieve the deployment URL you will configure the add-on and deploy the code again.
 
 ### Grant Cloud Build permission to deploy
 
@@ -76,46 +92,7 @@ gcloud run services list --platform managed
 
 Note the `URL` value in the response, as this will be your deployment URL to be used later in configuring the add-on.
 
-## Register the add-on
-
-### Prepare the deployment descriptor
-
-Make a copy of the `sample_deployment_file/deployment.json` in the main directory, and then edit the file to replace
-the `<DEPLOYMENT_URL>` variables with the deployment URL for the Cloud Run service above.
-
-### Upload the deployment descriptor
-
-```sh
-gcloud workspace-add-ons deployments create genai-gmail-companion --deployment-file=deployment.json
-```
-
-### Authorize access to the add-on backend
-
-```sh
-SERVICE_ACCOUNT_EMAIL=$(gcloud workspace-add-ons get-authorization --format="value(serviceAccountEmail)")
-gcloud run services add-iam-policy-binding \
-    genai-gmail-companion \
-    --member=serviceAccount:$SERVICE_ACCOUNT_EMAIL \
-    --role=roles/run.invoker \
-    --region=us-west1 \
-    --platform=managed
-```
-
-### Install the add-on
-
-```sh
-gcloud workspace-add-ons deployments install genai-gmail-companion
-```
-
-### To replace deployment.json
-
-If you later make any changes to the `deployment.json` file (i.e. logo, name of the add-on, etc) and need to redeploy the add-on, use the following command:
-
-```sh
-gcloud workspace-add-ons deployments replace genai-gmail-companion --deployment-file=deployment.json
-```
-
-## Configure the add-on
+## Configure the add-on backend
 
 The configuration below should be made inside the `config/default.json` file that is deployed with the code. 
 
@@ -217,3 +194,43 @@ gcloud builds submit
 ```
 
 Once the service is deployed, you can use the add-on.
+
+## Register the Google Workspace Add-on
+
+### Prepare the deployment descriptor
+
+Make a copy of the `sample_deployment_file/deployment.json` in the main directory, and then edit the file to replace
+the `<DEPLOYMENT_URL>` variables with the deployment URL for the Cloud Run service above.
+
+### Upload the deployment descriptor
+
+```sh
+gcloud workspace-add-ons deployments create genai-gmail-companion --deployment-file=deployment.json
+```
+
+### Authorize access to the add-on backend
+
+```sh
+SERVICE_ACCOUNT_EMAIL=$(gcloud workspace-add-ons get-authorization --format="value(serviceAccountEmail)")
+
+gcloud run services add-iam-policy-binding \
+    genai-gmail-companion \
+    --member=serviceAccount:$SERVICE_ACCOUNT_EMAIL \
+    --role=roles/run.invoker \
+    --region=us-west1 \
+    --platform=managed
+```
+
+### Install the add-on
+
+```sh
+gcloud workspace-add-ons deployments install genai-gmail-companion
+```
+
+### To replace deployment.json
+
+If you later make any changes to the deployment descriptor `deployment.json` file (i.e. update logo, name of the add-on, supported integrations), use the following command to update the add-on:
+
+```sh
+gcloud workspace-add-ons deployments replace genai-gmail-companion --deployment-file=deployment.json
+```
