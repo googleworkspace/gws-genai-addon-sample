@@ -180,7 +180,7 @@ export async function exportToDocs(event) {
     throw new Error('Summary must be provided!');
   }
 
-  const summaryFileName = `Summary for ${fileName}`;
+  const summaryFileName = `${fileName} [AI Summary]`;
   const accessToken = event.authorizationEventObject.userOAuthToken;
 
   // Get location for the file
