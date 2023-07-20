@@ -18,7 +18,6 @@ export async function generateEmailReply(
   authorName,
   config,
 ) {
-  console.log('Entering Vertex AI PaLM API provider module');
 
   const region = config.region;
 
@@ -40,8 +39,6 @@ export async function generateEmailReply(
     ' and sign it with the name ' +
     authorName;
 
-  console.log('Prompt to be sent to API is: ' + prompt);
-
   // TODO split prompt into prompt and context
   const candidates = await callVertexAiPalmApiTextModelGen(region, prompt);
 
@@ -54,7 +51,6 @@ export async function generateSummary(
   text,
   config,
 ) {
-  console.log('Entering Vertex AI PaLM API provider module');
 
   const region = config.region;
   let numOfSentences = '';
@@ -84,18 +80,15 @@ export async function generateSummary(
     'Text: ' +
     text;
 
-  console.log('Prompt to be sent to API is: ' + prompt);
-
   // TODO split prompt into prompt and context
   const results = await callVertexAiPalmApiTextModelGen(region, prompt);
 
   // TODO might want to do multiple summaries in the future
   if (results.length) {
     const summary = results[0].content;
-    console.log(`Summary is ${JSON.stringify(summary)}`);
     return summary;
   }
-  console.log('No summary found');
+  console.error('No summary found');
   return null;
 }
 

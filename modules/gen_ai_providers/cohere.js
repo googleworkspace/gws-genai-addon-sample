@@ -15,7 +15,6 @@ export async function generateEmailReply(
   authorName,
   config,
 ) {
-  console.log('Entering Cohere provider module');
 
   const cohereApiKey = config.apiKey;
 
@@ -36,8 +35,6 @@ export async function generateEmailReply(
     language +
     ' and sign it with the name ' +
     authorName;
-
-  console.log('Prompt to be sent to API is: ' + prompt);
 
   cohere.init(cohereApiKey);
 
@@ -71,7 +68,6 @@ export async function generateSummary(
   text,
   config,
 ) {
-  console.log('Entering Cohere provider module');
 
   const cohereApiKey = config.apiKey;
 
@@ -84,8 +80,6 @@ export async function generateSummary(
     text,
     cohere,
   );
-
-  console.log(`Summary is ${JSON.stringify(summary)}`);
 
   return summary;
 }
@@ -116,7 +110,7 @@ async function callCohereSummarizeEndpoint(
     return summary;
   }
 
-  console.log(
+  console.error(
     `Error generating summary. API HTTP response code: ${statusCode}.`,
   );
   return null;

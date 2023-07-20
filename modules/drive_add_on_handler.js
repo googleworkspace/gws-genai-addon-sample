@@ -48,14 +48,12 @@ export function generateOnItemsSelectedTriggerResponse(
   const enabledProviders = providers.filter(
     (provider) => provider.enabled == true,
   );
-  console.log('Enabled providers: ' + JSON.stringify(enabledProviders));
   if (enabledProviders.length == 0) {
     throw new Error('No enabled providers!');
   }
 
   const providerSelectionItems = [];
   for (const provider of enabledProviders) {
-    console.log('ping');
     const providerItem = {
       text: provider.name,
       value: provider.value,
@@ -114,16 +112,12 @@ export async function generateSummaryResponse(
   let generatedSummary = '';
 
   const selectedProvider = formInputs.providerSelection.stringInputs.value;
-  console.log(`Selected provider is ${selectedProvider}`);
   if (selectedProvider === '') {
     throw new Error('No valid provider selected.');
   }
   const providerConfig = providers.find(
     (provider) => provider.value == selectedProvider,
   ).config;
-
-  console.log(`Calling ${selectedProvider} provider`);
-  console.log(`Config is ${JSON.stringify(providerConfig)}`);
 
   let provider = null;
 
@@ -151,8 +145,6 @@ export async function generateSummaryResponse(
   );
 
   if (generatedSummary !== null) {
-    console.log(`Provider summary is ${JSON.stringify(generatedSummary)}`);
-
     return driveCardUiGenerator.createGenerateSummaryUi(
       generatedSummary,
       exportToDocsUrl,
@@ -201,7 +193,6 @@ export async function exportToDocs(event) {
     parents,
     accessToken,
   );
-  console.log(`New file ID generated ${newFileId}`);
 
   const notificationText = `Exported to ${summaryFileName}`;
   return driveCardUiGenerator.createNotificationUi(notificationText);

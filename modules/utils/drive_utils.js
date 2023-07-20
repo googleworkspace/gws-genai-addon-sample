@@ -3,7 +3,6 @@ import {OAuth2Client} from 'google-auth-library';
 
 export async function getFileContent(fileId, fileMimeType, accessToken) {
   let content = '';
-  console.log(`mimeType is ${fileMimeType}`);
   try {
     const supportedGoogleWorkspaceMimeTypes = [
       'application/vnd.google-apps.document',
@@ -18,10 +17,9 @@ export async function getFileContent(fileId, fileMimeType, accessToken) {
     } else {
       throw new Error('Unsupported file format');
     }
-    console.log(`content is ${JSON.stringify(content)}`);
     return content;
   } catch (error) {
-    console.log(`Error retrieving file content from Google Drive. ${error}`);
+    console.error(`Error retrieving file content from Google Drive. ${error}`);
     return '';
   }
 }
@@ -71,8 +69,6 @@ export async function getFileParentId(fileId, accessToken) {
       fields: 'parents',
     });
 
-    console.log(`File metadata: ${JSON.stringify(fileMetaData)}`);
-
     const parents = fileMetaData.data.parents;
 
     return parents;
@@ -108,7 +104,6 @@ export async function createDocsFileWithText(
       media: media,
       fields: 'id',
     });
-    console.log('File Id:', file.data.id);
     return file.data.id;
   } catch (err) {
     throw err;
