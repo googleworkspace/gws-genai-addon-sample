@@ -1,27 +1,18 @@
 /**  Written with the help of AI **/
 export default function convertMarkdownToWidgets(markdownText) {
-  console.log(`convertMarkdownToWidgets: ${markdownText}`);
-
   const results = [];
 
   // Split the markdown text into an array of lines
   const markdownLines = markdownText.split('\n');
 
-  // Log the count of lines after split
-  console.log(`markdownLines.length: ${markdownLines.length}`);
-
   // Iterate over each line
   markdownLines.forEach((line) => {
     // Log the current line
-    console.log(`line: ${line}`);
     const bulletListRegex = /^[-*+] (.*)/;
     const match = line.match(bulletListRegex);
     // If the line matches a bullet list item format, replace with
     // a decorated text with a specific icon
     if (match) {
-      // Log that list item was found
-      console.log(`Found bullet list item: ${match[0]}`);
-
       const bulletListItemText = match[0].slice(2);
 
       results.push({
@@ -49,7 +40,6 @@ export default function convertMarkdownToWidgets(markdownText) {
 
 /**  THIS IS WRITTEN WITH HELP OF BARD */
 function markdownToSimpleHtml(markdown) {
-  console.log(`markdownToSimpleHtml: ${markdown}`);
   const regexes = [
     // Bold
     {

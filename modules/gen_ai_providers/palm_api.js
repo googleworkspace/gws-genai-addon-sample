@@ -20,7 +20,6 @@ export async function generateEmailReply(
   authorName,
   config,
 ) {
-  console.log('Entering PaLM API provider module');
 
   const palmApiKey = config.apiKey;
 
@@ -41,8 +40,6 @@ export async function generateEmailReply(
     language +
     ' and sign it with the name ' +
     authorName;
-
-  console.log('Prompt to be sent to API is: ' + prompt);
 
   const client = new TextServiceClient({
     authClient: new GoogleAuth().fromAPIKey(palmApiKey),
@@ -107,7 +104,6 @@ export async function generateSummary(
   text,
   config,
 ) {
-  console.log('Entering PaLM API provider module');
 
   const palmApiKey = config.apiKey;
   let numOfSentences = '';
@@ -137,8 +133,6 @@ export async function generateSummary(
     'Text: ' +
     text;
 
-  console.log('Prompt to be sent to API is: ' + prompt);
-
   const client = new TextServiceClient({
     authClient: new GoogleAuth().fromAPIKey(palmApiKey),
   });
@@ -149,10 +143,9 @@ export async function generateSummary(
   // TODO might want to do multiple summaries in the future
   if (results.length) {
     const summary = results[0].output;
-    console.log(`Summary is ${JSON.stringify(summary)}`);
     return summary;
   }
-  console.log('No summary found');
+  console.error('No summary found');
   return null;
 }
 
