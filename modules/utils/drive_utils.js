@@ -33,6 +33,7 @@ async function getDriveTextFileContent(fileId, accessToken) {
   const docsResponse = await drive.files.get({
     fileId: fileId,
     alt: 'media',
+    supportsAllDrives: true
   });
 
   return docsResponse.data;
@@ -51,7 +52,7 @@ async function exportDriveFile(fileId, fileMimeType, accessToken) {
 
   const docsResponse = await drive.files.export({
     fileId: fileId,
-    mimeType: exportedMimeType,
+    mimeType: exportedMimeType
   });
 
   return docsResponse.data;
@@ -67,6 +68,7 @@ export async function getFileParentId(fileId, accessToken) {
     const fileMetaData = await drive.files.get({
       fileId: fileId,
       fields: 'parents',
+      supportsAllDrives: true
     });
 
     const parents = fileMetaData.data.parents;
@@ -103,6 +105,7 @@ export async function createDocsFileWithText(
       resource: fileMetadata,
       media: media,
       fields: 'id',
+      supportsAllDrives: true
     });
     return file.data.id;
   } catch (err) {

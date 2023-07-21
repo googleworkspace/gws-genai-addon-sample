@@ -68,12 +68,12 @@ export function createOnItemsSelectedTriggerUi(
                         {
                           text: 'Medium (3-4 sentences)',
                           value: 'medium',
-                          selected: true,
+                          selected: false,
                         },
                         {
                           text: 'Long (4 or more sentences)',
                           value: 'long',
-                          selected: false,
+                          selected: true,
                         },
                       ],
                     },
