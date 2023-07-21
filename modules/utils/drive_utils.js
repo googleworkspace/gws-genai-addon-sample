@@ -52,8 +52,7 @@ async function exportDriveFile(fileId, fileMimeType, accessToken) {
 
   const docsResponse = await drive.files.export({
     fileId: fileId,
-    mimeType: exportedMimeType,
-    supportsAllDrives: true
+    mimeType: exportedMimeType
   });
 
   return docsResponse.data;
