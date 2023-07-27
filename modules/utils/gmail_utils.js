@@ -53,17 +53,26 @@ export async function createDraft(event, draftContent) {
   let messageContent = '';
   let subject = '';
   let body = '';
+  let replyToAddress = '';
 
   // We are creating a draft reply, we could modify the values below
   // to create a brand new message (if we add functionality for this)
   // in the add-on
 
   const sender = message.payload.headers.find(
-      (header) => header.name === 'From',
+      (header) => header.name === 'From'
   ).value;
 
+  // Check if there is an additional Reply-To header that should use instead of the sender email
+  const replyToHeader = message.payload.headers.find((header) => header.name === 'Reply-To');
+  if (replyToHeader != null) {
+    replyToAddress = replyToHeader.value;
+  } else {
+    replyToAddress = sender;
+  }
+
   const originalSubject = message.payload.headers.find(
-      (header) => header.name === 'Subject',
+      (header) => header.name === 'Subject'
   ).value;
 
   if (!originalSubject.startsWith('Re: ')) {
@@ -72,10 +81,8 @@ export async function createDraft(event, draftContent) {
     subject = originalSubject;
   }
 
-  messageContent += 'To: ' + sender + '\n';
-
   // Reply to the original sender.
-  messageContent += 'To: ' + sender + '\n';
+  messageContent += 'To: ' + replyToAddress + '\n';
 
   // Preserve other To and CC addresses (reply-all).
   const originalTo = message.payload.headers.find((h) => h.name == 'To');
