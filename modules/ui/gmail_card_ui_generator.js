@@ -88,13 +88,8 @@ export function createStartGenerationUi(
                           selected: true,
                         },
                         {
-                          text: 'Apologetic',
-                          value: 'apologetic',
-                          selected: false,
-                        },
-                        {
-                          text: 'Snarky',
-                          value: 'snarky',
+                          text: 'Fun',
+                          value: 'fun',
                           selected: false,
                         },
                         {
