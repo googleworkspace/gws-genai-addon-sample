@@ -9,7 +9,8 @@
     "express-bearer-token": "^2.4.0",
     "google-auth-library": "^8.8.0",
     "googleapis": "^118.0.0",
-    "js-base64": "^3.7.5"
+    "js-base64": "^3.7.5",
+    "marked": "^6.0.0"
   },
   "description": "Rest API Example",
   "devDependencies": {
