@@ -3,8 +3,8 @@ marked.use({headerIds: false, mangle: false});
 
 export default function convertMarkdownToWidgets(markdownText) {
   return markdownText.split(/\r\n|\r|\n/).map((line) => {
-    const bulletListRegex = /^[-*+] (.*)/;
-    const match = line.match(bulletListRegex);
+    // Match Markdown list items
+    const match = line.match(/^\s*-\s*(.*)/);
 
     // If the line matches a bullet list item format, replace with
     // a decorated text with a specific icon
@@ -21,7 +21,7 @@ export default function convertMarkdownToWidgets(markdownText) {
         },
       };
     } else {
-      // Otherwise, convert markdown text to the supported HTML tags
+      // Otherwise, convert markdown text to HTML
       // in the paragraph widget
       return {
         textParagraph: {
