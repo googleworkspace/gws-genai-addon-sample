@@ -1,13 +1,10 @@
 import {GoogleAuth} from 'google-auth-library';
 
-// TODO list the other modules (or link to it)
 const TEXT_GEN_MODEL_NAME = 'text-bison';
 
 // BASED ON https://developers.generativeai.google/tutorials/chat_node_quickstart
 // AND https://developers.generativeai.google/tutorials/text_node_quickstart
 
-// TODO create another exported function for creating content for Google Docs
-// TODO you can move config to the instantiations of the module?
 export async function generateEmailReply(
   subject,
   senderName,
@@ -22,8 +19,6 @@ export async function generateEmailReply(
   const region = config.region;
 
   const prompt =
-    // Add: My name is xyz or "Sign it with my name which is ()"
-    // TODO Remove funny
     'Given an email with the subject "' +
     subject +
     '" from the sender "' +
@@ -39,7 +34,6 @@ export async function generateEmailReply(
     ' and sign it with the name ' +
     authorName;
 
-  // TODO split prompt into prompt and context
   const candidates = await callVertexAiPalmApiTextModelGen(region, prompt);
 
   return candidates.map(candidate => ({suggestedText: candidate.content}));
@@ -70,8 +64,6 @@ export async function generateSummary(
   }
 
   const prompt =
-    // Add: My name is xyz or "Sign it with my name which is ()"
-    // TODO Remove funny
     'Write a summary in ' +
     numOfSentences +
     ' sentences for the following article in a ' +
@@ -80,10 +72,8 @@ export async function generateSummary(
     'Text: ' +
     text;
 
-  // TODO split prompt into prompt and context
   const results = await callVertexAiPalmApiTextModelGen(region, prompt);
 
-  // TODO might want to do multiple summaries in the future
   if (results.length) {
     const summary = results[0].content;
     return summary;

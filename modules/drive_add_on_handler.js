@@ -43,7 +43,6 @@ export function generateOnItemsSelectedTriggerResponse(
     return response;
   }
 
-  // TODO this can be extracted as it is used in Gmail handler too
   // Generate GenAI selection options and set default per config
   const enabledProviders = providers.filter(
     (provider) => provider.enabled == true,
@@ -77,7 +76,6 @@ export async function generateSummaryResponse(
   navigateBackUrl,
 ) {
   // We only support a single file for now
-  // TODO can extract as a method as it's used in two methods now
   const selectedItems = event.drive.selectedItems;
 
   if (selectedItems.length > 1) {
@@ -121,13 +119,11 @@ export async function generateSummaryResponse(
 
   let provider = null;
 
-  // TODO I hate having to convert the type ... should look into what the type comes as from config file
   switch (String(selectedProvider)) {
     case 'cohere':
       provider = cohere;
       break;
     case 'palmApi':
-      // TODO move provider module file name to config file
       provider = palm;
       break;
     case 'vertexPalmApi':
@@ -159,7 +155,6 @@ export async function generateSummaryResponse(
 
 export async function exportToDocs(event) {
   // We only support a single file for now
-  // TODO can extract as a method as it's used in two methods now
   const selectedItems = event.drive.selectedItems;
 
   if (selectedItems.length > 1) {
