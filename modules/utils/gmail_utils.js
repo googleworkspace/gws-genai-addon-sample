@@ -32,7 +32,6 @@ export function decodeGmailBodyPayload(base64EncodedText) {
 }
 
 export async function createDraft(event, draftContent) {
-  // TODO add a try catch
   const currentMessageId = event.gmail.messageId;
   const threadId = event.gmail.threadId;
   const oauthToken = event.authorizationEventObject.userOAuthToken;
@@ -106,16 +105,22 @@ export async function createDraft(event, draftContent) {
   messageContent += 'Subject: ' + subject + '\n';
   messageContent += '\n' + body;
 
-  const newDraft = await gmail.users.drafts.create({
-    userId: 'me',
-    requestBody: {
-      message: {
-        raw: Base64.encodeURI(messageContent),
-        threadId: threadId,
+  try {
+    const newDraft = await gmail.users.drafts.create({
+      userId: 'me',
+      requestBody: {
+        message: {
+          raw: Base64.encodeURI(messageContent),
+          threadId: threadId,
+        },
       },
-    },
-    oauth2Client,
-    headers: {'X-Goog-Gmail-Access-Token': accessToken},
-  });
-  return newDraft.data;
+      oauth2Client,
+      headers: {'X-Goog-Gmail-Access-Token': accessToken},
+    });
+    return newDraft.data;
+  } catch (error) {
+    console.error(`Error creating new Gmail draft. ${error}`);
+    throw error;
+  }
+  
 }
