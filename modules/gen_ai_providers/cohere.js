@@ -1,10 +1,9 @@
 import cohere from 'cohere-ai';
 
 // For models check https://docs.cohere.com/docs/models
-const TEXT_GEN_MODEL_NAME = 'command-light'; // TODO use command-nightly or command-xlarge-nightly
-const SUMMARIZE_MODEL_NAME = 'summarize-medium'; // TODO summarize-xlarge once timeout issue is done
+const TEXT_GEN_MODEL_NAME = 'command-light'; // Other options include command-nightly, command-xlarge-nightly
+const SUMMARIZE_MODEL_NAME = 'summarize-medium'; // Other options include summarize-xlarge
 
-// TODO create another exported function for creating content for Google Docs
 export async function generateEmailReply(
   subject,
   senderName,
@@ -19,8 +18,6 @@ export async function generateEmailReply(
   const cohereApiKey = config.apiKey;
 
   const prompt =
-    // Add: My name is xyz or "Sign it with my name which is ()"
-    // TODO Remove funny
     'Given an email with the subject "' +
     subject +
     '" from the sender "' +
@@ -73,7 +70,6 @@ export async function generateSummary(
 
   cohere.init(cohereApiKey);
 
-  // TODO split prompt into prompt and context
   const summary = await callCohereSummarizeEndpoint(
     lengthSelection,
     formatSelection,

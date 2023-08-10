@@ -12,7 +12,6 @@ export async function getFileContent(fileId, fileMimeType, accessToken) {
     if (supportedGoogleWorkspaceMimeTypes.includes(fileMimeType)) {
       content = await exportDriveFile(fileId, fileMimeType, accessToken);
     } else if (fileMimeType == 'text/plain') {
-      // TODO support PDFs
       content = await getDriveTextFileContent(fileId, accessToken);
     } else {
       throw new Error('Unsupported file format');
@@ -74,8 +73,9 @@ export async function getFileParentId(fileId, accessToken) {
     const parents = fileMetaData.data.parents;
 
     return parents;
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    console.error(`Error retrieving file parent ID from Google Drive. ${error}`);
+    throw error;
   }
 }
 
@@ -108,7 +108,8 @@ export async function createDocsFileWithText(
       supportsAllDrives: true
     });
     return file.data.id;
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    console.error(`Error creating new Google Docs file in Google Drive. ${error}`);
+    throw error;
   }
 }
