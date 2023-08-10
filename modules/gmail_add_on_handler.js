@@ -18,7 +18,6 @@ export async function generateContextualTriggerResponse(
 ) {
   const message = await gmailUtils.getGmailMessage(event);
 
-  // TODO can extract to another function?
   const subject = message.payload.headers.find(
     (header) => header.name === 'Subject',
   ).value;
@@ -72,11 +71,6 @@ export async function generateCreateDraftResponse(event) {
     replyText = parameters.replyText;
   }
 
-  // TODO check if a draft already exist send a notification / alert saying a draft already exists
-  // ask the user to delete it if they want to use a different text
-  // TODO 2
-  // or update draft text after prompting if they want to overwrite?
-  // TODO 3 instead of sending entire event, send only needed params
   const draft = await gmailUtils.createDraft(event, replyText);
 
   const response = gmailCardUiGenerator.createCreateDraftUi(
@@ -129,13 +123,11 @@ export async function generateGenerateReplyResponse(
 
       let provider = null;
 
-      // TODO I hate having to convert the type ... should look into what the type comes as from config file
       switch (String(selectedProvider)) {
         case 'cohere':
           provider = cohere;
           break;
         case 'palmApi':
-          // TODO move provider module file name to config file
           provider = palm;
           break;
         case 'vertexPalmApi':

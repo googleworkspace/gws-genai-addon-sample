@@ -1,15 +1,12 @@
 import {TextServiceClient} from '@google-ai/generativelanguage';
 import {GoogleAuth} from 'google-auth-library';
 
-// TODO list the other modules (or link to it)
 const CHAT_MODEL_NAME = 'models/text-bison-001';
 const TEXT_GEN_MODEL_NAME = 'models/text-bison-001';
 
 // BASED ON https://developers.generativeai.google/tutorials/chat_node_quickstart
 // AND https://developers.generativeai.google/tutorials/text_node_quickstart
 
-// TODO create another exported function for creating content for Google Docs
-// TODO you can move config to the instantiations of the module?
 export async function generateEmailReply(
   subject,
   senderName,
@@ -24,8 +21,6 @@ export async function generateEmailReply(
   const palmApiKey = config.apiKey;
 
   const prompt =
-    // Add: My name is xyz or "Sign it with my name which is ()"
-    // TODO Remove funny
     'Given an email with the subject "' +
     subject +
     '" from the sender "' +
@@ -45,7 +40,6 @@ export async function generateEmailReply(
     authClient: new GoogleAuth().fromAPIKey(palmApiKey),
   });
 
-  // TODO split prompt into prompt and context
   const candidates = await callPalmApiChatModelGen(client, prompt);
 
   return candidates.map(candidate => ({suggestedText: candidate.output}));
@@ -62,7 +56,6 @@ async function callPalmApiChatModelGen(client, prompt) {
     prompt: {
       //       // optional, preamble context to prime responses
       //       context: "Respond to all questions with a rhyming poem.",
-      // TODO split prompt into prompt and context
       text: prompt,
     },
     safetySettings: [
@@ -123,8 +116,6 @@ export async function generateSummary(
   }
 
   const prompt =
-    // Add: My name is xyz or "Sign it with my name which is ()"
-    // TODO Remove funny
     'Write a summary in ' +
     numOfSentences +
     ' sentences for the following article in a ' +
@@ -137,10 +128,8 @@ export async function generateSummary(
     authClient: new GoogleAuth().fromAPIKey(palmApiKey),
   });
 
-  // TODO split prompt into prompt and context
   const results = await callPalmApiTextModelGen(client, prompt);
 
-  // TODO might want to do multiple summaries in the future
   if (results.length) {
     const summary = results[0].output;
     return summary;
@@ -159,7 +148,6 @@ async function callPalmApiTextModelGen(client, prompt) {
     prompt: {
       //       // optional, preamble context to prime responses
       //       context: "Respond to all questions with a rhyming poem.",
-      // TODO split prompt into prompt and context
       text: prompt,
     },
     safetySettings: [

@@ -1,4 +1,3 @@
-// TODO can split the card generation from the action-->navigation wrapper
 export function createHomePageUi(text) {
   return {
     action: {
