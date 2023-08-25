@@ -4,3 +4,4 @@ node_modules/
 # configs
 config/default.json
 deployment.json
+sample_data_delete_before_prod/
