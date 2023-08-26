@@ -1,4 +1,4 @@
-# genai-gmail-companion
+# gws-genai-addon-sample
 
 A sample Google Workspace add-on for Gmail and Google Drive using Node.js and demonstrating how to use various Generative AI APIs
 
