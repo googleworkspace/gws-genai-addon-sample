@@ -159,6 +159,10 @@ You can configure the region for the API in the `region` parameter (default is `
 
 Additional configurations for the provider are found in the `modules/gen_ai_providers/vertex_ai_palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
 
+##### Terms of Use & Privacy Policy
+
+Please check Google Cloud's [Terms](https://cloud.google.com/product-terms#section-3) for more information on how your data is processed.
+
 #### Google Developer PaLM API
 
 The add-on can use [Google Developer PaLM API](https://developers.generativeai.google/) to generate and summarize text.
@@ -173,6 +177,10 @@ gcloud services enable generativelanguage.googleapis.com
 
 Next you should [create an API key](https://makersuite.google.com/) and save it in the `apiKey` parameter in the relevant section for `palmAPI` in the add-on configuration file. Additional configurations for the provider are found in the `modules/gen_ai_providers/palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
 
+##### Terms of Use & Privacy Policy
+
+Please check Google's [Terms of Use](https://policies.google.com/terms), [Privacy Policy](https://policies.google.com/privacy) for more information on how your data is processed.
+
 #### Cohere.ai
 
 The add-on can also use [Cohere.ai](https://www.cohere.ai). To setup this provider, login to your Cohere.ai account and generate an API key, then you can save it in the `apiKey` parameter in the add-on configuration file.
@@ -180,6 +188,10 @@ The add-on can also use [Cohere.ai](https://www.cohere.ai). To setup this provid
 Please note that we use the specialized summarization endpoint for the sumamrization feature.
 
 Additional configurations for the provider are found in the `modules/gen_ai_providers/cohere.js` file, including the models used, maximum tokens returned, and other configuration.
+
+##### Terms of Use & Privacy Policy
+
+Please check Cohere.ai's [Terms of Use](https://cohere.com/terms-of-use), [Privacy Policy](https://cohere.com/privacy) and [Data Usage Policy](https://cohere.com/data-usage-policy) for more information on how your data is processed.
 
 ### Redeploy the code
 
