@@ -49,7 +49,6 @@ export function decodeGmailBodyPayload(base64EncodedText) {
 
 export async function createDraft(event, draftContent) {
   const currentMessageId = event.gmail.messageId;
-  const threadId = event.gmail.threadId;
   const oauthToken = event.authorizationEventObject.userOAuthToken;
   const accessToken = event.gmail.accessToken;
   const oauth2Client = new OAuth2Client();
@@ -59,7 +58,6 @@ export async function createDraft(event, draftContent) {
   const gmailResponse = await gmail.users.messages.get({
     id: currentMessageId,
     userId: 'me',
-    oauth2Client,
     headers: {'X-Goog-Gmail-Access-Token': accessToken},
   });
 
@@ -127,10 +125,9 @@ export async function createDraft(event, draftContent) {
       requestBody: {
         message: {
           raw: Base64.encodeURI(messageContent),
-          threadId: threadId,
+          threadId: message.threadId,
         },
       },
-      oauth2Client,
       headers: {'X-Goog-Gmail-Access-Token': accessToken},
     });
     return newDraft.data;
