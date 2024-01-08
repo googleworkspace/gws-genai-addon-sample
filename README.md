@@ -1,10 +1,15 @@
 # gws-genai-addon-sample
 
-A sample Google Workspace add-on for Google Drive using Node.js and demonstrating how to use various Generative AI APIs
+A sample Google Workspace add-on for Google Drive using Node.js and demonstrating how to use various Generative AI APIs.
 
-## Solution Diagram
+Here is a diagram that shows the different components in this sample solution:
 
-![Solution Diagram](diagram.svg)
+```mermaid
+flowchart LR
+    A[Google Workspace Add-on\nfor Google Drive]<-->B[Backend hosted on\nGoogle Cloud Run]
+    B-->C[Google Drive APIs]
+    B-->D[Generative AI APIs\ne.g. Google Cloud Vertex AI APIs]
+```
 
 ## Setup
 
