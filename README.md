@@ -4,7 +4,7 @@ A sample Google Workspace add-on for Google Drive using Node.js and demonstratin
 
 ## Solution Diagram
 
-![Solution Diagram](diagram.svg)
+![Solution Diagram](diagram.png)
 
 ## Setup
 
