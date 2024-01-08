@@ -146,7 +146,7 @@ Make sure to set the `defaultProvider` variable to an enabled provider that you 
 
 The add-on can use [Google Cloud Vertex AI PaLM API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#palm-api) to generate and summarize text.
 
-You use this provider, you first need to enable the service in your Google Cloud project using the same account that you applied for (and granted access to) via the waitlist.
+You use this provider, you first need to enable the service in your Google Cloud project.
 
 ```sh
 gcloud services enable aiplatform.googleapis.com
