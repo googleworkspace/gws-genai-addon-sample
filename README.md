@@ -1,6 +1,10 @@
 # gws-genai-addon-sample
 
-A sample Google Workspace add-on for Gmail and Google Drive using Node.js and demonstrating how to use various Generative AI APIs
+A Google Workspace add-on for Google Drive using Node.js and Generative AI APIs
+
+## Solution Diagram
+
+![Solution Diagram](diagram.svg)
 
 ## Setup
 
@@ -58,7 +62,15 @@ gcloud services enable \
 
 We will deploy the backend that handles requests from the add-on to Cloud Run.
 
-### Prepare addconfiguration file
+### Make a local copy of the repository
+
+For the next steps you need a local copy of the source code in this repository. 
+
+You can either use `git clone` to [clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository), or [download a copy](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives#downloading-source-code-archives-from-the-repository-view) from the repository view page.
+
+> NOTE: Before continuing with the next step, make sure to change into the directory containing your local copy of the repository.
+
+### Prepare configuration file
 
 Make a copy of the `config/default-template.json` file in the `config` folder and name it `default.json`. 
 
