@@ -19,6 +19,7 @@ import * as driveUtils from './utils/drive_utils.js';
 import * as cohere from './gen_ai_providers/cohere.js';
 import * as palm from './gen_ai_providers/palm_api.js';
 import * as vertexAiPalm from './gen_ai_providers/vertex_ai_palm_api.js';
+import * as vertexAiGeminiPro from './gen_ai_providers/vertex_ai_gemini_pro_text_api.js';
 
 export function generateHomePageResponse() {
   const message = 'Please select a file to start using this add-on.';
@@ -136,14 +137,17 @@ export async function generateSummaryResponse(
   let provider = null;
 
   switch (String(selectedProvider)) {
-    case 'cohere':
-      provider = cohere;
+    case 'vertexGeminiProTextApi':
+      provider = vertexAiGeminiProText;
+      break;
+    case 'vertexPalmApi':
+      provider = vertexAiPalm;
       break;
     case 'palmApi':
       provider = palm;
       break;
-    case 'vertexPalmApi':
-      provider = vertexAiPalm;
+    case 'cohere':
+      provider = cohere;
       break;
     default:
       throw new Error(`No valid modules exists for ${selectedProvider}`);

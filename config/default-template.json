@@ -10,12 +10,22 @@
       "exportToDocsUrl": "<DEPLOYMENT_URL>/exportToDocs"
     }
   },
-  "defaultProvider": "vertexPalmApi",
+  "defaultProvider": "vertexGeminiProTextApi",
   "providers": [
+    {
+      "name": "Vertex AI Gemini Pro (Text)",
+      "value": "vertexGeminiProTextApi",
+      "enabled": true,
+      "multimodal": false,
+      "config": {
+        "region": "us-central1"
+      }
+    },
     {
       "name": "Vertex AI PaLM",
       "value": "vertexPalmApi",
-      "enabled": true,
+      "enabled": false,
+      "multimodal": false,
       "config": {
         "region": "us-central1"
       }
@@ -24,6 +34,7 @@
       "name": "PaLM",
       "value": "palmApi",
       "enabled": false,
+      "multimodal": false,
       "config": {
         "apiKey": ""
       }
@@ -32,6 +43,7 @@
       "name": "Cohere",
       "value": "cohere",
       "enabled": false,
+      "multimodal": false,
       "config": {
         "apiKey": ""
       }
