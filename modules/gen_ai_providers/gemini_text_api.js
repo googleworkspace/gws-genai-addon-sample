@@ -45,9 +45,9 @@ export async function generateEmailReply(
     ' and sign it with the name ' +
     authorName;
 
-  const candidates = await callGeminiApiTextModelGen(apiKey, prompt);
+  const suggestedText = await callGeminiApiTextModelGen(apiKey, prompt);
 
-  return candidates.map(candidate => ({suggestedText: candidate.content.parts[0].text}));
+  return [{suggestedText}];
 }
 
 export async function generateSummary(
@@ -83,14 +83,9 @@ export async function generateSummary(
     'Text: ' +
     text;
 
-  const results = await callGeminiApiTextModelGen(apiKey, prompt);
+  const summary = await callGeminiApiTextModelGen(apiKey, prompt);
 
-  if (results.length) {
-    const summary = results[0].content.parts[0].text;
-    return summary;
-  }
-  console.error('No summary found');
-  return null;
+  return summary;
 }
 
 // BASED ON https://ai.google.dev/tutorials/node_quickstart
@@ -130,8 +125,9 @@ async function callGeminiApiTextModelGen(apiKey, prompt) {
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
+  const textResponse = response.text();
   
-  console.log(`Gemini API response is ${JSON.stringify(response)}`);
+  console.log(`Gemini API response is ${JSON.stringify(response)}. \r\nText response is ${textResponse}`);
 
-  return response.candidates;
+  return textResponse;
 }
