@@ -18,6 +18,7 @@
       "enabled": true,
       "multimodal": false,
       "config": {
+        "project": "<YOUR_GOOGLE_CLOUD_PROJECT_ID>",
         "region": "us-central1"
       }
     },

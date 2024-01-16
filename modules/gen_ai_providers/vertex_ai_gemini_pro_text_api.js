@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import {GoogleAuth} from 'google-auth-library';
+import {VertexAI, HarmCategory, HarmBlockThreshold} from '@google-cloud/vertexai';
 
-const TEXT_GEN_MODEL_NAME = 'gemini-pro';
+const MODEL_NAME = 'gemini-pro';
 
-// BASED ON https://cloud.google.com/vertex-ai/docs/generative-ai/start/quickstarts/quickstart-multimodal
-// and https://cloud.google.com/vertex-ai/docs/generative-ai/multimodal/send-chat-prompts-gemini
+// BASED ON https://github.com/googleapis/nodejs-vertexai?tab=readme-ov-file
 
 export async function generateEmailReply(
   subject,
@@ -32,6 +31,7 @@ export async function generateEmailReply(
   config,
 ) {
 
+  const project = config.project;
   const region = config.region;
 
   const prompt =
@@ -50,9 +50,9 @@ export async function generateEmailReply(
     ' and sign it with the name ' +
     authorName;
 
-  const candidates = await callVertexAiGeminiApiTextModelGen(region, prompt);
+  const candidates = await callVertexAiGeminiApiTextModelGen(project, region, prompt);
 
-  return candidates.map(candidate => ({suggestedText: candidate.content}));
+  return candidates.map(candidate => ({suggestedText: candidate.content.parts[0].text}));
 }
 
 export async function generateSummary(
@@ -62,7 +62,9 @@ export async function generateSummary(
   config,
 ) {
 
+  const project = config.project
   const region = config.region;
+
   let numOfSentences = '';
 
   switch (String(lengthSelection)) {
@@ -82,52 +84,51 @@ export async function generateSummary(
   const prompt =
     'Write a summary in ' +
     numOfSentences +
-    ' sentences for the following article in a ' +
+    ' sentences for the following text in a ' +
     formatSelection +
     ' format.\r\n ' +
     'Text: ' +
     text;
 
-  const results = await callVertexAiGeminiApiTextModelGen(region, prompt);
+  const results = await callVertexAiGeminiApiTextModelGen(project, region, prompt);
 
   if (results.length) {
-    const summary = results[0].content;
+    const summary = results[0].content.parts[0].text;
     return summary;
   }
   console.error('No summary found');
   return null;
 }
 
-async function callVertexAiGeminiApiTextModelGen(region, prompt) {
+async function callVertexAiGeminiApiTextModelGen(project, region, prompt) {
   console.log('Calling Vertex AI Gemini APIs..');
 
-  // Create auth client
-  const auth = new GoogleAuth({
-    scopes: 'https://www.googleapis.com/auth/cloud-platform'
-  });
-  const client = await auth.getClient();
-  const projectId = await auth.getProjectId();
-  const url = `https://us-central1-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/publishers/google/models/${TEXT_GEN_MODEL_NAME}:streamGenerateContent`;
-  const data = {
-    "contents": {
-      "role": "user",
-      "parts": [
-        {
-          "text": prompt
-        }
-      ]
-    },
-    // Check https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini
-    "generation_config": {
-      "temperature": 0.9, // 0.0 - 1.0, default for gemini-pro is 0.9
-      "topK": 40, // 1-40
-      "topP": 0.95, // 0.0 - 1.0
-      "candidateCount": 1, // must be 1
-      "maxOutputTokens": 8192 // default for gemini-pro
-    }
-  };
-  const res = await client.request({ method: 'POST', url, data });
-  console.log(`Vertex AI Gemini API response is ${JSON.stringify(res.data)}`);
+  const vertex_ai = new VertexAI({project: project, location: region});
 
-  return res.data.predictions;
+  // Instantiate models
+  // Learn more about the configuration below at https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini
+  const generativeModel = vertex_ai.preview.getGenerativeModel({
+      model: MODEL_NAME,
+      // The following parameters are optional
+      safety_settings: [{category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE}],
+      generation_config: {
+        "temperature": 0.9, // 0.0 - 1.0, default for gemini-pro is 0.9
+        "topK": 40, // 1-40
+        "topP": 0.95, // 0.0 - 1.0
+        "candidateCount": 1, // must be 1
+        "maxOutputTokens": 8192 // default for gemini-pro
+      },
+    });
+
+  const request = {
+    contents: [{role: 'user', parts: [{text: prompt}]}],
+  };
+
+  const resp = await generativeModel.generateContent(request);
+
+  const responseData = await resp.response;
+
+  console.log(`Vertex AI Gemini API response is ${JSON.stringify(responseData)}`);
+
+  return responseData.candidates;
 }
