@@ -16,7 +16,6 @@
       "name": "Vertex AI Gemini Pro (Text)",
       "value": "vertexGeminiProTextApi",
       "enabled": true,
-      "multimodal": false,
       "config": {
         "project": "<YOUR_GOOGLE_CLOUD_PROJECT_ID>",
         "region": "us-central1"
@@ -34,7 +33,6 @@
       "name": "PaLM",
       "value": "palmApi",
       "enabled": false,
-      "multimodal": false,
       "config": {
         "apiKey": ""
       }
@@ -43,7 +41,6 @@
       "name": "Cohere",
       "value": "cohere",
       "enabled": false,
-      "multimodal": false,
       "config": {
         "apiKey": ""
       }
