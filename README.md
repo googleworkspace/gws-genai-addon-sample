@@ -147,11 +147,49 @@ This add-on can be used with the list of providers below. For each provider, you
 
 Make sure to set the `defaultProvider` variable to an enabled provider that you want to be selected by default.
 
+#### Google Cloud Vertex AI Gemini API
+
+> Vertex AI Gemini API is a Preview offering, subject to the "Pre-GA Offerings Terms" in the General Service Terms section of the [Service Specific Terms](https://cloud.google.com/terms/service-terms). Pre-GA products and features are available "as is" and might have limited support, and changes to pre-GA products and features may not be compatible with other pre-GA versions. For more information, see the [launch stage descriptions](https://cloud.google.com/products#product-launch-stages). Further, by using Vertex AI Gemini API, you agree to the [Additional Terms](https://cloud.google.com/trustedtester/aitos) for Generative AI Preview Products.
+
+The add-on can use [Google Cloud Vertex AI Gemini API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#gemini-api) to generate and summarize text.
+
+To use this provider, you first need to enable the service in your Google Cloud project.
+
+```sh
+gcloud services enable aiplatform.googleapis.com
+```
+
+The code uses the service account attached to the Cloud Run deployment to generate access tokens to use the Vertex AI Gemini API. This service account by default is the  the [default Comptue Engine service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account).
+
+You need to grant this service account the following role in order to access the Vertex AI APIs:
+
+`Vertex AI User (roles/aiplatform.user)`
+
+You can either do this via the [Google Cloud Console](https://cloud.google.com/iam/docs/grant-role-console), or by using the following command (make sure to update `PROJECT_NUMBER` and `PROJECT_ID` with the relevant values for your project):
+
+```sh
+gcloud projects add-iam-policy-binding PROJECT_ID \
+      --member='serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com' \
+      --role='roles/aiplatform.user'
+```
+> Learn more on service account best practices and other ways to authenticate  [here](https://cloud.google.com/iam/docs/best-practices-service-accounts). 
+
+You should configure the following parameters in the relevant section for `vertexGeminiProTextApi` in the add-on configuration file:
+
+- `project`: The Google Cloud project ID where the add-on code will run.
+- `region`: The region used for the Gemini API  (default is `us-central1`). Make sure the value corresponds to one of the [available regions for Gemini API](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini#http_request).
+
+Additional provider configurations are available in the `modules/gen_ai_providers/vertex_ai_gemini_pro_text_api.js` file, including the model used, maximum tokens returned, and other configuration.
+
+##### Terms of Use & Privacy Policy
+
+Please check Google Cloud's [Terms](https://cloud.google.com/product-terms#section-3) for more information on how your data is processed.
+
 #### Google Cloud Vertex AI PaLM API
 
 The add-on can use [Google Cloud Vertex AI PaLM API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#palm-api) to generate and summarize text.
 
-You use this provider, you first need to enable the service in your Google Cloud project.
+To use this provider, you first need to enable the service in your Google Cloud project.
 
 ```sh
 gcloud services enable aiplatform.googleapis.com
@@ -186,7 +224,7 @@ The add-on can use [Google Developer PaLM API](https://developers.generativeai.g
 
 > **_NOTE:_** Access to the PaLM API / MakerSuite is granted via a waitlist. You must get access through the [waitlist](https://makersuite.google.com/waitlist) before you can enable the service and generate an API key.
 
-You use this provider, you first need to enable the service in your Google Cloud project using the same account that you applied for (and granted access to) via the waitlist.
+To use this provider, you first need to enable the service in your Google Cloud project using the same account that you applied for (and granted access to) via the waitlist.
 
 ```sh
 gcloud services enable generativelanguage.googleapis.com
