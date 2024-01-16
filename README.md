@@ -151,8 +151,6 @@ Make sure to set the `defaultProvider` variable to an enabled provider that you 
 
 The add-on can use [Google Cloud Vertex AI Gemini API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#gemini-api) to generate and summarize text.
 
-> Vertex AI Gemini API is a Preview offering, subject to the "Pre-GA Offerings Terms" in the General Service Terms section of the [Service Specific Terms](https://cloud.google.com/terms/service-terms). Pre-GA products and features are available "as is" and might have limited support, and changes to pre-GA products and features may not be compatible with other pre-GA versions. For more information, see the [launch stage descriptions](https://cloud.google.com/products#product-launch-stages). Further, by using Vertex AI Gemini API, you agree to the [Additional Terms](https://cloud.google.com/trustedtester/aitos) for Generative AI Preview Products.
-
 To use this provider, you first need to enable the service in your Google Cloud project.
 
 ```sh
@@ -183,7 +181,9 @@ Additional provider configurations are available in the `modules/gen_ai_provider
 
 ##### Terms of Use & Privacy Policy
 
-Please check Google Cloud's [Terms](https://cloud.google.com/product-terms#section-3) for more information on how your data is processed.
+> Vertex AI Gemini API is a Preview offering, subject to the "Pre-GA Offerings Terms" in the General Service Terms section of the [Service Specific Terms](https://cloud.google.com/terms/service-terms). Pre-GA products and features are available "as is" and might have limited support, and changes to pre-GA products and features may not be compatible with other pre-GA versions. For more information, see the [launch stage descriptions](https://cloud.google.com/products#product-launch-stages). Further, by using Vertex AI Gemini API, you agree to the [Additional Terms](https://cloud.google.com/trustedtester/aitos) for Generative AI Preview Products.
+
+Check Google Cloud's [Terms](https://cloud.google.com/product-terms#section-3) for more information on how your data is processed.
 
 #### Google Cloud Vertex AI PaLM API
 
@@ -195,7 +195,7 @@ To use this provider, you first need to enable the service in your Google Cloud 
 gcloud services enable aiplatform.googleapis.com
 ```
 
-The code uses the service account attached to the Cloud Run deployment to generate access tokens to use the Vertex AI PaLM APIs. This service account by default is the  the [default Comptue Engine service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account).
+The code uses the service account attached to the Cloud Run deployment to generate access tokens to use the Vertex AI PaLM APIs. This service account by default is the [default Comptue Engine service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account).
 
 You need to grant this service account the following role in order to access the Vertex AI APIs:
 
