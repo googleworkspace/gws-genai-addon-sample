@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Google LLC.
+ * Copyright 2024 Google LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,9 @@
  */
 
 import {jest} from '@jest/globals';
-import {TextServiceClient} from '@google-ai/generativelanguage';
-import {GoogleAuth} from 'google-auth-library';
-import {generateEmailReply, generateSummary} from './palm_api';
+import {generateEmailReply, generateSummary} from './vertex_ai_gemini_pro_text_api';
 
-jest.mock('@google-ai/generativelanguage');
-jest.mock('google-auth-library');
+jest.mock('@google-cloud/vertexai');
 
 describe('generateEmailReply', () => {
   it('should expose a function', () => {

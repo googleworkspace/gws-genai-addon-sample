@@ -10,19 +10,28 @@
       "exportToDocsUrl": "<DEPLOYMENT_URL>/exportToDocs"
     }
   },
-  "defaultProvider": "vertexPalmApi",
+  "defaultProvider": "vertexGeminiProTextApi",
   "providers": [
+    {
+      "name": "Vertex AI Gemini Pro (Text)",
+      "value": "vertexGeminiProTextApi",
+      "enabled": true,
+      "config": {
+        "project": "<YOUR_GOOGLE_CLOUD_PROJECT_ID>",
+        "region": "us-central1"
+      }
+    },
     {
       "name": "Vertex AI PaLM",
       "value": "vertexPalmApi",
-      "enabled": true,
+      "enabled": false,
       "config": {
         "region": "us-central1"
       }
     },
     {
-      "name": "PaLM",
-      "value": "palmApi",
+      "name": "Gemini Pro (Text)",
+      "value": "geminiTextApi",
       "enabled": false,
       "config": {
         "apiKey": ""

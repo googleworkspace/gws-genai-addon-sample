@@ -17,8 +17,9 @@
 import * as driveCardUiGenerator from './ui/drive_card_ui_generator.js';
 import * as driveUtils from './utils/drive_utils.js';
 import * as cohere from './gen_ai_providers/cohere.js';
-import * as palm from './gen_ai_providers/palm_api.js';
+import * as geminiText from './gen_ai_providers/gemini_text_api.js';
 import * as vertexAiPalm from './gen_ai_providers/vertex_ai_palm_api.js';
+import * as vertexAiGeminiProText from './gen_ai_providers/vertex_ai_gemini_pro_text_api.js';
 
 export function generateHomePageResponse() {
   const message = 'Please select a file to start using this add-on.';
@@ -136,14 +137,17 @@ export async function generateSummaryResponse(
   let provider = null;
 
   switch (String(selectedProvider)) {
-    case 'cohere':
-      provider = cohere;
-      break;
-    case 'palmApi':
-      provider = palm;
+    case 'vertexGeminiProTextApi':
+      provider = vertexAiGeminiProText;
       break;
     case 'vertexPalmApi':
       provider = vertexAiPalm;
+      break;
+    case 'geminiTextApi':
+      provider = geminiText;
+      break;
+    case 'cohere':
+      provider = cohere;
       break;
     default:
       throw new Error(`No valid modules exists for ${selectedProvider}`);
