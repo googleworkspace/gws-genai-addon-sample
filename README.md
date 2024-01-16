@@ -6,7 +6,7 @@ Here is a diagram that shows the different components in this sample solution:
 
 ```mermaid
 flowchart LR
-    A[Google Workspace Add-on\nfor Google Drive]<-->B[Backend hosted on\nGoogle Cloud Run]
+    A[Google Workspace Add-on\nfor Google Drive and Gmail]<-->B[Backend hosted on\nGoogle Cloud Run]
     B-->C[Google Drive APIs]
     B-->D[Generative AI APIs\ne.g. Google Cloud Vertex AI APIs]
 ```
