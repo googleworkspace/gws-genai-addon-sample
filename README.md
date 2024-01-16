@@ -149,9 +149,9 @@ Make sure to set the `defaultProvider` variable to an enabled provider that you 
 
 #### Google Cloud Vertex AI Gemini API
 
-> Vertex AI Gemini API is a Preview offering, subject to the "Pre-GA Offerings Terms" in the General Service Terms section of the [Service Specific Terms](https://cloud.google.com/terms/service-terms). Pre-GA products and features are available "as is" and might have limited support, and changes to pre-GA products and features may not be compatible with other pre-GA versions. For more information, see the [launch stage descriptions](https://cloud.google.com/products#product-launch-stages). Further, by using Vertex AI Gemini API, you agree to the [Additional Terms](https://cloud.google.com/trustedtester/aitos) for Generative AI Preview Products.
-
 The add-on can use [Google Cloud Vertex AI Gemini API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#gemini-api) to generate and summarize text.
+
+> Vertex AI Gemini API is a Preview offering, subject to the "Pre-GA Offerings Terms" in the General Service Terms section of the [Service Specific Terms](https://cloud.google.com/terms/service-terms). Pre-GA products and features are available "as is" and might have limited support, and changes to pre-GA products and features may not be compatible with other pre-GA versions. For more information, see the [launch stage descriptions](https://cloud.google.com/products#product-launch-stages). Further, by using Vertex AI Gemini API, you agree to the [Additional Terms](https://cloud.google.com/trustedtester/aitos) for Generative AI Preview Products.
 
 To use this provider, you first need to enable the service in your Google Cloud project.
 
