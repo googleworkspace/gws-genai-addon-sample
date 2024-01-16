@@ -30,8 +30,8 @@
       }
     },
     {
-      "name": "PaLM",
-      "value": "palmApi",
+      "name": "Gemini Pro (Text)",
+      "value": "geminiTextApi",
       "enabled": false,
       "config": {
         "apiKey": ""

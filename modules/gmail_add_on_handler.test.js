@@ -15,11 +15,7 @@
  */
 
 import {jest} from '@jest/globals';
-import * as gmailCardUiGenerator from './ui/gmail_card_ui_generator.js';
-import * as gmailUtils from './utils/gmail_utils.js';
-import * as commonAddOnUtils from './utils/common_add_on_utils.js';
-import * as cohere from './gen_ai_providers/cohere.js';
-import * as palm from './gen_ai_providers/palm_api.js';
+
 import {
   generateHomePageResponse,
   generateContextualTriggerResponse,
@@ -31,7 +27,7 @@ jest.mock('./ui/gmail_card_ui_generator.js');
 jest.mock('./utils/gmail_utils.js');
 jest.mock('./utils/common_add_on_utils.js');
 jest.mock('./gen_ai_providers/cohere.js');
-jest.mock('./gen_ai_providers/palm_api.js');
+jest.mock('./gen_ai_providers/gemini_text_api.js');
 
 describe('generateHomePageResponse', () => {
   it('should expose a function', () => {

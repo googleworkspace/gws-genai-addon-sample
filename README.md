@@ -218,21 +218,17 @@ Additional configurations for the provider are found in the `modules/gen_ai_prov
 
 Please check Google Cloud's [Terms](https://cloud.google.com/product-terms#section-3) for more information on how your data is processed.
 
-#### Google Developer PaLM API
+#### Google AI for Developers Gemini API
 
-The add-on can use [Google Developer PaLM API](https://developers.generativeai.google/) to generate and summarize text.
+The add-on can use [Google AI for Developers Gemini API](https://ai.google.dev/docs/gemini_api_overview) to generate and summarize text.
 
-> **_NOTE:_** Access to the PaLM API / MakerSuite is granted via a waitlist. You must get access through the [waitlist](https://makersuite.google.com/waitlist) before you can enable the service and generate an API key.
+> Check the list of [available languages and regions for Google AI Studio and Gemini API](https://ai.google.dev/available_regions) to confirm that Gemini API is available in your region before you continue with the next step.
 
-To use this provider, you first need to enable the service in your Google Cloud project using the same account that you applied for (and granted access to) via the waitlist.
-
-```sh
-gcloud services enable generativelanguage.googleapis.com
-```
-
-Next you should [create an API key](https://makersuite.google.com/) and save it in the `apiKey` parameter in the relevant section for `palmAPI` in the add-on configuration file. Additional configurations for the provider are found in the `modules/gen_ai_providers/palm_api.js` file, including the models used, maximum tokens returned, and other configuration.
+To use this provider, you need to [create an API key in Google AI Studio](https://makersuite.google.com/) and save it in the `apiKey` parameter in the relevant section for `geminiApi` in the add-on configuration file. Additional configurations for the provider are found in the `modules/gen_ai_providers/gemini_api.js` file, including the model used, maximum tokens returned, and other configuration.
 
 ##### Terms of Use & Privacy Policy
+
+> The Gemini API is currently in public preview. Production applications are not supported yet. 
 
 Please check Google's [Terms of Use](https://policies.google.com/terms), [Privacy Policy](https://policies.google.com/privacy) for more information on how your data is processed.
 

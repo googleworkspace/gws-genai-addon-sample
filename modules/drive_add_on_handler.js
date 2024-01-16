@@ -17,7 +17,7 @@
 import * as driveCardUiGenerator from './ui/drive_card_ui_generator.js';
 import * as driveUtils from './utils/drive_utils.js';
 import * as cohere from './gen_ai_providers/cohere.js';
-import * as palm from './gen_ai_providers/palm_api.js';
+import * as geminiText from './gen_ai_providers/gemini_text_api.js';
 import * as vertexAiPalm from './gen_ai_providers/vertex_ai_palm_api.js';
 import * as vertexAiGeminiProText from './gen_ai_providers/vertex_ai_gemini_pro_text_api.js';
 
@@ -143,8 +143,8 @@ export async function generateSummaryResponse(
     case 'vertexPalmApi':
       provider = vertexAiPalm;
       break;
-    case 'palmApi':
-      provider = palm;
+    case 'geminiTextApi':
+      provider = geminiText;
       break;
     case 'cohere':
       provider = cohere;
