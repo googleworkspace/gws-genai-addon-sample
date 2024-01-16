@@ -187,7 +187,7 @@ Check Google Cloud's [Terms](https://cloud.google.com/product-terms#section-3) f
 
 #### Google Cloud Vertex AI PaLM API
 
-The add-on can use [Google Cloud Vertex AI PaLM API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#palm-api) to generate and summarize text.
+The add-on can use [Google Cloud Vertex AI PaLM API](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview#palm-api) to generate and summarize text. 
 
 To use this provider, you first need to enable the service in your Google Cloud project.
 
@@ -218,9 +218,9 @@ Additional configurations for the provider are found in the `modules/gen_ai_prov
 
 Please check Google Cloud's [Terms](https://cloud.google.com/product-terms#section-3) for more information on how your data is processed.
 
-#### Google AI for Developers Gemini API
+#### Google AI Gemini API
 
-The add-on can use [Google AI for Developers Gemini API](https://ai.google.dev/docs/gemini_api_overview) to generate and summarize text.
+The add-on can use [Google AI Gemini API](https://ai.google.dev/docs/gemini_api_overview) to generate and summarize text.
 
 > Check the list of [available languages and regions for Google AI Studio and Gemini API](https://ai.google.dev/available_regions) to confirm that Gemini API is available in your region before you continue with the next step.
 
