@@ -26,7 +26,6 @@
       "name": "Vertex AI PaLM",
       "value": "vertexPalmApi",
       "enabled": false,
-      "multimodal": false,
       "config": {
         "region": "us-central1"
       }
