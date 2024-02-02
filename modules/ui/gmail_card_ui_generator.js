@@ -170,12 +170,12 @@ export function createStartGenerationUi(
 
 export function createCreateDraftUi(draftId, draftThreadId) {
   return {
-    render_actions: {
-      host_app_action: {
-        gmail_action: {
-          open_created_draft_action_markup: {
-            draft_id: draftId,
-            draft_thread_id: draftThreadId,
+    renderActions: {
+      hostAppAction: {
+        gmailAction: {
+          openCreatedDraftActionMarkup: {
+            draftId: draftId,
+            draftThreadId: draftThreadId,
           },
         },
       },
