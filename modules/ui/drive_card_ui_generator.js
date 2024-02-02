@@ -18,7 +18,7 @@ import convertMarkdownToWidgets from '../utils/card_ui_utils.js';
 
 export function createRenderActionWithTextUi(text) {
   return {
-    render_actions: createSingleCardWithTextUi(text),
+    renderActions: createSingleCardWithTextUi(text),
   };
 }
 
@@ -185,7 +185,7 @@ export function createGenerateSummaryUi(
   });
 
   return {
-    render_actions: {
+    renderActions: {
       action: {
         navigations: [
           {
@@ -206,7 +206,7 @@ export function createGenerateSummaryUi(
 
 export function createNotificationUi(message) {
   return {
-    render_actions: {
+    renderActions: {
       action: {
         notification: {
           text: message,
