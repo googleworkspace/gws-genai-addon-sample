@@ -5,7 +5,7 @@
     "body-parser": "^1.20.2",
     "cohere-ai": "^6.2.0",
     "config": "^3.3.9",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "express-async-handler": "^1.2.0",
     "express-bearer-token": "^2.4.0",
     "google-auth-library": "^8.8.0",
