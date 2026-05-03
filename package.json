@@ -9,7 +9,7 @@
     "express-async-handler": "^1.2.0",
     "express-bearer-token": "^3.0.0",
     "google-auth-library": "^8.8.0",
-    "googleapis": "^118.0.0",
+    "googleapis": "^171.4.0",
     "js-base64": "^3.7.5",
     "marked": "^6.0.0"
   },
